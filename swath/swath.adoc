@@ -1,0 +1,502 @@
+= Encoding of Swath Data in the Climate and Forecast Convention
+This is a draft proposal for an extension of the Climate and Forecast metadata convention developed under the U.S. National Science Foundation award 1541031: "EarthCube IA: Advancing netCDF-CF for the Geoscience Community".
+:toc:
+
+== What are Swath Data?
+
+Earth Science swath data are collected by an instrument that observes a smaller portion of Earth at any given instant while its platform (an object carrying such instrument) moves and the instrument sweeps over a wider area of Earth. Usually, successive swath observations are combined to cover a larger portion of Earth, sometimes even the entire Earth. The term _swath_ is used because when aggregations of such data are plotted on a map they appear to cover a swath on the Earth’s surface.
+
+Swath data originates as measurements at a number of intervals of the electromagnetic spectrum, usually called _bands_ or _channels_. This type of swath data is commonly referred to as _Level 1_. Further processing these data to retrieve geophysical parameters produces so-called _Level 2_ swath data. The aim of this proposal is to standardize encoding of the radiometric (Level 1) and geophysical (Level 2) swath data in the Climate and Forecast (CF) convention.
+
+== Assumptions
+
+The encodings proposed for swath data  in this document are based on:
+
+* The CF convention version 1.7 (currently in draft): http://cfconventions.org/cf-conventions/cf-conventions.html.
+* Backward compatibility with the CF version 1 convention is not required.
+* HDF-5 and netCDF-4 file formats.
+* Submitted swath file examples from the community hosted at: https://github.com/diwg/diwg.
+* This proposal is part of a suite of proposals prepared for this project. Since they are being developed at the same time, this proposal will be updated whenever there are relevant changes.
+* The currently global attribute `featureType` can be changed to become a variable attribute and its values can be extended to accommodate the new swath data encodings.
+
+== Swath Data Encodings
+
+Swath data encodings will be split in two domains: radiometric (for Level 1 data) and geophysical (for Level 2 data). The main differences between the two domain encodings are:
+
+* use of spectral (band, channel) coordinates for radiometric domain swath data;
+* geospatial extent for radiometric swath data is two-dimensional, while for geophysical domain swath data it can also be three-dimensional;
+* use of altitude coordinate for geophysical domain swath data.
+
+Encoding examples will be expressed in the http://www.unidata.ucar.edu/software/netcdf/netcdf/CDL-Syntax.html#CDL-Syntax[NetCDF CDL] with only the relevant content to illustrate the concept.
+
+== Time Coordinate
+
+Specifying time coordinate for swath data follows the CF convention. The rank of the time coordinate can range from one to the rank of the swath data variable to which it applies. Usually, time coordinate will be either a one- or two-dimensional variable.
+
+Some satellite swath data use the International Atomic Time (TAI) which as of yet is not a valid value of the CF convention’s calendar attribute (see this http://mailman.cgd.ucar.edu/pipermail/cf-metadata/2015/058061.html[thread] on the CF mailing list for background). The encoding examples in this proposal use the Gregorian calendar.
+
+== Spectral Coordinate
+
+Specifying band (channels) at which swath data was acquired is done with spectral coordinates. Band information can either be numerical (as wavelength, wavenumber, or frequency) or string. String band information is applicable to cases where polarization together with electromagnetic spectrum description has to be provided.
+
+An example of the numerical spectral coordinate is:
+
+.Example: Swath time coordinate.
+----
+dimensions:
+  band = 5 ;
+
+variables:
+  float band(band) ;
+    band:standard_name = "sensor_band_central_radiation_wavelength" ;
+    band:units = "um" ;
+----
+
+`standard_name attribute`’s value can be any other standard name that represents an electromagnetic radiation property.
+
+An example of a string-value spectral coordinate is:
+
+----
+dimensions:
+  band_enum = 5 ;
+  band_strlen = 10 ;
+
+variables:
+  char band(band_enum, band_strlen) ;
+    band:standard_name = "sensor_band_identifier" ;
+----
+
+== Radiometric Domain Encodings
+
+=== Multi-Band
+
+This type of data represents probably the most commonly collected swath data, where observations over an area on the Earth are made at a number of different bands (or channels).
+
+----
+dimensions:
+  time = 10 ; // option: time = UNLIMITED
+  scan = 512 ;
+  band = 5 ;
+
+variables:
+  // spectral coordinate variable
+  float band(band) ;
+     band:standard_name = "sensor_band_central_radiation_wavelength" ;
+     band:units = "um" ;
+
+  float lat(time, scan) ;
+     lat:standard_name = "latitude" ;
+     lat:units = "degrees_north" ;
+
+  float lon(time, scan) ;
+     lon:standard_name = "longitude" ;
+     lon:units = "degrees_east" ;
+
+  double time(time) ;
+     time:standard_name = "time" ;
+     time:units = "<units> since <datetime string>" ;
+     time:calendar = "gregorian" ;
+
+  float swath_data(time, scan, band) ;
+      swath_data:featureType = "multiBandSwath" ;
+     swath_data:coordinates = "lon lat" ;
+----
+
+=== Multi-Band with String Band Information
+
+This is a variation on the Multi-Band Swath where the band information is given as strings because expressing them numerically may not be always appropriate.
+
+----
+dimensions:
+  time = 10 ; // option: time = UNLIMITED
+  scan = 1024 ;
+  band_enum = 5 ;
+  band_strlen = 10 ;
+
+variables:
+  // string-valued auxiliary coordinate variable
+  char band(band_enum, band_strlen) ;
+    band:standard_name = "sensor_band_identifier" ;
+
+  float lat(time, scan) ;
+    lat:standard_name = "latitude" ;
+    lat:units = "degrees_north" ;
+
+  float lon(time, scan) ;
+    lon:standard_name = "longitude" ;
+    lon:units = "degrees_east" ;
+
+  double time(time) ;
+     time:standard_name = "time" ;
+     time:units = "<units> since <datetime string>" ;
+     time:calendar = "gregorian" ;
+
+  float swath_data(time, scan, band_enum) ;
+      swath_data:featureType = "multiStringBandSwath" ;
+      swath_data:coordinates = "lon lat band" ;
+----
+
+=== Multi-Band with Field-of-View Shape
+
+Along with the swath data itself, sometimes it may be required to specify the shape of the each field-of-view (FOV). The Multi-Band Swath encoding is extended with additional variables for describing the field-of-view geospatial extent.
+
+----
+dimensions:
+  time = 10 ; // option: time = UNLIMITED
+  scan = 512 ;
+  band = 5 ;
+  waypoints = 4 ;
+
+variables:
+  float band(band) ;
+    band:standard_name = "sensor_band_central_radiation_wavelength" ;
+    band:units = "um" ;
+
+  float lat(time, scan) ;
+    lat:standard_name = "latitude" ;
+    lat:units = "degrees_north" ;
+    lat:bounds = "lat_bounds" ;
+
+  float lat_bounds(time, scan, waypoints) ;
+    lat_bounds:units = "degrees_north" ;
+
+  float lon(time, scan) ;
+    lon:standard_name = "longitude" ;
+    lon:units = "degrees_east" ;
+    lon:bounds = "lon_bounds" ;
+
+  float lon_bounds(time, scan, waypoints) ;
+    lon_bounds:units = "degrees_east" ;
+
+  double time(time) ;
+    time:standard_name = "time" ;
+    time:units = "<units> since <datetime string>" ;
+    time:calendar = "gregorian" ;
+
+  float swath_data(time, scan, band) ;
+    swath_data:featureType = "multiBandSwath" ;
+    swath_data:coordinates = "lon lat" ;
+----
+
+=== Multi-Band Field-of-Regard
+
+Hyperspectral sounding instruments typically take observations with their detectors arranged into a 2-by-2 or 3-by-3 grid. Such grouping of the field-of-views is referred to as a field-of-regard (FOR).
+
+----
+dimensions:
+  time = 10 ; // option: time = UNLIMITED
+  for = 45 ;
+  band = 1305 ;
+  fov = 9 ;
+
+variables:
+  float band(band) ;
+    band:standard_name = "sensor_band_central_radiation_wavelength" ;
+    band:units = "um" ;
+
+  short fov(fov);
+    fov:long_name = "Field-of-view ordinal number" ;
+
+  float lat(time, for, fov) ;
+    lat:standard_name = "latitude" ;
+    lat:units = "degrees_north" ;
+
+  float lon(time, for, fov) ;
+    lon:standard_name = "longitude" ;
+    lon:units = "degrees_east" ;
+
+  double time(time) ;
+    time:standard_name = "time" ;
+    time:units = "<units> since <datetime string>" ;
+    time:calendar = "gregorian" ;
+
+  float swath_data(time, for, fov, band) ;
+    swath_data:featureType = "multiBandForSwath" ;
+    swath_data:coordinates = "lon lat" ;
+----
+
+=== Multi-Band Field-of-Regard with Field-of-View Shapes
+
+This is an extension on the Multi-Band Field-of-Regard feature type when geospatial extent of all field-of-views in each field-of-regard need to be specified.
+
+----
+dimensions:
+  time = 10 ; // option: time = UNLIMITED
+  for = 30 ;
+  band = 1305 ;
+  fov = 9 ;
+  waypoints = 8 ;
+
+
+variables:
+  float band(band) ;
+    band:standard_name = "sensor_band_central_radiation_wavelength" ;
+    band:units = "um" ;
+
+  float lat(time, for, fov) ;
+    lat:standard_name = "latitude" ;
+    lat:units = "degrees_north" ;
+    lat:bounds = "lat_bounds" ;
+
+  float lat_bounds(time, for, fov, waypoints) ;
+    lat_bounds:units = "degrees_north" ;
+
+  float lon(time, for, fov) ;
+    lon:standard_name = "longitude" ;
+    lon:units = "degrees_east" ;
+    lon:bounds = "lon_bounds" ;
+
+  float lon_bounds(time, for, fov, waypoints) ;
+    lon_bounds:units = "degrees_east" ;
+
+  double time(time) ;
+    time:standard_name = "time" ;
+    time:units = "<units> since <datetime string>" ;
+    time:calendar = "gregorian" ;
+
+  float swath_data(time, for, fov, band) ;
+    swath_data:featureType = "multiBandForSwath" ;
+    swath_data:coordinates = "lon lat" ;
+----
+
+== Geophysical Domain Encodings
+
+=== Swath
+
+----
+dimensions:
+  time = 512 ;
+  scan = 1024 ;
+
+
+variables:
+  double time(time) ;
+    time:standard_name = "time" ;
+    time:units = "<units> since <datetime string>" ;
+    time:calendar = "gregorian" ;
+
+  float lat(time, scan) ;
+    lat:standard_name = "latitude" ;
+    lat:units = "degrees_north" ;
+
+  float lon(time, scan) ;
+    lon:standard_name = "longitude" ;
+    lon:units = "degrees_east" ;
+
+  float swath_data(time, scan) ;
+    swath_data:featureType = "swath" ;
+    swath_data:coordinates = "lon lat" ;
+----
+
+=== Field-of-Regard Swath
+
+A variant of the Swath feature type, enabling storing data values for all field-of-views of each field-of-regard.
+
+----
+dimensions:
+  time = 512 ;
+  for = 30 ;
+  fov = 9 ;
+
+
+variables:
+  double time(time) ;
+    time:standard_name = "time" ;
+    time:units = "<units> since <datetime string>" ;
+    time:calendar = "gregorian" ;
+
+  float lat(time, for, fov) ;
+    lat:standard_name = "latitude" ;
+    lat:units = "degrees_north" ;
+
+  float lon(time, for, fov) ;
+    lon:standard_name = "longitude" ;
+    lon:units = "degrees_east" ;
+
+  float swath_data(time, for, fov) ;
+    swath_data:featureType = "swath" ;
+    swath_data:coordinates = "lon lat" ;
+----
+
+=== Profile
+
+----
+dimensions:
+  time = 10 ; // option: time = UNLIMITED
+  scan = 512 ;
+  press = 15 ;
+
+
+variables:
+  float press(press) ;
+    press:standard_name = "air_pressure" ;
+    press:units = "Pa" ;
+    press:positive = "up" ;
+
+  float lat(time, scan) ;
+    lat:standard_name = "latitude" ;
+    lat:units = "degrees_north" ;
+
+  float lon(time, scan) ;
+    lon:standard_name = "longitude" ;
+    lon:units = "degrees_east" ;
+
+  double time(time) ;
+    time:standard_name = "time" ;
+    time:units = "<units> since <datetime string>" ;
+    time:calendar = "gregorian" ;
+
+  float swath_data(time, scan, press) ;
+    swath_data:featureType = "profileSwath" ;
+    swath_data:coordinates = "lon lat" ;
+----
+
+=== Multi-Band Profile
+
+----
+dimensions:
+  time = 10 ; // option: time = UNLIMITED
+  scan = 512 ;
+  band = 5 ;
+  press = 15 ;
+
+
+variables:
+  float band(band) ;
+    band:standard_name = "sensor_band_central_radiation_wavelength" ;
+    band:units = "um" ;
+
+  float press(press) ;
+    press:standard_name = "air_pressure" ;
+    press:units = "Pa" ;
+    press:positive = "up" ;
+
+  float lat(time, scan) ;
+    lat:standard_name = "latitude" ;
+    lat:units = "degrees_north" ;
+
+  float lon(time, scan) ;
+    lon:standard_name = "longitude" ;
+    lon:units = "degrees_east" ;
+
+  double time(time) ;
+    time:standard_name = "time" ;
+    time:units = "<units> since <datetime string>" ;
+    time:calendar = "gregorian" ;
+
+  float swath_data(time, scan, press, band) ;
+    swath_data:featureType = "multiBandProfileSwath" ;
+    swath_data:coordinates = "lon lat" ;
+----
+
+=== Field-of-Regard Profile
+
+A variant of the Profile feature type for providing profile data for all field-of-views in each field-of-regard.
+
+----
+dimensions:
+  time = 10 ; // option: time = UNLIMITED
+  for = 30 ;
+  press = 15 ;
+  fov_atrack = 3 ;
+  fov_xtrack = 3 ;
+
+
+variables:
+  float press(press) ;
+    press:standard_name = "air_pressure" ;
+    press:units = "Pa" ;
+    press:positive = "up" ;
+
+  float lat(time, for, fov_atrack, fov_xtrack) ;
+    lat:standard_name = "latitude" ;
+    lat:units = "degrees_north" ;
+
+  float lon(time, for, fov_atrack, fov_xtrack) ;
+    lon:standard_name = "longitude" ;
+    lon:units = "degrees_east" ;
+
+  double time(time) ;
+    time:standard_name = "time" ;
+    time:units = "<units> since <datetime string>" ;
+    time:calendar = "gregorian" ;
+
+  float swath_data(time, for, fov_atrack, fov_xtrack, press) ;
+    swath_data:featureType = "forProfileSwath" ;
+    swath_data:coordinates = "lon lat" ;
+----
+
+Variant #2:
+
+----
+dimensions:
+  time = 10 ; // option: time = UNLIMITED
+  for = 45 ;
+  press = 15 ;
+  fov = 9 ;
+
+
+variables:
+  float press(press) ;
+     press:standard_name = "air_pressure" ;
+     press:units = "Pa" ;
+     press:positive = "up" ;
+
+  float lat(time, for, fov) ;
+     lat:standard_name = "latitude" ;
+     lat:units = "degrees_north" ;
+
+  float lon(time, for, fov) ;
+     lon:standard_name = "longitude" ;
+     lon:units = "degrees_east" ;
+
+  double time(time) ;
+     time:standard_name = "time" ;
+     time:units = "<units> since <datetime string>" ;
+     time:calendar = "gregorian" ;
+
+  float swath_data(time, for, fov, press) ;
+      swath_data:featureType = "forProfileSwath" ;
+     swath_data:coordinates = "lon lat" ;
+----
+
+Variant #3:
+
+----
+dimensions:
+  time = 10 ;
+  for = 30 ;
+  press = 15 ;
+  fov_atrack = 3 ;
+  fov_xtrack = 3 ;
+
+
+variables:
+  short fov_atrack(fov_atrack):
+     fov_atrack:long_name = "Field-of-view along track ordinal number" ;
+
+  short fov_xtrack(fov_xtrack):
+     fov_xtrack:long_name = "Field-of-view across track ordinal number" ;
+
+  float press(press) ;
+     press:standard_name = "air_pressure" ;
+     press:units = "Pa" ;
+     press:positive = "up" ;
+
+  float lat(time, for) ;
+     lat:standard_name = "latitude" ;
+     lat:units = "degrees_north" ;
+
+  float lon(time, for) ;
+     lon:standard_name = "longitude" ;
+     lon:units = "degrees_east" ;
+
+  double time(time) ;
+     time:standard_name = "time" ;
+     time:units = "<units> since <datetime string>" ;
+     time:calendar = "gregorian" ;
+
+  float swath_data(time, for, fov_atrack, fov_xtrack, press) ;
+     swath_data:featureType = "forProfileSwath" ;
+     swath_data:coordinates = "lon lat" ;
+----
