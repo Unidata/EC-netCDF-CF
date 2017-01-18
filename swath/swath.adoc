@@ -31,9 +31,9 @@ Encoding examples will be expressed in the http://www.unidata.ucar.edu/software/
 
 == Time Coordinate
 
-Specifying time coordinate for swath data follows the CF convention. The rank of the time coordinate can range from one to the rank of the swath data variable to which it applies. Usually, time coordinate will be either a one- or two-dimensional variable.
+Specifying time coordinate for swath data follows the pertinent CF convention rules. The rank of the time coordinate can range from one (one-dimensional) up to the rank of the swath data variable to which it applies (2, 3, ..., _n_-dimensional). The slowest varying dimension of the coordinate must represent forward (along-track) movement of the platform.
 
-Some satellite swath data use the International Atomic Time (TAI) which as of yet is not a valid value of the CF convention’s calendar attribute (see this http://mailman.cgd.ucar.edu/pipermail/cf-metadata/2015/058061.html[thread] on the CF mailing list for background). The encoding examples in this proposal use the Gregorian calendar.
+Some satellite swath data use the International Atomic Time (TAI) which currently is not supported by the CF convention (see this http://mailman.cgd.ucar.edu/pipermail/cf-metadata/2015/058061.html[thread] on the CF mailing list for background). The encoding examples in this proposal use the Gregorian calendar.
 
 == Spectral Coordinate
 
@@ -41,7 +41,7 @@ Specifying band (channels) at which swath data was acquired is done with spectra
 
 An example of the numerical spectral coordinate is:
 
-.Example: Swath time coordinate.
+// .Example: Swath time coordinate.
 ----
 dimensions:
   band = 5 ;
@@ -66,6 +66,15 @@ variables:
     band:standard_name = "sensor_band_identifier" ;
 ----
 
+----
+dimensions:
+  band_enum = 5 ;
+
+variables:
+  string band(band_enum) ;
+     band:standard_name = "sensor_band_identifier" ;
+----
+
 == Radiometric Domain Encodings
 
 === Multi-Band
@@ -81,25 +90,25 @@ dimensions:
 variables:
   // spectral coordinate variable
   float band(band) ;
-     band:standard_name = "sensor_band_central_radiation_wavelength" ;
-     band:units = "um" ;
+    band:standard_name = "sensor_band_central_radiation_wavelength" ;
+    band:units = "um" ;
 
   float lat(time, scan) ;
-     lat:standard_name = "latitude" ;
-     lat:units = "degrees_north" ;
+    lat:standard_name = "latitude" ;
+    lat:units = "degrees_north" ;
 
   float lon(time, scan) ;
-     lon:standard_name = "longitude" ;
-     lon:units = "degrees_east" ;
+    lon:standard_name = "longitude" ;
+    lon:units = "degrees_east" ;
 
   double time(time) ;
-     time:standard_name = "time" ;
-     time:units = "<units> since <datetime string>" ;
-     time:calendar = "gregorian" ;
+    time:standard_name = "time" ;
+    time:units = "<units> since <datetime string>" ;
+    time:calendar = "gregorian" ;
 
   float swath_data(time, scan, band) ;
-      swath_data:featureType = "multiBandSwath" ;
-     swath_data:coordinates = "lon lat" ;
+    swath_data:featureType = "multiBandSwath" ;
+    swath_data:coordinates = "lon lat" ;
 ----
 
 === Multi-Band with String Band Information
@@ -127,13 +136,13 @@ variables:
     lon:units = "degrees_east" ;
 
   double time(time) ;
-     time:standard_name = "time" ;
-     time:units = "<units> since <datetime string>" ;
-     time:calendar = "gregorian" ;
+    time:standard_name = "time" ;
+    time:units = "<units> since <datetime string>" ;
+    time:calendar = "gregorian" ;
 
   float swath_data(time, scan, band_enum) ;
-      swath_data:featureType = "multiStringBandSwath" ;
-      swath_data:coordinates = "lon lat band" ;
+    swath_data:featureType = "multiStringBandSwath" ;
+    swath_data:coordinates = "lon lat band" ;
 ----
 
 === Multi-Band with Field-of-View Shape
@@ -438,26 +447,26 @@ dimensions:
 
 variables:
   float press(press) ;
-     press:standard_name = "air_pressure" ;
-     press:units = "Pa" ;
-     press:positive = "up" ;
+    press:standard_name = "air_pressure" ;
+    press:units = "Pa" ;
+    press:positive = "up" ;
 
   float lat(time, for, fov) ;
-     lat:standard_name = "latitude" ;
-     lat:units = "degrees_north" ;
+    lat:standard_name = "latitude" ;
+    lat:units = "degrees_north" ;
 
   float lon(time, for, fov) ;
-     lon:standard_name = "longitude" ;
-     lon:units = "degrees_east" ;
+    lon:standard_name = "longitude" ;
+    lon:units = "degrees_east" ;
 
   double time(time) ;
-     time:standard_name = "time" ;
-     time:units = "<units> since <datetime string>" ;
-     time:calendar = "gregorian" ;
+    time:standard_name = "time" ;
+    time:units = "<units> since <datetime string>" ;
+    time:calendar = "gregorian" ;
 
   float swath_data(time, for, fov, press) ;
-      swath_data:featureType = "forProfileSwath" ;
-     swath_data:coordinates = "lon lat" ;
+    swath_data:featureType = "forProfileSwath" ;
+    swath_data:coordinates = "lon lat" ;
 ----
 
 Variant #3:
@@ -473,30 +482,30 @@ dimensions:
 
 variables:
   short fov_atrack(fov_atrack):
-     fov_atrack:long_name = "Field-of-view along track ordinal number" ;
+    fov_atrack:long_name = "Field-of-view along track ordinal number" ;
 
   short fov_xtrack(fov_xtrack):
-     fov_xtrack:long_name = "Field-of-view across track ordinal number" ;
+    fov_xtrack:long_name = "Field-of-view across track ordinal number" ;
 
   float press(press) ;
-     press:standard_name = "air_pressure" ;
-     press:units = "Pa" ;
-     press:positive = "up" ;
+    press:standard_name = "air_pressure" ;
+    press:units = "Pa" ;
+    press:positive = "up" ;
 
   float lat(time, for) ;
-     lat:standard_name = "latitude" ;
-     lat:units = "degrees_north" ;
+    lat:standard_name = "latitude" ;
+    lat:units = "degrees_north" ;
 
   float lon(time, for) ;
-     lon:standard_name = "longitude" ;
-     lon:units = "degrees_east" ;
+    lon:standard_name = "longitude" ;
+    lon:units = "degrees_east" ;
 
   double time(time) ;
-     time:standard_name = "time" ;
-     time:units = "<units> since <datetime string>" ;
-     time:calendar = "gregorian" ;
+    time:standard_name = "time" ;
+    time:units = "<units> since <datetime string>" ;
+    time:calendar = "gregorian" ;
 
   float swath_data(time, for, fov_atrack, fov_xtrack, press) ;
-     swath_data:featureType = "forProfileSwath" ;
-     swath_data:coordinates = "lon lat" ;
+    swath_data:featureType = "forProfileSwath" ;
+    swath_data:coordinates = "lon lat" ;
 ----
