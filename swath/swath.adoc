@@ -1,41 +1,41 @@
 = Encoding of Swath Data in the Climate and Forecast Convention
-This is a draft proposal for an extension of the Climate and Forecast metadata convention developed under the U.S. National Science Foundation award 1541031: "EarthCube IA: Advancing netCDF-CF for the Geoscience Community".
 :toc:
+:toclevels: 4
 
-== What are Swath Data?
+[NOTE]
+====
+This is a draft proposal for an extension of the Climate and Forecast metadata convention developed under the U.S. National Science Foundation award 1541031: "EarthCube IA: Advancing netCDF-CF for the Geoscience Community".
+====
 
-Earth Science swath data are collected by an instrument that observes a smaller portion of Earth at any given instant while its platform (an object carrying such instrument) moves and the instrument sweeps over a wider area of Earth. Usually, successive swath observations are combined to cover a larger portion of Earth, sometimes even the entire Earth. The term _swath_ is used because when aggregations of such data are plotted on a map they appear to cover a swath on the Earth’s surface.
+== Introduction
 
-Swath data originates as measurements at a number of intervals of the electromagnetic spectrum, usually called _bands_ or _channels_. This type of swath data is commonly referred to as _Level 1_. Further processing these data to retrieve geophysical parameters produces so-called _Level 2_ swath data. The aim of this proposal is to standardize encoding of the radiometric (Level 1) and geophysical (Level 2) swath data in the Climate and Forecast (CF) convention.
+Earth Science swath data are collected by an instrument that observes a smaller portion of Earth at any given instant while its platform (an object carrying such instrument) moves and the instrument sweeps over a wider area of Earth. Usually, successive swath observations are combined to cover a larger portion of Earth, sometimes even the entire Earth. When these successive observations are plotted on maps they appear to cover a swath on the Earth's surface, hence the name.
 
-== Assumptions
+Swath data originates as measurements of electromagnetic radiation at a number of intervals of the electromagnetic spectrum, called _bands_ or _channels_. These radiometric swath data are commonly referred to as _Level 1_. Further processing these data to retrieve geophysical parameters produces so-called _Level 2_ swath data.
 
-The encodings proposed for swath data  in this document are based on:
+The aim of this proposal is to standardize encodings of both radiometric (Level 1) and geophysical (Level 2) swath data in the Climate and Forecast (CF) convention. The proposed encodings are independent from the observation method and should be applicable to swath data acquired either from satellites, airplanes, or unmanned aerial systems.
 
-* The CF convention version 1.7 (currently in draft): http://cfconventions.org/cf-conventions/cf-conventions.html.
-* Backward compatibility with the CF version 1 convention is not required.
-* HDF-5 and netCDF-4 file formats.
-* Submitted swath file examples from the community hosted at: https://github.com/diwg/diwg.
-* This proposal is part of a suite of proposals prepared for this project. Since they are being developed at the same time, this proposal will be updated whenever there are relevant changes.
-* The currently global attribute `featureType` can be changed to become a variable attribute and its values can be extended to accommodate the new swath data encodings.
+The basis for this proposal is the CF convention http://cfconventions.org/cf-conventions/cf-conventions.html[version 1.7] (currently in draft) although backward compatibility with it is not necessarily an objective. Since there are already swath data in netCDF files with various levels of CF compatibility, the community-provided examples were valuable source in preparing this proposal. These examples are stored in a GitHub repository at https://github.com/diwg/diwg.
 
 == Swath Data Encodings
 
-Swath data encodings will be split in two domains: radiometric (for Level 1 data) and geophysical (for Level 2 data). The main differences between the two domain encodings are:
+The proposed encodings reflect the variety of swath data from the radiometric (for Level 1 data) and geophysical (for Level 2 data) domains. The chief differences between the two domain encodings are:
 
-* use of spectral (band, channel) coordinates for radiometric domain swath data;
-* geospatial extent for radiometric swath data is two-dimensional, while for geophysical domain swath data it can also be three-dimensional;
-* use of altitude coordinate for geophysical domain swath data.
+* Spectral (band, channel) coordinates must be present for all radiometric swath data.
+* Geospatial extent for radiometric swath data is always two-dimensional (area), while for geophysical swath data it can also be three-dimensional.
+* Geophysical swath data may use coordinates that represent altitude.
 
-Encoding examples will be expressed in the http://www.unidata.ucar.edu/software/netcdf/netcdf/CDL-Syntax.html#CDL-Syntax[NetCDF CDL] with only the relevant content to illustrate the concept.
+All the swath encodings rely on the use of the `featureType` attribute as a variable attribute. This attribute holds the swath encoding type identifier. Currently this requirement breaks the backward compatibility with the CF version 1 conventions. However, the convention's version 1.7 draft http://cfconventions.org/cf-conventions/cf-conventions.html#_features_and_feature_types[allows] for the possibility the `featureType` attribute may become a variable attribute at some later time.
 
-== Time Coordinate
+Encoding examples are expressed using the http://www.unidata.ucar.edu/software/netcdf/netcdf/CDL-Syntax.html#CDL-Syntax[NetCDF Common Data Language] (CDL) with only the relevant file content to illustrate the concept.
+
+=== Time Coordinate
 
 Specifying time coordinate for swath data follows the pertinent CF convention rules. The rank of the time coordinate can range from one (one-dimensional) up to the rank of the swath data variable to which it applies (2, 3, ..., _n_-dimensional). The slowest varying dimension of the coordinate must represent forward (along-track) movement of the platform.
 
 Some satellite swath data use the International Atomic Time (TAI) which currently is not supported by the CF convention (see this http://mailman.cgd.ucar.edu/pipermail/cf-metadata/2015/058061.html[thread] on the CF mailing list for background). The encoding examples in this proposal use the Gregorian calendar.
 
-== Spectral Coordinate
+=== Spectral Coordinate
 
 Specifying band (channels) at which swath data was acquired is done with spectral coordinates. Band information can either be numerical (as wavelength, wavenumber, or frequency) or string. String band information is applicable to cases where polarization together with electromagnetic spectrum description has to be provided.
 
@@ -75,9 +75,9 @@ variables:
      band:standard_name = "sensor_band_identifier" ;
 ----
 
-== Radiometric Domain Encodings
+=== Radiometric Domain Encodings
 
-=== Multi-Band
+==== Multi-Band
 
 This type of data represents probably the most commonly collected swath data, where observations over an area on the Earth are made at a number of different bands (or channels).
 
@@ -111,7 +111,7 @@ variables:
     swath_data:coordinates = "lon lat" ;
 ----
 
-=== Multi-Band with String Band Information
+==== Multi-Band with String Band Information
 
 This is a variation on the Multi-Band Swath where the band information is given as strings because expressing them numerically may not be always appropriate.
 
@@ -145,7 +145,7 @@ variables:
     swath_data:coordinates = "lon lat band" ;
 ----
 
-=== Multi-Band with Field-of-View Shape
+==== Multi-Band with Field-of-View Shape
 
 Along with the swath data itself, sometimes it may be required to specify the shape of the each field-of-view (FOV). The Multi-Band Swath encoding is extended with additional variables for describing the field-of-view geospatial extent.
 
@@ -187,7 +187,7 @@ variables:
     swath_data:coordinates = "lon lat" ;
 ----
 
-=== Multi-Band Field-of-Regard
+==== Multi-Band Field-of-Regard
 
 Hyperspectral sounding instruments typically take observations with their detectors arranged into a 2-by-2 or 3-by-3 grid. Such grouping of the field-of-views is referred to as a field-of-regard (FOR).
 
@@ -224,7 +224,7 @@ variables:
     swath_data:coordinates = "lon lat" ;
 ----
 
-=== Multi-Band Field-of-Regard with Field-of-View Shapes
+==== Multi-Band Field-of-Regard with Field-of-View Shapes
 
 This is an extension on the Multi-Band Field-of-Regard feature type when geospatial extent of all field-of-views in each field-of-regard need to be specified.
 
@@ -268,9 +268,9 @@ variables:
     swath_data:coordinates = "lon lat" ;
 ----
 
-== Geophysical Domain Encodings
+=== Geophysical Domain Encodings
 
-=== Swath
+==== Swath
 
 ----
 dimensions:
@@ -297,7 +297,7 @@ variables:
     swath_data:coordinates = "lon lat" ;
 ----
 
-=== Field-of-Regard Swath
+==== Field-of-Regard Swath
 
 A variant of the Swath feature type, enabling storing data values for all field-of-views of each field-of-regard.
 
@@ -327,7 +327,7 @@ variables:
     swath_data:coordinates = "lon lat" ;
 ----
 
-=== Profile
+==== Profile
 
 ----
 dimensions:
@@ -360,7 +360,7 @@ variables:
     swath_data:coordinates = "lon lat" ;
 ----
 
-=== Multi-Band Profile
+==== Multi-Band Profile
 
 ----
 dimensions:
@@ -398,7 +398,7 @@ variables:
     swath_data:coordinates = "lon lat" ;
 ----
 
-=== Field-of-Regard Profile
+==== Field-of-Regard Profile
 
 A variant of the Profile feature type for providing profile data for all field-of-views in each field-of-regard.
 
