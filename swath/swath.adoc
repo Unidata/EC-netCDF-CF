@@ -1,6 +1,7 @@
 = Encoding of Swath Data in the Climate and Forecast Convention
 :toc:
 :toclevels: 4
+:icons: font
 
 [NOTE]
 ====
@@ -15,7 +16,7 @@ Swath data originates as measurements of electromagnetic radiation at a number o
 
 The aim of this proposal is to standardize encodings of both radiometric (Level 1) and geophysical (Level 2) swath data in the Climate and Forecast (CF) convention. The proposed encodings are independent from the observation method and should be applicable to swath data acquired either from satellites, airplanes, or unmanned aerial systems.
 
-The basis for this proposal is the CF convention http://cfconventions.org/cf-conventions/cf-conventions.html[version 1.7] (currently in draft) although backward compatibility with it is not necessarily an objective. Since there are already swath data in netCDF files with various levels of CF compatibility, the community-provided examples were valuable source in preparing this proposal. These examples are stored in a GitHub repository at https://github.com/diwg/diwg.
+The basis for this proposal is the CF convention http://cfconventions.org/cf-conventions/cf-conventions.html[version 1.7] (currently in draft) although backward compatibility with it is not necessarily an objective. Since there are already swath data in netCDF files, the community-provided examples were valuable resource in preparing this proposal. These examples are stored in a GitHub repository at https://github.com/diwg/diwg.
 
 == Swath Data Encodings
 
@@ -37,35 +38,45 @@ Some satellite swath data use the International Atomic Time (TAI) which currentl
 
 === Spectral Coordinate
 
-Specifying band (channels) at which swath data was acquired is done with spectral coordinates. Band information can either be numerical (as wavelength, wavenumber, or frequency) or string. String band information is applicable to cases where polarization together with electromagnetic spectrum description has to be provided.
+Specifying bands (channels) is done with spectral coordinates. Band information can either be numerical (as wavelength, wavenumber, or frequency) or string.
 
-An example of the numerical spectral coordinate is:
-
-// .Example: Swath time coordinate.
+[caption="Example 1: "]
+.Numerical spectral coordinate.
+====
 ----
 dimensions:
-  band = 5 ;
+  band = 5 ; <1>
 
 variables:
-  float band(band) ;
-    band:standard_name = "sensor_band_central_radiation_wavelength" ;
+  float band(band) ; <2>
+    band:standard_name = "sensor_band_central_radiation_wavelength" ; <3>
     band:units = "um" ;
 ----
+<1> Number of bands.
+<2> The `band` variable is a coordinate variable.
+<3> One of standard names specifically for numerical band data. The other two names are `sensor_band_central_radiation_wavenumber` and `sensor_band_central_radiation_frequency`.
+====
 
-`standard_name attribute`’s value can be any other standard name that represents an electromagnetic radiation property.
+String band information is applicable to cases where bands cannot be differentiated solely numerically, for example, when polarization together with electromagnetic spectrum interval definition has to be combined.
 
-An example of a string-value spectral coordinate is:
-
+[caption="Example 2: "]
+.String band coordinate.
+====
+For the netCDF classic model:
 ----
 dimensions:
-  band_enum = 5 ;
-  band_strlen = 10 ;
+  band_enum = 5 ; <1>
+  band_strlen = 10 ; <2>
 
 variables:
   char band(band_enum, band_strlen) ;
-    band:standard_name = "sensor_band_identifier" ;
+    band:standard_name = "sensor_band_identifier" ; <3>
 ----
+<1> Number of bands.
+<2> Number of characters of the longest band string identifier.
+<3> The standard name specifically for string band data.
 
+For the netCDF extended model (strongly recommended):
 ----
 dimensions:
   band_enum = 5 ;
@@ -74,6 +85,8 @@ variables:
   string band(band_enum) ;
      band:standard_name = "sensor_band_identifier" ;
 ----
+
+====
 
 === Radiometric Domain Encodings
 
