@@ -11,7 +11,7 @@ The work is done under the U.S. National Science Foundation award https://www.ns
 
 Proposal status: *[red]#DRAFT#*.
 
-Last modified: {docdatetime}
+Last modified: 2017-01-23
 ====
 
 == Introduction
