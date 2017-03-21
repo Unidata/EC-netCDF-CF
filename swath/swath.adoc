@@ -36,9 +36,52 @@ All the swath encodings rely on the use of the `featureType` attribute as a vari
 
 Encoding examples are expressed using the http://www.unidata.ucar.edu/software/netcdf/netcdf/CDL-Syntax.html#CDL-Syntax[NetCDF Common Data Language] (CDL) with only the relevant file content to illustrate the concept.
 
+=== Swath Coordinate
+
+The swath coordinate describes the swath characteristics (e.g., cross-track, conical scan, reprojected to fixed grid) and mapping to geolocation (latitude/longitude for every _n_-th pixel). Other specifications include: coordinate reference (geodetic or geocentric; planetodetic, planetocentric for other planetary bodies) and a fill value (when the swath is off-planet). The slowest varying dimension of the geolocation coordinate must represent forward (along-track) movement of the platform.
+
+[caption="Example 0: "]
+.Geolocation array for MODIS (starts at 3,3 and sampled 5x5).
+====
+----
+  group: MODIS_SWATH_Type_L1B {
+    dimensions:
+      2*nscans = 406;
+      1KM_geo_dim = 271;
+    variables:
+      int 10*nscans(2*nscans=406);
+        :_DimensionMap = "";
+
+      int Max_EV_frames(1KM_geo_dim=271);
+        :_DimensionMap = "";
+
+
+    group: Geolocation_Fields {
+      variables:
+        float Latitude(2*nscans=406, 1KM_geo_dim=271);
+          :units = "degrees_north";
+          :valid_range = -90.0f, 90.0f; // float
+          :_FillValue = -999.0f; // float
+          :line_numbers = "3,8";
+          :frame_numbers = "3,8,13,...";
+          :_CoordinateAxisType = "Lat";
+
+        float Longitude(2*nscans=406, 1KM_geo_dim=271);
+          :units = "degrees_east";
+          :valid_range = -180.0f, 180.0f; // float
+          :_FillValue = -999.0f; // float
+          :line_numbers = "3,8";
+          :frame_numbers = "3,8,13,...";
+          :_CoordinateAxisType = "Lon";
+
+    }
+----
+
+====
+
 === Time Coordinate
 
-Specifying time coordinate for swath data follows the pertinent CF convention rules. The rank of the time coordinate can range from one (one-dimensional) up to the rank of the swath data variable to which it applies (2, 3, ..., _n_-dimensional). The slowest varying dimension of the coordinate must represent forward (along-track) movement of the platform.
+Specifying the time coordinate for swath data follows the pertinent CF convention rules. The rank of the time coordinate can range from one (one-dimensional) up to the rank of the swath data variable to which it applies (2, 3, ..., _n_-dimensional). The slowest varying dimension of the coordinate must represent forward (along-track) movement of the platform.
 
 [caption="Example 1: "]
 .Time coordinate.
@@ -62,7 +105,7 @@ Some satellite swath data use the International Atomic Time (TAI) which currentl
 
 === Spectral Coordinate
 
-Specifying bands (channels) is done with spectral coordinates. Band information can either be numerical (as wavelength, wavenumber, or frequency) or string.
+Specifying bands (channels) is done with spectral coordinates. Band information can either be numerical (e.g., wavelength, wavenumber, or frequency) or character (contained in a string).
 
 [caption="Example 2: "]
 .Numerical spectral coordinate.
@@ -74,7 +117,7 @@ dimensions:
 variables:
   float band(band) ; <2>
     band:standard_name = "sensor_band_central_radiation_wavelength" ; <3>
-    band:units = "um" ;
+    band:units = "μm" ;
 ----
 <1> Number of bands.
 <2> The `band` variable is a coordinate variable.
@@ -129,7 +172,7 @@ dimensions:
 variables:
   float band(band) ;
     band:standard_name = "sensor_band_central_radiation_wavelength" ;
-    band:units = "um" ;
+    band:units = "μm" ;
 
   float lat(time, scan) ;
     lat:standard_name = "latitude" ;
@@ -206,7 +249,7 @@ dimensions:
 variables:
   float band(band) ;
     band:standard_name = "sensor_band_central_radiation_wavelength" ;
-    band:units = "um" ;
+    band:units = "μm" ;
 
   float lat(time, scan) ;
     lat:standard_name = "latitude" ;
@@ -252,7 +295,7 @@ dimensions:
 variables:
   float band(band) ;
     band:standard_name = "sensor_band_central_radiation_wavelength" ;
-    band:units = "um" ;
+    band:units = "μm" ;
 
   float lat(time, nrows, ncols) ;
      lat:standard_name = "latitude" ;
@@ -283,23 +326,23 @@ The same encoding is also applicable to swath data from hyperspectral sounding i
 ----
 dimensions:
   time = 50 ;
-  for = 45 ; <1>
-  fov = 9 ; <2>
+  FOR = 45 ; <1>
+  FOV = 9 ; <2>
   band = 1305 ;
 
 variables:
   float band(band) ;
     band:standard_name = "sensor_band_central_radiation_wavelength" ;
-    band:units = "um" ;
+    band:units = "μm" ;
 
-  short fov(fov); <3>
-    fov:long_name = "Field-of-view ordinal number" ;
+  short FOV(FOV); <3>
+    FOV:long_name = "Field-of-view ordinal number" ;
 
-  float lat(time, for, fov) ;
+  float lat(time, FOR, FOV) ;
     lat:standard_name = "latitude" ;
     lat:units = "degrees_north" ;
 
-  float lon(time, for, fov) ;
+  float lon(time, FOR, FOV) ;
     lon:standard_name = "longitude" ;
     lon:units = "degrees_east" ;
 
@@ -308,7 +351,7 @@ variables:
     time:units = "<units> since <datetime string>" ;
     time:calendar = "gregorian" ;
 
-  float swath_data(time, for, fov, band) ;
+  float swath_data(time, FOR, FOV, band) ;
     swath_data:featureType = "multibandImageSwath" ;
     swath_data:coordinates = "lon lat" ;
 ----
@@ -317,11 +360,11 @@ variables:
 <3> This variable can be left out if there is no need to define a particular ordering of field-of-views within the field-of-regard.
 ====
 
-An interesting variation in the above encoding would be if the `for` and `fov` dimensions exchanged places in the ordering, e.g. `(time, for, fov, ...)` -> `(time, fov, for, ...)`. The latter ordering corresponds to the spatial arrangement of the FORs and FOVs: FORs match the columns and FOVs match the rows of a two-dimensional imaging sensor. In other words: `for` -> `ncols` and `fov` -> `nrows`.
+An interesting variation in the above encoding would be if the `FOR` and `FOV` dimensions exchanged places in the ordering, e.g. `(time, FOR, FOV, ...)` -> `(time, FOV, FOR, ...)`. The latter ordering corresponds to the spatial arrangement of the FORs and FOVs: FORs match the columns and FOVs match the rows of a two-dimensional imaging sensor. In other words: `FOR` -> `ncols` and `FOV` -> `nrows`.
 
 ==== Multiband Field-of-Regard with Field-of-View Shapes
 
-This is an extension on the Multiband Image feature type when geospatial extent of all field-of-views in each field-of-regard need to be provided.
+This is an extension on the Multiband Image feature type when the geospatial extent of all field-of-views in each field-of-regard need to be provided.
 
 [WARNING]
 ====
@@ -334,31 +377,31 @@ This encoding example is under review and may change in the future.
 ----
 dimensions:
   time = 10 ; // option: time = UNLIMITED
-  for = 30 ;
+  FOR = 30 ;
   band = 1305 ;
-  fov = 9 ;
+  FOV = 9 ;
   waypoints = 8 ;
 
 
 variables:
   float band(band) ;
     band:standard_name = "sensor_band_central_radiation_wavelength" ;
-    band:units = "um" ;
+    band:units = "μm" ;
 
-  float lat(time, for, fov) ;
+  float lat(time, FOR, FOV) ;
     lat:standard_name = "latitude" ;
     lat:units = "degrees_north" ;
     lat:bounds = "lat_bounds" ;
 
-  float lat_bounds(time, for, fov, waypoints) ;
+  float lat_bounds(time, FOR, FOV, waypoints) ;
     lat_bounds:units = "degrees_north" ;
 
-  float lon(time, for, fov) ;
+  float lon(time, FOR, FOV) ;
     lon:standard_name = "longitude" ;
     lon:units = "degrees_east" ;
     lon:bounds = "lon_bounds" ;
 
-  float lon_bounds(time, for, fov, waypoints) ;
+  float lon_bounds(time, FOR, FOV, waypoints) ;
     lon_bounds:units = "degrees_east" ;
 
   double time(time) ;
@@ -366,7 +409,7 @@ variables:
     time:units = "<units> since <datetime string>" ;
     time:calendar = "gregorian" ;
 
-  float swath_data(time, for, fov, band) ;
+  float swath_data(time, FOR, FOV, band) ;
     swath_data:featureType = "multiBandForSwath" ;
     swath_data:coordinates = "lon lat" ;
 ----
@@ -473,8 +516,8 @@ variables:
 ----
 dimensions:
   time = UNLIMITED ;
-  for = 30 ;
-  fov = 9 ;
+  FOR = 30 ;
+  FOV = 9 ;
 
 variables:
   double time(time) ;
@@ -482,15 +525,15 @@ variables:
     time:units = "<units> since <datetime string>" ;
     time:calendar = "gregorian" ;
 
-  float lat(time, for, fov) ;
+  float lat(time, FOR, FOV) ;
     lat:standard_name = "latitude" ;
     lat:units = "degrees_north" ;
 
-  float lon(time, for, fov) ;
+  float lon(time, FOR, FOV) ;
     lon:standard_name = "longitude" ;
     lon:units = "degrees_east" ;
 
-  float swath_data(time, for, fov) ;
+  float swath_data(time, FOR, FOV) ;
     swath_data:featureType = "imageSwath" ;
     swath_data:coordinates = "lon lat" ;
 ----
@@ -664,10 +707,10 @@ There are two more ways how to encode swath data from field-of-views and field-o
 ----
 dimensions:
   time = 10 ;
-  for = 30 ; <1>
+  FOR = 30 ; <1>
   press = 15 ;
-  fov_atrack = 3 ; <2>
-  fov_xtrack = 3 ; <3>
+  FOV_atrack = 3 ; <2>
+  FOV_xtrack = 3 ; <3>
 
 variables:
   float press(press) ;
@@ -675,11 +718,11 @@ variables:
     press:units = "Pa" ;
     press:positive = "up" ;
 
-  float lat(time, for, fov_atrack, fov_xtrack) ; <4>
+  float lat(time, FOR, FOV_atrack, FOV_xtrack) ; <4>
     lat:standard_name = "latitude" ;
     lat:units = "degrees_north" ;
 
-  float lon(time, for, fov_atrack, fov_xtrack) ; <4>
+  float lon(time, FOR, FOV_atrack, FOV_xtrack) ; <4>
     lon:standard_name = "longitude" ;
     lon:units = "degrees_east" ;
 
@@ -688,8 +731,8 @@ variables:
     time:units = "<units> since <datetime string>" ;
     time:calendar = "gregorian" ;
 
-  float swath_data(time, for, fov_atrack, fov_xtrack, press) ;
-    swath_data:featureType = "forProfileSwath" ;
+  float swath_data(time, FOR, FOV_atrack, FOV_xtrack, press) ;
+    swath_data:featureType = "FORProfileSwath" ;
     swath_data:coordinates = "lon lat" ;
 ----
 <1> Number of field-of-regards in one across-track scan.
@@ -704,28 +747,28 @@ variables:
 ----
 dimensions:
   time = 10 ;
-  for = 30 ;
+  FOR = 30 ;
   press = 15 ;
-  fov_atrack = 3 ;
-  fov_xtrack = 3 ;
+  FOV_atrack = 3 ;
+  FOV_xtrack = 3 ;
 
 variables:
-  short fov_atrack(fov_atrack): <1>
-    fov_atrack:long_name = "Field-of-view along track ordinal number" ;
+  short FOV_atrack(FOV_atrack): <1>
+    FOV_atrack:long_name = "Field-of-view along track ordinal number" ;
 
-  short fov_xtrack(fov_xtrack): <1>
-    fov_xtrack:long_name = "Field-of-view across track ordinal number" ;
+  short FOV_xtrack(FOV_xtrack): <1>
+    FOV_xtrack:long_name = "Field-of-view across track ordinal number" ;
 
   float press(press) ;
     press:standard_name = "air_pressure" ;
     press:units = "Pa" ;
     press:positive = "up" ;
 
-  float lat(time, for) ;
+  float lat(time, FOR) ;
     lat:standard_name = "latitude" ;
     lat:units = "degrees_north" ;
 
-  float lon(time, for) ;
+  float lon(time, FOR) ;
     lon:standard_name = "longitude" ;
     lon:units = "degrees_east" ;
 
@@ -734,9 +777,9 @@ variables:
     time:units = "<units> since <datetime string>" ;
     time:calendar = "gregorian" ;
 
-  float swath_data(time, for, fov_atrack, fov_xtrack, press) ;
-    swath_data:featureType = "forProfileSwath" ;
+  float swath_data(time, FOR, FOV_atrack, FOV_xtrack, press) ;
+    swath_data:featureType = "FORProfileSwath" ;
     swath_data:coordinates = "lon lat" ;
 ----
-<1> `fov_atrack` and `fov_xtrack` are coordinates now compared to the previous example because the `lat` and `lon` auxiliary coordinates do not depend on them.
+<1> `FOV_atrack` and `FOV_xtrack` are coordinates now compared to the previous example because the `lat` and `lon` auxiliary coordinates do not depend on them.
 ====
