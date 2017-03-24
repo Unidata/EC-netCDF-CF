@@ -14,6 +14,9 @@ Proposal status: *[red]#DRAFT#*.
 Last modified: 2017-01-23
 ====
 
+// Example counter
+:example-count: 0
+
 == Introduction
 
 Earth Science swath data are collected by an instrument that observes a smaller portion of Earth at any given instant while its platform (an object carrying such instrument) moves and the instrument sweeps over a wider area of Earth. Usually, successive swath observations are combined to cover a larger portion of Earth, sometimes even the entire Earth. When these successive observations are plotted on maps they appear to cover a swath on the Earth's surface, hence the name.
@@ -40,7 +43,7 @@ Encoding examples are expressed using the http://www.unidata.ucar.edu/software/n
 
 Specifying time coordinate for swath data follows the pertinent CF convention rules. The rank of the time coordinate can range from one (one-dimensional) up to the rank of the swath data variable to which it applies (2, 3, ..., _n_-dimensional). The slowest varying dimension of the coordinate must represent forward (along-track) movement of the platform.
 
-[caption="Example 1: "]
+[caption="Example {counter:example-count}: "]
 .Time coordinate.
 ====
 ----
@@ -64,7 +67,7 @@ Some satellite swath data use the International Atomic Time (TAI) which currentl
 
 Specifying bands (channels) is done with spectral coordinates. Band information can either be numerical (as wavelength, wavenumber, or frequency) or string.
 
-[caption="Example 2: "]
+[caption="Example {counter:example-count}: "]
 .Numerical spectral coordinate.
 ====
 ----
@@ -83,7 +86,7 @@ variables:
 
 String band information is applicable to cases where bands cannot be differentiated solely numerically, for example, when polarization together with electromagnetic spectrum interval definition has to be combined.
 
-[caption="Example 3: "]
+[caption="Example {counter:example-count}: "]
 .String band coordinate.
 ====
 For the netCDF classic model:
@@ -117,7 +120,7 @@ variables:
 
 Multiband swath data are the most common radiometric swath data, collected over an area on the Earth as successive across-track observations at a number of different bands.
 
-[caption="Example 4: "]
+[caption="Example {counter:example-count}: "]
 .Multiband data with numerical spectral coordinate.
 ====
 ----
@@ -152,7 +155,7 @@ variables:
 
 Another encoding of the Multiband Swath with string-valued band coordinate because numerical band information may not always be sufficient.
 
-[caption="Example 5: "]
+[caption="Example {counter:example-count}: "]
 .Multiband data with string spectral coordinate.
 ====
 ----
@@ -193,7 +196,7 @@ Along with the multiband swath data itself, sometimes it may be required to spec
 This encoding example is under review and may change in the future.
 ====
 
-[caption="Example 6: "]
+[caption="Example {counter:example-count}: "]
 .Multiband data with field-of-view shapes.
 ====
 ----
@@ -239,7 +242,7 @@ variables:
 
 So far the presented encodings are for swath data collected by successive across-track observations. Two-dimensional imaging sensors, such as in digital cameras, can acquire swath data as a multiband image.
 
-[caption="Example 7: "]
+[caption="Example {counter:example-count}: "]
 .Multiband Image data.
 ====
 ----
@@ -277,7 +280,7 @@ variables:
 
 The same encoding is also applicable to swath data from hyperspectral sounding instruments which make observations with their detectors arranged into a grid, typically 2-by-2 or 3-by-3. Such grouping of the field-of-views is referred to as a field-of-regard (FOR). The following example is identical to the previous one except for two dimensions with changed names.
 
-[caption="Example 8: "]
+[caption="Example {counter:example-count}: "]
 .Multiband Image data for each field-of-regard/field-of-view.
 ====
 ----
@@ -328,7 +331,7 @@ This is an extension on the Multiband Image feature type when geospatial extent 
 This encoding example is under review and may change in the future.
 ====
 
-[caption="Example 9: "]
+[caption="Example {counter:example-count}: "]
 .title
 ====
 ----
@@ -376,7 +379,7 @@ variables:
 
 ==== Swath
 
-[caption="Example 10: "]
+[caption="Example {counter:example-count}: "]
 .Swath data.
 ====
 ----
@@ -406,7 +409,7 @@ variables:
 
 For completeness, the example below uses along- and across-track dimensions.
 
-[caption="Example 11: "]
+[caption="Example {counter:example-count}: "]
 .Swath data utilizing along- and across-track dimensions.
 ====
 ----
@@ -438,7 +441,7 @@ variables:
 
 This is the geophysical analog of the Multiband Image Swath feature type.
 
-[caption="Example 12: "]
+[caption="Example {counter:example-count}: "]
 .Image Swath data.
 ====
 ----
@@ -467,7 +470,7 @@ variables:
 ----
 ====
 
-[caption="Example 13: "]
+[caption="Example {counter:example-count}: "]
 .The version of this feature type for each field-of-regard/field-of-view.
 ====
 ----
@@ -500,7 +503,7 @@ variables:
 
 This feature type consists of the Swath with an altitude coordinate. All types of altitude coordinates are allowed.
 
-[caption="Example 14: "]
+[caption="Example {counter:example-count}: "]
 .Profile data.
 ====
 ----
@@ -535,7 +538,7 @@ variables:
 ----
 ====
 
-[caption="Example 15: "]
+[caption="Example {counter:example-count}: "]
 .Profile data utilizing along- and across-track dimensions.
 ====
 ----
@@ -571,7 +574,7 @@ float press(press) ;
 
 ==== Multiband Profile
 
-[caption="Example 16: "]
+[caption="Example {counter:example-count}: "]
 .Multiband Profile data.
 ====
 ----
@@ -614,7 +617,7 @@ variables:
 
 Adding an altitude coordinate to the Image Swath feature type makes this one.
 
-[caption="Example 17: "]
+[caption="Example {counter:example-count}: "]
 .Image Profile data.
 ====
 ----
@@ -658,7 +661,7 @@ There are two more ways how to encode swath data from field-of-views and field-o
 * How much latitude/longitude data is provided: for all field-of-views in each field-of-regard, or just for each field-of-regard as a whole.
 * A two-dimensional layout of field-of-views within the field-of-regard.
 
-[caption="Example 18: "]
+[caption="Example {counter:example-count}: "]
 .Field-of-Regard Profile data with latitude and longitude data for all field-of-views in each field-of-regard.
 ====
 ----
@@ -698,7 +701,7 @@ variables:
 <4> Latitude and longitude for all field-of-views in the field-of-regard.
 ====
 
-[caption="Example 19: "]
+[caption="Example {counter:example-count}: "]
 .Field-of-Regard Profile data with latitude and longitude data for each field-of-regard as a whole.
 ====
 ----
