@@ -38,7 +38,7 @@ All the swath encodings in this proposal use the `featureType` attribute as a va
 
 The swath coordinate describes the swath characteristics (e.g., cross-track, conical scan, reprojected to fixed grid) and mapping to geolocation (latitude/longitude for every _n_-th pixel). Other specifications include: coordinate reference (geodetic or geocentric; planetodetic, planetocentric for other planetary bodies) and a fill value (when the swath is off-planet). The slowest varying dimension of the geolocation coordinate must represent forward (along-track) movement of the platform.
 
-[caption="Example 0: "]
+[caption="Example {counter:example-count}: "]
 .Geolocation array for MODIS (starts at 3,3 and sampled 5x5).
 ====
 ----
