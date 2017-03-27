@@ -4,11 +4,6 @@
 :icons: font
 
 ====
-This is a proposal for an extension of the http://cfconventions.org[Climate and Forecast metadata convention].
-
-The work is done under the U.S. National Science Foundation award https://www.nsf.gov/awardsearch/showAward?AWD_ID=1541031[1541031]: +
-"EarthCube IA: Advancing netCDF-CF for the Geoscience Community".
-
 Proposal status: *[red]#DRAFT#*.
 
 Last modified: 2017-01-23
@@ -16,25 +11,25 @@ Last modified: 2017-01-23
 
 == Introduction
 
-Earth Science swath data are collected by an instrument that observes a smaller portion of Earth at any given instant while its platform (an object carrying such instrument) moves and the instrument sweeps over a wider area of Earth. Usually, successive swath observations are combined to cover a larger portion of Earth, sometimes even the entire Earth. When these successive observations are plotted on maps they appear to cover a swath on the Earth's surface, hence the name.
+This is a proposal for an extension of the http://cfconventions.org[Climate and Forecast metadata convention] (CF) to standardize the encodings of Earth Science swath data in the original instrument viewing geometry. It is based on the CF http://cfconventions.org/cf-conventions/cf-conventions.html[version 1.7] (currently in draft) although backward compatibility is not necessarily an objective.
 
-Swath data originates as measurements of electromagnetic radiation at a number of intervals of the electromagnetic spectrum, called _bands_ or _channels_. These radiometric swath data are commonly referred to as _Level 1_. Further processing these data to retrieve geophysical parameters produces so-called _Level 2_ swath data.
+The work is done under the U.S. National Science Foundation award https://www.nsf.gov/awardsearch/showAward?AWD_ID=1541031[1541031]: "EarthCube IA: Advancing netCDF-CF for the Geoscience Community".
 
-The aim of this proposal is to standardize encodings of both radiometric (Level 1) and geophysical (Level 2) swath data in the Climate and Forecast (CF) convention. The proposed encodings are independent from the observation method and should be applicable to swath data acquired either from satellites, airplanes, or unmanned aerial systems.
-
-The basis for this proposal is the CF convention http://cfconventions.org/cf-conventions/cf-conventions.html[version 1.7] (currently in draft) although backward compatibility with it is not necessarily an objective. Since there are already swath data in netCDF files, the community-provided examples were valuable resource in preparing this proposal. These examples are stored in a GitHub repository at https://github.com/diwg/diwg.
+Since there are already swath data in netCDF files, the community-provided examples were valuable resource in preparing this proposal. These examples are stored in a GitHub repository at https://github.com/diwg/diwg.
 
 == Swath Data Encodings
 
-The proposed encodings reflect the variety of swath data from the radiometric (for Level 1 data) and geophysical (for Level 2 data) domains. The chief differences between the two domain encodings are:
+Earth Science swath data are collected by an instrument that observes a smaller portion of Earth at any given instant while its platform (an object carrying such instrument) moves and the instrument sweeps over a wider area of Earth. Successive swath observations are usually combined to cover a larger portion of Earth, sometimes even the entire Earth. When these successive observations are plotted on maps they appear to cover a swath on the Earth's surface, hence the name. The proposed encodings are independent from the observation method and are applicable to swath data acquired either from satellites, airplanes, or unmanned aerial systems.
+
+Swath data originates as measurements of electromagnetic radiation at a number of intervals of the electromagnetic spectrum, called _bands_ or _channels_. In the satellite remote sensing context, these radiometric swath data are commonly referred to as _Level 1_. Further processing these data to retrieve geophysical parameters produces so-called _Level 2_ swath data.
+
+Encoding examples are expressed using the http://www.unidata.ucar.edu/software/netcdf/netcdf/CDL-Syntax.html#CDL-Syntax[NetCDF Common Data Language] (CDL) with only the relevant file content to illustrate the concept. The `swath_data` variable in the examples is a generic representative of any parameter that can be stored in swath data files.  The chief differences between the encodings for these two domains are:
 
 * Spectral (band, channel) coordinates must be present for all radiometric swath data.
 * Geospatial extent for radiometric swath data is always two-dimensional (area), while for geophysical swath data it can also be three-dimensional.
 * Geophysical swath data may use coordinates that represent altitude.
 
-All the swath encodings rely on the use of the `featureType` attribute as a variable attribute. This attribute holds the swath encoding type identifier. Currently this requirement breaks the backward compatibility with the CF version 1 conventions. However, the convention's version 1.7 draft http://cfconventions.org/cf-conventions/cf-conventions.html#_features_and_feature_types[allows] for the possibility the `featureType` attribute may become a variable attribute at some later time.
-
-Encoding examples are expressed using the http://www.unidata.ucar.edu/software/netcdf/netcdf/CDL-Syntax.html#CDL-Syntax[NetCDF Common Data Language] (CDL) with only the relevant file content to illustrate the concept.
+All the swath encodings in this proposal use the `featureType` attribute as a variable attribute for storing the swath encoding type identifiers. Currently this requirement breaks the backward compatibility with the CF version 1 conventions. However, the convention's version 1.7 draft http://cfconventions.org/cf-conventions/cf-conventions.html#_features_and_feature_types[allows] for the possibility the `featureType` attribute may become a variable attribute at some later time.
 
 === Swath Coordinate
 
