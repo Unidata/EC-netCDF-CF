@@ -20,6 +20,8 @@ The work is done under the U.S. National Science Foundation award https://www.ns
 
 The community-provided examples were valuable resource in preparing this proposal. These examples are stored in a GitHub repository at https://github.com/diwg/diwg.
 
+Encoding examples are expressed using the http://www.unidata.ucar.edu/software/netcdf/netcdf/CDL-Syntax.html#CDL-Syntax[NetCDF Common Data Language] (CDL) with only the relevant file content to illustrate the concept.
+
 == Swath Data Encodings
 
 Earth Science swath data are collected by an instrument that observes a smaller portion of Earth at any given instant while its platform (an object carrying such instrument) moves and the instrument sweeps over a wider area of Earth. Successive swath observations are usually combined to cover a larger portion of Earth, sometimes even the entire Earth. When these successive observations are plotted on maps they appear to cover a swath on the Earth's surface, hence the name. The proposed encodings are independent from the observation method and are applicable to swath data acquired either from satellites, airplanes, or unmanned aerial systems.
@@ -32,7 +34,7 @@ Swath data originates as electromagnetic radiation collected from a specific dir
 
 All the swath encodings in this proposal use the `featureType` variable attribute for storing the swath encoding type identifiers. Currently this requirement breaks the backward compatibility with the CF version 1 conventions. However, the convention's version 1.7 draft http://cfconventions.org/cf-conventions/cf-conventions.html#_features_and_feature_types[allows] for the possibility the `featureType` attribute may become a variable attribute at some later time.
 
-Encoding examples are expressed using the http://www.unidata.ucar.edu/software/netcdf/netcdf/CDL-Syntax.html#CDL-Syntax[NetCDF Common Data Language] (CDL) with only the relevant file content to illustrate the concept. The `swath_data` variable in the examples is a generic representative of any parameter that can be stored in swath data files.
+The `swath_data` variable in the examples is a generic representative of any parameter that can be stored in swath data files. The order of its dimensions in the examples is not the only possible or allowed. It should be tailored in actual files to expected data access patterns.
 
 === Swath Coordinate
 
@@ -703,7 +705,7 @@ variables:
 As in the few previous encoding examples, assuming that `nrows` represents field-of-regards (FOR) and `ncols` represents field-of-views (FOV), this feature type can also serve for storing profiles from hyperspectral sounders for each field-of-view. The following example illustrates this:
 
 [caption="Example {counter:example-count}: "]
-.Image Profile data for field-of-regards and field-of-views.
+.Image Profile data for field-of-regards (FOR) and field-of-views (FOV).
 ====
 ----
 dimensions:
