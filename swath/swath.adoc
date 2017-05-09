@@ -24,13 +24,13 @@ The community-provided examples were valuable resource in preparing this proposa
 
 Earth Science swath data are collected by an instrument that observes a smaller portion of Earth at any given instant while its platform (an object carrying such instrument) moves and the instrument sweeps over a wider area of Earth. Successive swath observations are usually combined to cover a larger portion of Earth, sometimes even the entire Earth. When these successive observations are plotted on maps they appear to cover a swath on the Earth's surface, hence the name. The proposed encodings are independent from the observation method and are applicable to swath data acquired either from satellites, airplanes, or unmanned aerial systems.
 
-Swath data originates as measurements of electromagnetic radiation at a number of intervals of the electromagnetic spectrum, called _bands_ or _channels_. In the satellite remote sensing context, these radiometric swath data are commonly referred to as _Level 1_. Further processing these data to retrieve geophysical parameters produces so-called _Level 2_ swath data. Thus, there are two distinctive data domains for which we define their encodings: radiometric and geophysical. The chief differences between the encodings for these two domains are:
+Swath data originates as electromagnetic radiation collected from a specific direction into a solid angle and then measured at a number of intervals of the electromagnetic spectrum, called _bands_ or _channels_. The combination of the direction and the solid angle define what is known as the field-of-view (FOV). These radiometric swath data are then further processed to retrieve geophysical parameters. In the satellite remote sensing context, the former is commonly referred to as _Level 1_ while the latter is called _Level 2_ swath data. Thus there are two distinctive swath data domains for which we define encodings: radiometric and geophysical. The chief differences between the encodings for these two domains are:
 
 * Spectral (band, channel) coordinates must be defined for all radiometric swath data.
 * The geospatial extent for radiometric swath data is always two-dimensional (area), while for geophysical swath data it can also be three-dimensional.
 * Geophysical swath data may also define coordinates that represent altitude.
 
-All the swath encodings in this proposal use the `featureType` attribute as a variable attribute for storing the swath encoding type identifiers. Currently this requirement breaks the backward compatibility with the CF version 1 conventions. However, the convention's version 1.7 draft http://cfconventions.org/cf-conventions/cf-conventions.html#_features_and_feature_types[allows] for the possibility the `featureType` attribute may become a variable attribute at some later time.
+All the swath encodings in this proposal use the `featureType` variable attribute for storing the swath encoding type identifiers. Currently this requirement breaks the backward compatibility with the CF version 1 conventions. However, the convention's version 1.7 draft http://cfconventions.org/cf-conventions/cf-conventions.html#_features_and_feature_types[allows] for the possibility the `featureType` attribute may become a variable attribute at some later time.
 
 Encoding examples are expressed using the http://www.unidata.ucar.edu/software/netcdf/netcdf/CDL-Syntax.html#CDL-Syntax[NetCDF Common Data Language] (CDL) with only the relevant file content to illustrate the concept. The `swath_data` variable in the examples is a generic representative of any parameter that can be stored in swath data files.
 
@@ -374,7 +374,7 @@ An interesting variation in the above encoding would be if the `FOR` and `FOV` d
 
 ==== Multiband Image with Field-of-View Geo-Shapes
 
-This is an extension on the Multiband Image feature type when the geospatial extent of all field-of-views in each field-of-regard need to be provided. The assumptions and approach are identical as for the Multiband with Field-of-View Geo-Shapes encoding.
+This is an extension on the Multiband Image feature type when the geospatial extent of all field-of-views in each field-of-regard need to be provided. The assumptions and approach are identical as for the <<Multiband with Field-of-View Geo-Shapes>> encoding.
 
 [caption="Example {counter:example-count}: "]
 .Multiband Image data with field-of-view geopolygons.
@@ -700,7 +700,42 @@ variables:
 ----
 ====
 
-As in the few previous encoding examples, assuming that `nrows` represents field-of-regards (FOR) and `ncols` represents field-of-views (FOV), this feature type can be used for storing profiles from hyperspectral sounders for each field-of-view.
+As in the few previous encoding examples, assuming that `nrows` represents field-of-regards (FOR) and `ncols` represents field-of-views (FOV), this feature type can also serve for storing profiles from hyperspectral sounders for each field-of-view. The following example illustrates this:
+
+[caption="Example {counter:example-count}: "]
+.Image Profile data for field-of-regards and field-of-views.
+====
+----
+dimensions:
+  time = 1 ;
+  FOR = 1024 ;
+  FOV = 3600 ;
+  press = 100 ;
+
+variables:
+  float press(press) ;
+    press:standard_name = "air_pressure" ;
+    press:units = "Pa" ;
+    press:positive = "up" ;
+
+  float lat(time, FOR, FOV) ;
+    lat:standard_name = "latitude" ;
+    lat:units = "degrees_north" ;
+
+  float lon(time, FOR, FOV) ;
+    lon:standard_name = "longitude" ;
+    lon:units = "degrees_east" ;
+
+  double time(time) ;
+    time:standard_name = "time" ;
+    time:units = "<units> since <datetime string>" ;
+    time:calendar = "gregorian" ;
+
+  float swath_data(time, FOR, FOV, press) ;
+    swath_data:featureType = "imageProfileSwath" ;
+    swath_data:coordinates = "lon lat" ;
+----
+====
 
 ==== Field-of-Regard Profile
 
