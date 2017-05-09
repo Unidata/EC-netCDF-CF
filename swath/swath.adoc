@@ -6,7 +6,7 @@
 ====
 Proposal status: *[red]#DRAFT#*.
 
-Last modified: 2017-04-20
+Last modified: 2017-05-09
 ====
 
 // Example counter
@@ -36,22 +36,22 @@ All the swath encodings in this proposal use the `featureType` variable attribut
 
 The `swath_data` variable in the examples is a generic representative of any parameter that can be stored in swath data files. The order of its dimensions in the examples is not the only possible or allowed. It should be tailored in actual files to expected data access patterns.
 
-=== Swath Coordinate
+=== Geospatial Coordinate
 
-The swath coordinate is mandatory as it describes the instrument scanning and stepping in terms of the latitude and longitude for each footprint. This greatly reduces the complexity of the geolocation, which to generalize would require a two-body orbit model, precise time information, 3D instrument pointing information (e.g., cross-track, conical scan), etc. to determine the latitude/longitude of each footprint. 
+The geospatial coordinate is mandatory as it describes the instrument scanning and stepping in terms of the latitude and longitude for each footprint. This greatly reduces the complexity of the geolocation, which to generalize would require a two-body orbit model, precise time information, 3D instrument pointing information (e.g., cross-track, conical scan), etc. to determine the latitude/longitude of each footprint. As an alternative to having latitude and longitude variables, there may be a projected coordinate variable (e.g., fixed grid).  When the projected coordinate variable is used, each variable must contain a grid_mapping attribute referencing it.
 
 However, this per pixel latitude/longitude does preclude the possibility of CF compliance of many existing archives of satellite data. For example: 
 
-* The MODIS Level 1b data (see <<MODIS: HDF-EOS Format,Example 21>> in Appendix A) stores latitude/longitude for every 5th line and element, beginning at position 3,3.
+* The MODIS Level 1b data (see <<MODIS: HDF-EOS Format,Example 22>> in Appendix A) stores latitude/longitude for every 5th line and element, beginning at position 3,3.
 * The GOES-16 Advanced Baseline Imager (ABI) data is reprojected to a fixed grid, which is a normalized geostationary projection. The coefficients of the fixed grid are stored, rather than latitude/longitude information. 
 * In general, the latitude/longitude of geostationary satellite data will require a fill value as the instrument does scan off-Earth.
 
-The latitude/longitude coordinate reference is geodetic (planetodetic for other planetary bodies). The slowest varying dimension of the geolocation coordinate must represent forward (along-track) movement of the platform. 
+The latitude/longitude coordinate reference is geodetic (planetodetic for other planetary bodies). The slowest varying dimension of the geospatial coordinate must represent forward (along-track) movement of the platform. 
 
-The following example is a minimum specification for the swath coordinate.
+The following example is a minimum specification for the geospatial coordinate.
 
 [caption="Example {counter:example-count}: "]
-.Geolocation example for a scanning instrument: along track (atrack) and cross track (xtrack).
+.Geospatial example for a scanning instrument: along track (atrack) and cross track (xtrack).
 ====
 
 ----
@@ -60,19 +60,59 @@ dimensions:
   xtrack = 2048 ;
 
 variables:
-    float lat(atrack, xtrack) ;
-        string lat:units = "degrees_north" ;
-        lat:valid_range = -90.f, 90.f ;
-        string lat:long_name = "latitude" ;
-        string lat:standard_name = "latitude" ;
-        string lat:description = "latitude of footprint" ;
-    float lon(atrack, xtrack) ;
-        string lon:units = "degrees_east" ;
-        lon:valid_range = -180.f, 180.f ;
-        string lon:long_name = "longitude" ;
-        string lon:standard_name = "longitude" ;
-        string lon:description = "longitude of footprint" ;
+  float lat(atrack, xtrack) ;
+    string lat:units = "degrees_north" ;
+    lat:valid_range = -90.f, 90.f ;
+    string lat:long_name = "latitude" ;
+    string lat:standard_name = "latitude" ;
+    string lat:description = "latitude of footprint" ;
+  float lon(atrack, xtrack) ;
+    string lon:units = "degrees_east" ;
+    lon:valid_range = -180.f, 180.f ;
+    string lon:long_name = "longitude" ;
+    string lon:standard_name = "longitude" ;
+    string lon:description = "longitude of footprint" ;
 ----
+
+
+====
+
+[caption="Example {counter:example-count}: "]
+.Geospatial example for a scanning instrument: x/y dimensions with x/y and projected coordinate variable.
+====
+
+----
+dimensions:
+  y = 1500 ;
+  x = 2500 ;
+
+variables:
+  short y(y) ;
+    y:scale_factor = -5.6e-005f ;
+	y:add_offset = 0.126532f ;
+	y:units = "rad" ;
+	y:axis = "Y" ;
+	y:long_name = "GOES fixed grid projection y-coordinate" ;
+	y:standard_name = "projection_y_coordinate" ;
+  short x(x) ;
+	x:scale_factor = 5.6e-005f ;
+	x:add_offset = -0.075012f ;
+	x:units = "rad" ;
+	x:axis = "X" ;
+	x:long_name = "GOES fixed grid projection x-coordinate" ;
+	x:standard_name = "projection_x_coordinate" ;
+  int goes_imager_projection ;
+	goes_imager_projection:long_name = "GOES-R ABI fixed grid projection" ;
+	goes_imager_projection:grid_mapping_name = "geostationary" ;
+	goes_imager_projection:perspective_point_height = 35786023. ;
+	goes_imager_projection:semi_major_axis = 6378137. ;
+	goes_imager_projection:semi_minor_axis = 6356752.31414 ;
+	goes_imager_projection:inverse_flattening = 298.2572221 ;
+	goes_imager_projection:latitude_of_projection_origin = 0. ;
+	goes_imager_projection:longitude_of_projection_origin = -89.5 ;
+	goes_imager_projection:sweep_angle_axis = "x" ;
+----
+
 
 ====
 
@@ -89,10 +129,10 @@ dimensions:
   time = 10 ; <1>
 
 variables:
-    double time(time) ;
-      time:standard_name = "time" ;
-      time:units = "<units> since <datetime string>" ;
-      time:calendar = "gregorian" ;
+  double time(time) ;
+    time:standard_name = "time" ;
+    time:units = "<units> since <datetime string>" ;
+    time:calendar = "gregorian" ;
 ----
 <1> The dimension represents forward (along track) platform movement. It can also be an unlimited dimension (`time = UNLIMITED`).
 
@@ -103,10 +143,10 @@ dimensions:
   xtrack = 2048 ;
 
 variables:
-    double time(atrack, xtrack) ; <1>
-      time:standard_name = "time" ;
-      time:units = "<units> since <datetime string>" ;
-      time:calendar = "gregorian" ;
+  double time(atrack, xtrack) ; <1>
+    time:standard_name = "time" ;
+    time:units = "<units> since <datetime string>" ;
+    time:calendar = "gregorian" ;
 ----
 <1> Time coordinates with the rank greater than one must be listed in the `coordinates` attribute of their swath data variables.
 ====
@@ -160,7 +200,7 @@ dimensions:
 
 variables:
   string band(band_enum) ;
-     band:standard_name = "sensor_band_identifier" ;
+    band:standard_name = "sensor_band_identifier" ;
 ----
 ====
 
@@ -307,21 +347,21 @@ variables:
     band:units = "μm" ;
 
   float lat(time, nrows, ncols) ;
-     lat:standard_name = "latitude" ;
-     lat:units = "degrees_north" ;
+    lat:standard_name = "latitude" ;
+    lat:units = "degrees_north" ;
 
   float lon(time, nrows, ncols) ;
-     lon:standard_name = "longitude" ;
-     lon:units = "degrees_east" ;
+    lon:standard_name = "longitude" ;
+    lon:units = "degrees_east" ;
 
   double time(time) ;
-     time:standard_name = "time" ;
-     time:units = "<units> since <datetime string>" ;
-     time:calendar = "gregorian" ;
+    time:standard_name = "time" ;
+    time:units = "<units> since <datetime string>" ;
+    time:calendar = "gregorian" ;
 
   float swath_data(time, nrows, ncols, band) ;
-     swath_data:featureType = "multibandImageSwath" ;
-     swath_data:coordinates = "lon lat" ;
+    swath_data:featureType = "multibandImageSwath" ;
+    swath_data:coordinates = "lon lat" ;
 ----
 <1> Number of rows of the two-dimensional imaging sensor.
 <2> Number of columns of the two-dimensional imaging sensor.
@@ -385,7 +425,6 @@ dimensions:
   band = 1305 ;
   FOV = 9 ;
   vertices = 8 ;
-
 
 variables:
   float band(band) ;
@@ -497,21 +536,21 @@ dimensions:
 
 variables:
   float lat(time, nrows, ncols) ;
-     lat:standard_name = "latitude" ;
-     lat:units = "degrees_north" ;
+    lat:standard_name = "latitude" ;
+    lat:units = "degrees_north" ;
 
   float lon(time, nrows, ncols) ;
-     lon:standard_name = "longitude" ;
-     lon:units = "degrees_east" ;
+    lon:standard_name = "longitude" ;
+    lon:units = "degrees_east" ;
 
   double time(time) ;
-     time:standard_name = "time" ;
-     time:units = "<units> since <datetime string>" ;
-     time:calendar = "gregorian" ;
+    time:standard_name = "time" ;
+    time:units = "<units> since <datetime string>" ;
+    time:calendar = "gregorian" ;
 
   float swath_data(time, nrows, ncols) ;
-     swath_data:featureType = "imageSwath" ;
-     swath_data:coordinates = "lon lat" ;
+    swath_data:featureType = "imageSwath" ;
+    swath_data:coordinates = "lon lat" ;
 ----
 ====
 
@@ -557,7 +596,6 @@ dimensions:
   scan = 512 ;
   press = 15 ;
 
-
 variables:
   float press(press) ;
     press:standard_name = "air_pressure" ;
@@ -593,10 +631,10 @@ dimensions:
   press = 15 ;
 
 variables:
-float press(press) ;
-  press:standard_name = "air_pressure" ;
-  press:units = "Pa" ;
-  press:positive = "up" ;
+  float press(press) ;
+    press:standard_name = "air_pressure" ;
+    press:units = "Pa" ;
+    press:positive = "up" ;
 
   double time(atrack) ;
     time:standard_name = "time" ;
@@ -826,16 +864,22 @@ variables:
 <1> `FOV_atrack` and `FOV_xtrack` are coordinates now compared to the previous example because the `lat` and `lon` auxiliary coordinates do not depend on them.
 ====
 
-=== Appendix A: Swath Examples
+=== Appendix A: Non-compliant Geospatial Examples
 
 The following examples are from a variety of satellite swath data stored in netCDF, HDF-4, and HDF-5. This is to illustrate the variety of specifications for swath data, which on one hand provides an impetus to define a CF standard for satellite data, but on the other hand these exemplify the difficulty in getting all satellite data to conform to a standard.
 
 ==== MODIS: HDF-EOS Format
 
-The Moderate Resolution Imaging Spectroradiometer (MODIS) is a key instrument aboard the Terra (originally known as EOS AM-1) and Aqua (originally known as EOS PM-1) satellites. <<Appendix B: References,[1]>>
+The Moderate Resolution Imaging Spectroradiometer (MODIS) is a key instrument aboard the Terra (originally known as EOS AM-1) and Aqua (originally known as EOS PM-1) satellites. <<Appendix B: References,[1]>> 
+
+CF Non-compliant attributes: 
+
+* Groups are used in variables and geolocation fields
+* Non-standard dimension names (2*nscans)
+* Variable names are not standard (Latitude, Longitude) 
 
 [caption="Example {counter:example-count}: "]
-.Geolocation array for MODIS (starts at 3,3 and sampled 5x5).
+.Geospatial array for MODIS (starts at 3,3 and sampled 5x5).
 ====
 ----
   group: MODIS_SWATH_Type_L1B {
@@ -873,41 +917,45 @@ The Moderate Resolution Imaging Spectroradiometer (MODIS) is a key instrument ab
 ====
 ==== TRMM: NetCDF Format
 
-The Tropical Rainfall Measuring Mission (TRMM), a joint mission of NASA and the Japan Aerospace Exploration Agency, was launched in 1997 to study rainfall for weather and climate research. The satellite was retired on 8 April 2015. <<Appendix B: References,[2]>>
+The Tropical Rainfall Measuring Mission (TRMM), a joint mission of NASA and the Japan Aerospace Exploration Agency, was launched in 1997 to study rainfall for weather and climate research. The satellite was retired on 8 April 2015. <<Appendix B: References,[2]>> 
+
+CF Non-compliant attributes: 
+
+* Low and high resolution data contained in same file, with corresponding Latitude/Longitude variables (lat_lo, lat_hi) 
 
 [caption="Example {counter:example-count}: "]
-.Geolocation array for TRMM.
+.Geospatial array for TRMM.
 ====
 ----
 dimensions:
-    line = 2939 ;
-    samp_lo = 104 ;
-    samp_hi = 208 ;
+  line = 2939 ;
+  samp_lo = 104 ;
+  samp_hi = 208 ;
 variables:
-    short lat_hi(line, samp_hi) ;
-        lat_hi:units = "std_latitude" ;
-        lat_hi:missing_value = -32768s ;
-        lat_hi:valid_min = -9000s ;
-        lat_hi:valid_max = 9000s ;
-        lat_hi:scale_factor = 0.01 ;
-    short lat_lo(line, samp_lo) ;
-        lat_lo:units = "std_latitude" ;
-        lat_lo:missing_value = -32768s ;
-        lat_lo:valid_min = -9000s ;
-        lat_lo:valid_max = 9000s ;
-        lat_lo:scale_factor = 0.01 ;
-    short lon_hi(line, samp_hi) ;
-        lon_hi:units = "std_longitude" ;
-        lon_hi:missing_value = -32768s ;
-        lon_hi:valid_min = -18000s ;
-        lon_hi:valid_max = 18000s ;
-        lon_hi:scale_factor = 0.01 ;
-    short lon_lo(line, samp_lo) ;
-        lon_lo:units = "std_longitude" ;
-        lon_lo:missing_value = -32768s ;
-        lon_lo:valid_min = -18000s ;
-        lon_lo:valid_max = 18000s ;
-        lon_lo:scale_factor = 0.01 ;
+  short lat_hi(line, samp_hi) ;
+    lat_hi:units = "std_latitude" ;
+    lat_hi:missing_value = -32768s ;
+    lat_hi:valid_min = -9000s ;
+    lat_hi:valid_max = 9000s ;
+    lat_hi:scale_factor = 0.01 ;
+  short lat_lo(line, samp_lo) ;
+    lat_lo:units = "std_latitude" ;
+    lat_lo:missing_value = -32768s ;
+    lat_lo:valid_min = -9000s ;
+    lat_lo:valid_max = 9000s ;
+    lat_lo:scale_factor = 0.01 ;
+  short lon_hi(line, samp_hi) ;
+    lon_hi:units = "std_longitude" ;
+    lon_hi:missing_value = -32768s ;
+    lon_hi:valid_min = -18000s ;
+    lon_hi:valid_max = 18000s ;
+    lon_hi:scale_factor = 0.01 ;
+  short lon_lo(line, samp_lo) ;
+    lon_lo:units = "std_longitude" ;
+    lon_lo:missing_value = -32768s ;
+    lon_lo:valid_min = -18000s ;
+    lon_lo:valid_max = 18000s ;
+    lon_lo:scale_factor = 0.01 ;
 ----
 
 ====
@@ -915,110 +963,118 @@ variables:
 
 The Special Sensor Microwave Imager (SSM/I) Sensor is carried aboard Defense Meteorological Satellite Program (DMSP) satellites DMSP F-8, DMSP F-10, DMSP F-11, DMSP F-12, and DMSP F-13. <<Appendix B: References,[3]>>
 
+CF Non-compliant attributes: 
+
+* Low and high resolution data contained in same file, with corresponding Latitude/Longitude variables (lat_lo, lat_hi) 
+
 [caption="Example {counter:example-count}: "]
-.Geolocation array for SSM/I.
+.Geospatial array for SSM/I.
 ====
 ----
 dimensions:
-    miline_hi = 1124 ;
-    misamp_hi = 128 ;
-    miline_lo = 562 ;
-    misamp_lo = 64 ;
+  miline_hi = 1124 ;
+  misamp_hi = 128 ;
+  miline_lo = 562 ;
+  misamp_lo = 64 ;
 variables:
-    short lat_hi(miline_hi, misamp_hi) ;
-        lat_hi:units = "std_latitude" ;
-        lat_hi:missing_value = -32768s ;
-        lat_hi:valid_min = -32768s ;
-        lat_hi:valid_max = 32767s ;
-        lat_hi:scale_factor = 0.01 ;
-    short lat_lo(miline_lo, misamp_lo) ;
-        lat_lo:units = "std_latitude" ;
-        lat_lo:missing_value = -32768s ;
-        lat_lo:valid_min = -32768s ;
-        lat_lo:valid_max = 32767s ;
-        lat_lo:scale_factor = 0.01 ;
-    short lon_hi(miline_hi, misamp_hi) ;
-        lon_hi:units = "std_longitude" ;
-        lon_hi:missing_value = -32768s ;
-        lon_hi:valid_min = -32768s ;
-        lon_hi:valid_max = 32767s ;
-        lon_hi:scale_factor = 0.01 ;
-    short lon_lo(miline_lo, misamp_lo) ;
-        lon_lo:units = "std_longitude" ;
-        lon_lo:missing_value = -32768s ;
-        lon_lo:valid_min = -32768s ;
-        lon_lo:valid_max = 32767s ;
-        lon_lo:scale_factor = 0.01 ;
+  short lat_hi(miline_hi, misamp_hi) ;
+    lat_hi:units = "std_latitude" ;
+    lat_hi:missing_value = -32768s ;
+    lat_hi:valid_min = -32768s ;
+    lat_hi:valid_max = 32767s ;
+    lat_hi:scale_factor = 0.01 ;
+  short lat_lo(miline_lo, misamp_lo) ;
+    lat_lo:units = "std_latitude" ;
+    lat_lo:missing_value = -32768s ;
+    lat_lo:valid_min = -32768s ;
+    lat_lo:valid_max = 32767s ;
+    lat_lo:scale_factor = 0.01 ;
+  short lon_hi(miline_hi, misamp_hi) ;
+    lon_hi:units = "std_longitude" ;
+    lon_hi:missing_value = -32768s ;
+    lon_hi:valid_min = -32768s ;
+    lon_hi:valid_max = 32767s ;
+    lon_hi:scale_factor = 0.01 ;
+  short lon_lo(miline_lo, misamp_lo) ;
+    lon_lo:units = "std_longitude" ;
+    lon_lo:missing_value = -32768s ;
+    lon_lo:valid_min = -32768s ;
+    lon_lo:valid_max = 32767s ;
+    lon_lo:scale_factor = 0.01 ;
 ----
 ====
 ==== CrIS: NetCDF Format
 
 The Cross-track Infrared Sounder (CrIS) instrument is the first in a series of advanced operational sounders that provides more accurate, detailed atmospheric temperature and moisture observations for weather and climate applications. This is on board Suomi-NPP and will be on JPSS-1 (launch in fall 2017) and JPSS-2. <<Appendix B: References,[4]>> 
 
+CF Non-compliant attributes: 
+
+* Additional latitude/longitude variables for FOV center (lat_geoid, lon_geoid) and polygon points defining FOV (lat_bnds, lon_bnds)
+
 [caption="Example {counter:example-count}: "]
-.Geolocation array for CrIS.
+.Geospatial array for CrIS.
 ====
 ----
 dimensions:
-    spatial = 3 ;
-    fov_poly = 8 ;
-    utc_tuple = 8 ;
-    attitude = 3 ;
-    atrack = 45 ;
-    xtrack = 30 ;
-    fov = 9 ;
-    chan_lw = 717 ;
-    chan_mw = 437 ;
-    chan_sw = 163 ;
+  spatial = 3 ;
+  fov_poly = 8 ;
+  utc_tuple = 8 ;
+  attitude = 3 ;
+  atrack = 45 ;
+  xtrack = 30 ;
+  fov = 9 ;
+  chan_lw = 717 ;
+  chan_mw = 437 ;
+  chan_sw = 163 ;
 variables:
-    float lat(atrack, xtrack, fov) ;
-        string lat:units = "degrees_north" ;
-        lat:valid_range = -90.f, 90.f ;
-        string lat:long_name = "latitude" ;
-        string lat:standard_name = "latitude" ;
-        string lat:description = "latitude of FOV center" ;
-        lat:_FillValue = 9.96921e+36f ;
-        string lat:coverage_content_type = "referenceInformation" ;
-        string lat:bounds = "lat_bnds" ;
-    float lat_geoid(atrack, xtrack, fov) ;
-        string lat_geoid:units = "degrees_north" ;
-        lat_geoid:valid_range = -90.f, 90.f ;
-        string lat_geoid:long_name = "latitude" ;
-        string lat_geoid:standard_name = "latitude" ;
-        string lat_geoid:description = "latitude of FOV center on the geoid (without terrain correction)" ;
-        lat_geoid:_FillValue = 9.96921e+36f ;
-        string lat_geoid:coverage_content_type = "referenceInformation" ;
-    float lon(atrack, xtrack, fov) ;
-        string lon:units = "degrees_east" ;
-        lon:valid_range = -180.f, 180.f ;
-        string lon:long_name = "longitude" ;
-        string lon:standard_name = "longitude" ;
-        string lon:description = "longitude of FOV center" ;
-        lon:_FillValue = 9.96921e+36f ;
-        string lon:coverage_content_type = "referenceInformation" ;
-        string lon:bounds = "lon_bnds" ;
-    float lon_geoid(atrack, xtrack, fov) ;
-        string lon_geoid:units = "degrees_east" ;
-        lon_geoid:valid_range = -180.f, 180.f ;
-        string lon_geoid:long_name = "longitude" ;
-        string lon_geoid:standard_name = "longitude" ;
-        string lon_geoid:description = "longitude of FOV center on the geoid (without terrain correction)" ;
-        lon_geoid:_FillValue = 9.96921e+36f ;
-        string lon_geoid:coverage_content_type = "referenceInformation" ;
-    float lat_bnds(atrack, xtrack, fov, fov_poly) ;
-        string lat_bnds:units = "degrees_north" ;
-        lat_bnds:valid_range = -90.f, 90.f ;
-        string lat_bnds:long_name = "FOV boundary latitudes" ;
-        string lat_bnds:description = "latitudes of points forming a polygon around the perimeter of the FOV" ;
-        lat_bnds:_FillValue = 9.96921e+36f ;
-        string lat_bnds:coverage_content_type = "referenceInformation" ;
-    float lon_bnds(atrack, xtrack, fov, fov_poly) ;
-        string lon_bnds:units = "degrees_east" ;
-        lon_bnds:valid_range = -180.f, 180.f ;
-        string lon_bnds:long_name = "FOV boundary longitudes" ;
-        string lon_bnds:description = "longitudes of points forming a polygon around the perimeter of the FOV" ;
-        lon_bnds:_FillValue = 9.96921e+36f ;
-        string lon_bnds:coverage_content_type = "referenceInformation" ;
+  float lat(atrack, xtrack, fov) ;
+    string lat:units = "degrees_north" ;
+    lat:valid_range = -90.f, 90.f ;
+    string lat:long_name = "latitude" ;
+    string lat:standard_name = "latitude" ;
+    string lat:description = "latitude of FOV center" ;
+    lat:_FillValue = 9.96921e+36f ;
+    string lat:coverage_content_type = "referenceInformation" ;
+    string lat:bounds = "lat_bnds" ;
+  float lat_geoid(atrack, xtrack, fov) ;
+    string lat_geoid:units = "degrees_north" ;
+    lat_geoid:valid_range = -90.f, 90.f ;
+    string lat_geoid:long_name = "latitude" ;
+    string lat_geoid:standard_name = "latitude" ;
+    string lat_geoid:description = "latitude of FOV center on the geoid (without terrain correction)" ;
+    lat_geoid:_FillValue = 9.96921e+36f ;
+    string lat_geoid:coverage_content_type = "referenceInformation" ;
+  float lon(atrack, xtrack, fov) ;
+    string lon:units = "degrees_east" ;
+    lon:valid_range = -180.f, 180.f ;
+    string lon:long_name = "longitude" ;
+    string lon:standard_name = "longitude" ;
+    string lon:description = "longitude of FOV center" ;
+    lon:_FillValue = 9.96921e+36f ;
+    string lon:coverage_content_type = "referenceInformation" ;
+    string lon:bounds = "lon_bnds" ;
+  float lon_geoid(atrack, xtrack, fov) ;
+    string lon_geoid:units = "degrees_east" ;
+    lon_geoid:valid_range = -180.f, 180.f ;
+    string lon_geoid:long_name = "longitude" ;
+    string lon_geoid:standard_name = "longitude" ;
+    string lon_geoid:description = "longitude of FOV center on the geoid (without terrain correction)" ;
+    lon_geoid:_FillValue = 9.96921e+36f ;
+    string lon_geoid:coverage_content_type = "referenceInformation" ;
+  float lat_bnds(atrack, xtrack, fov, fov_poly) ;
+    string lat_bnds:units = "degrees_north" ;
+    lat_bnds:valid_range = -90.f, 90.f ;
+    string lat_bnds:long_name = "FOV boundary latitudes" ;
+    string lat_bnds:description = "latitudes of points forming a polygon around the perimeter of the FOV" ;
+    lat_bnds:_FillValue = 9.96921e+36f ;
+    string lat_bnds:coverage_content_type = "referenceInformation" ;
+  float lon_bnds(atrack, xtrack, fov, fov_poly) ;
+    string lon_bnds:units = "degrees_east" ;
+    lon_bnds:valid_range = -180.f, 180.f ;
+    string lon_bnds:long_name = "FOV boundary longitudes" ;
+    string lon_bnds:description = "longitudes of points forming a polygon around the perimeter of the FOV" ;
+    lon_bnds:_FillValue = 9.96921e+36f ;
+    string lon_bnds:coverage_content_type = "referenceInformation" ;
 ----
 ====
 
