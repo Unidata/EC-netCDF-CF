@@ -673,30 +673,30 @@ dimensions:
   time = 1 ;
   nrows = 1024 ;
   ncols = 3600 ;
-  pres = 100 ;
+  press = 100 ;
 
 variables:
-float press(press) ;
-  press:standard_name = "air_pressure" ;
-  press:units = "Pa" ;
-  press:positive = "up" ;
+  float press(press) ;
+    press:standard_name = "air_pressure" ;
+    press:units = "Pa" ;
+    press:positive = "up" ;
 
   float lat(time, nrows, ncols) ;
-     lat:standard_name = "latitude" ;
-     lat:units = "degrees_north" ;
+    lat:standard_name = "latitude" ;
+    lat:units = "degrees_north" ;
 
   float lon(time, nrows, ncols) ;
-     lon:standard_name = "longitude" ;
-     lon:units = "degrees_east" ;
+    lon:standard_name = "longitude" ;
+    lon:units = "degrees_east" ;
 
   double time(time) ;
-     time:standard_name = "time" ;
-     time:units = "<units> since <datetime string>" ;
-     time:calendar = "gregorian" ;
+    time:standard_name = "time" ;
+    time:units = "<units> since <datetime string>" ;
+    time:calendar = "gregorian" ;
 
-  float swath_data(time, nrows, ncols, pres) ;
-     swath_data:featureType = "imageProfileSwath" ;
-     swath_data:coordinates = "lon lat" ;
+  float swath_data(time, nrows, ncols, press) ;
+    swath_data:featureType = "imageProfileSwath" ;
+    swath_data:coordinates = "lon lat" ;
 ----
 ====
 
