@@ -18,7 +18,7 @@ This is a proposal for an extension of the http://cfconventions.org[Climate and 
 
 The work is done under the U.S. National Science Foundation award https://www.nsf.gov/awardsearch/showAward?AWD_ID=1541031[1541031]: "EarthCube IA: Advancing netCDF-CF for the Geoscience Community".
 
-The community-provided examples were valuable resource in preparing this proposal. These examples are stored in a GitHub repository at https://github.com/diwg/diwg.
+The community-provided examples were valuable resource in preparing this proposal. These examples are collected in a GitHub repository at https://github.com/diwg/diwg.
 
 Encoding examples are expressed using the http://www.unidata.ucar.edu/software/netcdf/netcdf/CDL-Syntax.html#CDL-Syntax[NetCDF Common Data Language] (CDL) with only the relevant file content to illustrate the concept.
 
@@ -38,9 +38,7 @@ The `swath_data` variable in the examples is a generic representative of any par
 
 === Geospatial Coordinate
 
-Geospatial coordinates for swath data reflect the instrument scanning and stepping in terms of the latitude and longitude for each field-of-view. Because of this the rank of these coordinates is at least two, but can be larger. Their coordinate reference is a geodetic datum (planetodetic for other planetary bodies). The slowest varying dimension must represent forward (along-track) movement of the platform.
-
-The following example demonstrates a typical case of swath data latitude and longitude coordinates on the WGS-84 geoid.
+Geospatial coordinates for swath data reflect the instrument scanning and stepping in terms of the latitude and longitude for each field-of-view. Because of this the rank of these coordinates is at least two, but can be larger, with the slowest varying dimension representing forward (along-track) movement of the platform. The reference of latitude-longitude coordinates is a geodetic datum (planetodetic for other planetary bodies). The following example demonstrates a typical case of swath data latitude and longitude coordinates on the WGS-84 geoid.
 
 [caption="Example {counter:example-count}: "]
 .Latitude and longitude coordinates on the WGS-84 geoid for a scanning instrument.
@@ -109,7 +107,7 @@ variables:
 <2> The grid mapping variable with the attributes describing the Geostationary projection.
 ====
 
-It is important to note here that the following requirements:
+It is important to note here that the CF requirements to:
 
 1. provide geospatial coordinate data for every field-of-view, or
 2. include latitude and longitude coordinates in addition to projected coordinates,
@@ -868,9 +866,9 @@ variables:
 <1> `FOV_atrack` and `FOV_xtrack` are coordinates now compared to the previous example because the `lat` and `lon` auxiliary coordinates do not depend on them.
 ====
 
-=== Appendix A: Non-compliant Geospatial Examples
+=== Appendix A: Non-Compliant Geospatial Examples
 
-The following examples are from a variety of satellite swath data stored in netCDF, HDF4, and HDF5. This is to illustrate the variety of specifications for swath data, which on one hand provides an impetus to define a CF standard for satellite data, but on the other hand these exemplify the difficulty in getting all satellite data to conform to a standard.
+The following examples are from a variety of satellite swath data stored in the netCDF, HDF4, and HDF5 file formats. This is to illustrate the variety of encodings for swath data, which on one hand provides an impetus to define a CF standard, but on the other hand these exemplify the difficulty in getting all satellite data to conform to a standard.
 
 ==== MODIS: HDF-EOS Format
 
