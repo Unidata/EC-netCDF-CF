@@ -6,7 +6,7 @@
 ====
 Proposal status: *[red]#DRAFT#*.
 
-Last modified: 2017-05-09
+Last modified: 2017-05-16
 ====
 
 // Example counter
@@ -24,19 +24,19 @@ Encoding examples are expressed using the http://www.unidata.ucar.edu/software/n
 
 == Swath Data Encodings
 
-Earth Science swath data are collected by an instrument that observes a smaller portion of Earth at any given instant while its platform (an object carrying such instrument) moves and the instrument sweeps over a wider area of Earth. Successive swath observations are usually combined to cover a larger portion of Earth, sometimes even the entire Earth. When these successive observations are plotted on maps they appear to cover a swath on the Earth's surface, hence the name. The proposed encodings are independent from the observation method and are applicable to swath data acquired either from satellites, airplanes, or unmanned aerial systems.
+Earth Science swath data originates as electromagnetic radiation collected from a specific direction into a solid angle and then measured at a number of intervals of the electromagnetic spectrum, called _bands_ or _channels_. The combination of the direction and the solid angle defines a _field-of-view_ (FOV). At any given instant an instrument sweeps its FOV over an area of Earth while its platform (an object carrying such instrument) moves. Successive FOV observations are usually combined to cover a larger portion of Earth, sometimes even the entire Earth. When these successive observations are plotted on maps they appear to cover a swath on the Earth's surface, hence the name.
 
-Swath data originates as electromagnetic radiation collected from a specific direction into a solid angle and then measured at a number of intervals of the electromagnetic spectrum, called _bands_ or _channels_. The combination of the direction and the solid angle define what is known as the field-of-view (FOV). These radiometric swath data are then further processed to retrieve geophysical parameters. In the satellite remote sensing context, the former is commonly referred to as _Level 1_ while the latter is called _Level 2_ swath data. Thus there are two distinctive swath data domains for which we define encodings: radiometric and geophysical. The chief differences between the encodings for these two domains are:
+Radiometric swath data are further processed to retrieve geophysical parameters. In the satellite remote sensing context, the former are commonly referred to as _Level 1_ while the latter are called _Level 2_ swath data. Thus there are two distinctive swath data domains for which we define encodings: radiometric and geophysical. The chief differences between these two domains are:
 
 * Spectral (band, channel) coordinates must be defined for all radiometric swath data.
 * The geospatial extent for radiometric swath data is always two-dimensional (area), while for geophysical swath data it can also be three-dimensional.
-* Geophysical swath data may also define coordinates that represent altitude.
+* Geophysical swath data may also include coordinates that represent altitude.
+
+The proposed encodings are independent from the observation method and are applicable to swath data acquired by instruments on either satellites, airplanes, or unmanned aerial systems. The `swath_data` variable in the examples is a generic representative of any parameter that can be stored in swath data files. The order of its dimensions in the examples is not the only possible or allowed. It should be tailored in actual files based on expected data access patterns.
 
 All the swath encodings in this proposal use the `featureType` variable attribute for storing the swath encoding type identifiers. Currently this requirement breaks the backward compatibility with the CF version 1 conventions. However, the convention's version 1.7 draft http://cfconventions.org/cf-conventions/cf-conventions.html#_features_and_feature_types[allows] for the possibility the `featureType` attribute may become a variable attribute at some later time.
 
-The `swath_data` variable in the examples is a generic representative of any parameter that can be stored in swath data files. The order of its dimensions in the examples is not the only possible or allowed. It should be tailored in actual files to expected data access patterns.
-
-=== Geospatial Coordinate
+=== Geospatial Coordinates
 
 Geospatial coordinates for swath data reflect the instrument scanning and stepping in terms of the latitude and longitude for each field-of-view. Because of this the rank of these coordinates is at least two, but can be larger, with the slowest varying dimension representing forward (along-track) movement of the platform. The reference of latitude-longitude coordinates is a geodetic datum (planetodetic for other planetary bodies). The following example demonstrates a typical case of swath data latitude and longitude coordinates on the WGS-84 geoid.
 
@@ -72,10 +72,10 @@ variables:
 <7> The attributes related to describing the WGS-84 geoid datum.
 ====
 
-As an alternative to having latitude and longitude coordinates, projected coordinates (e.g., fixed grid) may be employed instead. When they are used there has to be a grid mapping variable describing their map projection. The example below shows the projected coordinates for swath data collected by a geostationary instrument.
+As an alternative to having latitude and longitude coordinates, projection coordinates (e.g., fixed grid over a map projection) may be employed instead. When used, there has to be a grid mapping variable describing the map projection. The example below shows the projection coordinates for swath data collected by a geostationary instrument.
 
 [caption="Example {counter:example-count}: "]
-.Projected coordinates for a geostationary scanning instrument.
+.Projection coordinates for a geostationary scanning instrument.
 ====
 ----
 dimensions:
@@ -84,43 +84,42 @@ dimensions:
 
 variables:
   short y(y) ;
-	y:units = "radian" ;
-	y:axis = "Y" ;
-	y:standard_name = "projection_y_coordinate" ; <1>
+    y:units = "radian" ;
+    y:axis = "Y" ;
+    y:standard_name = "projection_y_coordinate" ; <1>
 
   short x(x) ;
-	x:units = "radian" ;
-	x:axis = "X" ;
-	x:standard_name = "projection_x_coordinate" ; <1>
+    x:units = "radian" ;
+    x:axis = "X" ;
+    x:standard_name = "projection_x_coordinate" ; <1>
 
   int goes_imager_projection ; <2>
     goes_imager_projection:grid_mapping_name = "geostationary" ;
-	goes_imager_projection:perspective_point_height = 35786023. ;
-	goes_imager_projection:semi_major_axis = 6378137. ;
-	goes_imager_projection:semi_minor_axis = 6356752.31414 ;
-	goes_imager_projection:inverse_flattening = 298.2572221 ;
-	goes_imager_projection:latitude_of_projection_origin = 0. ;
-	goes_imager_projection:longitude_of_projection_origin = -89.5 ;
-	goes_imager_projection:sweep_angle_axis = "x" ;
+    goes_imager_projection:perspective_point_height = 35786023. ;
+    goes_imager_projection:semi_major_axis = 6378137. ;
+    goes_imager_projection:semi_minor_axis = 6356752.31414 ;
+    goes_imager_projection:inverse_flattening = 298.2572221 ;
+    goes_imager_projection:latitude_of_projection_origin = 0. ;
+    goes_imager_projection:longitude_of_projection_origin = -89.5 ;
+    goes_imager_projection:sweep_angle_axis = "x" ;
 ----
-<1> Required use of the `standard_name` attribute with values that identify the projected coordinates.
+<1> Required use of the `standard_name` attribute with values that identify the projection coordinates.
 <2> The grid mapping variable with the attributes describing the Geostationary projection.
 ====
 
-It is important to note here that the CF requirements to:
+It is important to note here that the requirements to:
 
 1. provide geospatial coordinate data for every field-of-view, or
-2. include latitude and longitude coordinates in addition to projected coordinates,
+2. include latitude and longitude coordinates in addition to projection coordinates,
 
 does preclude the possibility of CF compliance for many existing archives of satellite swath data. For example:
 
-* The MODIS Level 1b data (see <<MODIS: HDF-EOS Format>> in Appendix A) stores latitude/longitude for every 5th line and element, beginning at position (3,3).
-* The GOES-16 Advanced Baseline Imager (ABI) data is reprojected to a fixed grid, which is a normalized geostationary projection. The coefficients of the fixed grid are stored, rather than latitude/longitude information.
-// * In general, the latitude/longitude of geostationary satellite data will require a fill value as the instrument does scan off-Earth.
+* The MODIS Level 1b data (see <<MODIS: HDF-EOS Format>> in Appendix A) stores latitude/longitude for every 5th scan (`atrack`) line and field-of-view (`xtrack`), beginning at position `(atrack = 3, xtrack = 3)`.
+* The GOES-16 Advanced Baseline Imager (ABI) data is reprojected to a fixed grid, which is a normalized geostationary projection. The projection coordinates of the fixed grid are stored rather then latitude/longitude information.
 
-=== Time Coordinate
+=== Time Coordinates
 
-Specifying the time coordinate for swath data follows the pertinent CF convention rules. The rank of the time coordinate can range from one (one-dimensional) up to the rank of the swath data variable to which it applies (2, 3, ..., _n_-dimensional). The slowest varying dimension of the coordinate must represent forward (along-track) movement of the platform.
+Specifying time coordinates for swath data follows the pertinent CF convention rules. The rank of time coordinates can range from one (one-dimensional) up to the rank of the swath data variable to which they apply (2, 3, ..., _n_-dimensional). The slowest varying coordinate dimension must represent forward (along-track) movement of the platform.
 
 [caption="Example {counter:example-count}: "]
 .Time coordinate (one- and two-dimensional).
@@ -155,9 +154,9 @@ variables:
 
 NOTE: Some satellite swath data use the International Atomic Time (TAI) which currently is not supported by the CF convention (see this http://mailman.cgd.ucar.edu/pipermail/cf-metadata/2015/058061.html[thread] on the CF mailing list for background). The encoding examples in this proposal use the Gregorian calendar.
 
-=== Spectral Coordinate
+=== Spectral Coordinates
 
-Specifying bands (channels) is done with spectral coordinates. Band information can either be numerical (e.g., wavelength, wavenumber, or frequency) or character (contained in a string).
+The information about the electromagnetic radiation intervals (bands, channels) at which swath data were acquired is encoded as spectral coordinates. The coordinate values can either be stored as physical properties (e.g., wavelength, wavenumber, or frequency) or alphanumeric strings.
 
 [caption="Example {counter:example-count}: "]
 .Numerical spectral coordinate.
@@ -176,10 +175,10 @@ variables:
 <3> One of the standard names specifically for numerical band data. The other two names are `sensor_band_central_radiation_wavenumber` and `sensor_band_central_radiation_frequency`.
 ====
 
-String band information is applicable to cases where bands cannot be differentiated solely numerically, for example, when polarization together with electromagnetic spectrum interval definition has to be combined.
+Alphanumeric spectral coordinates are applicable to cases where bands cannot be differentiated solely numerically, for example, when polarization together with electromagnetic spectrum interval information has to be combined.
 
 [caption="Example {counter:example-count}: "]
-.String band coordinate.
+.Alphanumerical band coordinate.
 ====
 For the netCDF classic model:
 ----
@@ -206,7 +205,7 @@ variables:
 ----
 ====
 
-=== Radiometric Swath Domain Encodings
+=== Radiometric Swath Data Encodings
 
 ==== Multiband
 
@@ -245,10 +244,10 @@ variables:
 ----
 ====
 
-Another encoding of the Multiband Swath with string-valued band coordinate because numerical information may not always be sufficient to distinguish between spectral bands.
+Another encoding of the Multiband Swath with alphanumeric-valued band coordinate because numerical information may not always be sufficient to distinguish between spectral bands.
 
 [caption="Example {counter:example-count}: "]
-.Multiband data with string spectral coordinate.
+.Multiband data with alphanumeric spectral coordinate.
 ====
 ----
 dimensions:
@@ -331,7 +330,7 @@ variables:
 
 ==== Multiband Image
 
-So far the presented encodings are for swath data where a single time instance applies to all across-track observations belonging to one along-track group. Single time instance can also apply to a number of successive along-track groups of observations, for example in the case of two-dimensional imaging sensors which can acquire swath data as a multiband image.
+So far the presented encodings are for swath data where a single time instance applies to all across-track observations belonging to one along-track group. Single time instance can also apply to a number of successive along-track groups of observations, for example, in the case of two-dimensional imaging sensors which can acquire swath data as a multiband image.
 
 [caption="Example {counter:example-count}: "]
 .Multiband Image data.
@@ -458,7 +457,7 @@ variables:
 ----
 ====
 
-=== Geophysical Swath Domain Encodings
+=== Geophysical Swath Data Encodings
 
 ==== Swath
 
@@ -1016,87 +1015,6 @@ variables:
 ----
 ====
 
-// ==== CrIS: NetCDF Format
-//
-// The Cross-track Infrared Sounder (CrIS) instrument is the first in a series of advanced operational sounders that provides more accurate, detailed atmospheric temperature and moisture observations for weather and climate applications. The CrIS is currently on-board the Suomi-NPP and will be on JPSS-1 (launch in fall 2017) and JPSS-2. <<Appendix B: References,[4]>>
-//
-// CF non-compliant attributes:
-//
-// * Additional latitude/longitude variables for FOV center (lat_geoid, lon_geoid) and polygon points defining FOV (lat_bnds, lon_bnds)
-//
-// [caption="Example {counter:example-count}: "]
-// .Geospatial array for CrIS.
-// ====
-// ----
-// dimensions:
-//   spatial = 3 ;
-//   fov_poly = 8 ;
-//   utc_tuple = 8 ;
-//   attitude = 3 ;
-//   atrack = 45 ;
-//   xtrack = 30 ;
-//   fov = 9 ;
-//   chan_lw = 717 ;
-//   chan_mw = 437 ;
-//   chan_sw = 163 ;
-//
-// variables:
-//   float lat(atrack, xtrack, fov) ;
-//     string lat:units = "degrees_north" ;
-//     lat:valid_range = -90.f, 90.f ;
-//     string lat:long_name = "latitude" ;
-//     string lat:standard_name = "latitude" ;
-//     string lat:description = "latitude of FOV center" ;
-//     lat:_FillValue = 9.96921e+36f ;
-//     string lat:coverage_content_type = "referenceInformation" ;
-//     string lat:bounds = "lat_bnds" ;
-//
-//   float lat_geoid(atrack, xtrack, fov) ;
-//     string lat_geoid:units = "degrees_north" ;
-//     lat_geoid:valid_range = -90.f, 90.f ;
-//     string lat_geoid:long_name = "latitude" ;
-//     string lat_geoid:standard_name = "latitude" ;
-//     string lat_geoid:description = "latitude of FOV center on the geoid (without terrain correction)" ;
-//     lat_geoid:_FillValue = 9.96921e+36f ;
-//     string lat_geoid:coverage_content_type = "referenceInformation" ;
-//
-//   float lon(atrack, xtrack, fov) ;
-//     string lon:units = "degrees_east" ;
-//     lon:valid_range = -180.f, 180.f ;
-//     string lon:long_name = "longitude" ;
-//     string lon:standard_name = "longitude" ;
-//     string lon:description = "longitude of FOV center" ;
-//     lon:_FillValue = 9.96921e+36f ;
-//     string lon:coverage_content_type = "referenceInformation" ;
-//     string lon:bounds = "lon_bnds" ;
-//
-//   float lon_geoid(atrack, xtrack, fov) ;
-//     string lon_geoid:units = "degrees_east" ;
-//     lon_geoid:valid_range = -180.f, 180.f ;
-//     string lon_geoid:long_name = "longitude" ;
-//     string lon_geoid:standard_name = "longitude" ;
-//     string lon_geoid:description = "longitude of FOV center on the geoid (without terrain correction)" ;
-//     lon_geoid:_FillValue = 9.96921e+36f ;
-//     string lon_geoid:coverage_content_type = "referenceInformation" ;
-//
-//   float lat_bnds(atrack, xtrack, fov, fov_poly) ;
-//     string lat_bnds:units = "degrees_north" ;
-//     lat_bnds:valid_range = -90.f, 90.f ;
-//     string lat_bnds:long_name = "FOV boundary latitudes" ;
-//     string lat_bnds:description = "latitudes of points forming a polygon around the perimeter of the FOV" ;
-//     lat_bnds:_FillValue = 9.96921e+36f ;
-//     string lat_bnds:coverage_content_type = "referenceInformation" ;
-//
-//   float lon_bnds(atrack, xtrack, fov, fov_poly) ;
-//     string lon_bnds:units = "degrees_east" ;
-//     lon_bnds:valid_range = -180.f, 180.f ;
-//     string lon_bnds:long_name = "FOV boundary longitudes" ;
-//     string lon_bnds:description = "longitudes of points forming a polygon around the perimeter of the FOV" ;
-//     lon_bnds:_FillValue = 9.96921e+36f ;
-//     string lon_bnds:coverage_content_type = "referenceInformation" ;
-// ----
-// ====
-
 === Appendix B: References
 
 [1] https://modis.gsfc.nasa.gov/about/
@@ -1104,5 +1022,3 @@ variables:
 [2] https://pmm.nasa.gov/trmm
 
 [3] https://eosweb.larc.nasa.gov/GUIDE/sensor_documents/ssmi_sensor.html
-
-// [4] http://www.jpss.noaa.gov/cris.html
