@@ -115,7 +115,7 @@ It is important to note here that the requirements to:
 does preclude the possibility of CF compliance for many existing archives of satellite swath data. For example:
 
 * The MODIS Level 1b data (see <<MODIS: HDF-EOS Format>> in Appendix A) stores latitude/longitude for every 5th scan (`atrack`) line and field-of-view (`xtrack`), beginning at position `(atrack = 3, xtrack = 3)`.
-* The GOES-16 Advanced Baseline Imager (ABI) data is reprojected to a fixed grid, which is a normalized geostationary projection. The projection coordinates of the fixed grid are stored rather then latitude/longitude information.
+* The GOES-16 Advanced Baseline Imager (ABI) data is reprojected to a fixed grid, which is a normalized geostationary projection. The projection coordinates of the fixed grid are stored rather than latitude/longitude information.
 
 === Time Coordinates
 
@@ -777,7 +777,7 @@ variables:
 
 ==== Field-of-Regard Profile
 
-There are two more ways how to encode swath data from field-of-views and field-of-regards. The differing features of these encodings are:
+There are two more ways to encode swath data from field-of-views and field-of-regards. The differing features of these encodings are:
 
 * How much latitude/longitude data is provided: for all field-of-views in each field-of-regard, or just for each field-of-regard as a whole.
 * A two-dimensional layout of field-of-views within the field-of-regard.
