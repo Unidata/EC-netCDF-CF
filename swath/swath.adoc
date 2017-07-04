@@ -156,7 +156,7 @@ NOTE: Some satellite swath data use the International Atomic Time (TAI) which cu
 
 === Spectral Coordinates
 
-The information about the electromagnetic radiation intervals (bands, channels) at which swath data were acquired is encoded as spectral coordinates. The coordinate values can either be stored as physical properties (e.g., wavelength, wavenumber, or frequency) or alphanumeric strings.
+The information about the electromagnetic radiation intervals (bands, channels) at which swath data were acquired is encoded as spectral coordinates. The coordinate values can either be stored as physical properties (wavelength, wavenumber, frequency) or alphanumeric strings.
 
 [caption="Example {counter:example-count}: "]
 .Numerical spectral coordinate.
@@ -172,7 +172,7 @@ variables:
 ----
 <1> Number of bands.
 <2> The `band` variable is a coordinate variable.
-<3> One of the standard names specifically for numerical band data. The other two names are `sensor_band_central_radiation_wavenumber` and `sensor_band_central_radiation_frequency`.
+<3> One of the standard names specifically for numerical band data. The other two are `sensor_band_central_radiation_wavenumber` and `sensor_band_central_radiation_frequency`. More generic names `radiation_frequency` and `radiation_wavelength` can also be used when appropriate.
 ====
 
 Alphanumeric spectral coordinates are applicable to cases where bands cannot be differentiated solely numerically, for example, when polarization together with electromagnetic spectrum interval information has to be combined.
@@ -368,7 +368,7 @@ variables:
 <2> Number of columns of the two-dimensional imaging sensor.
 ====
 
-The same encoding is applicable to swath data from hyperspectral sounding instruments which make observations with their detectors arranged into a grid, typically 2-by-2 or 3-by-3. Such grouping of the field-of-views is referred to as one field-of-regard (FOR). The following example is identical to the previous one except for two dimensions with changed names.
+The same encoding is applicable to swath data from hyperspectral sounding instruments which make observations with their field-of-views arranged into a grid, typically 2-by-2 or 3-by-3. Such grouping of the field-of-views is referred to as one field-of-regard (FOR). The following example is identical to the previous one except for two dimensions with changed names.
 
 [caption="Example {counter:example-count}: "]
 .Multiband Image data for each field-of-regard/field-of-view.
