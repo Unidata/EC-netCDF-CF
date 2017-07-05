@@ -161,6 +161,7 @@ The information about the electromagnetic radiation intervals (bands, channels) 
 [caption="Example {counter:example-count}: "]
 .Numerical spectral coordinate.
 ====
+For monotonically increasing or decreasing band data:
 ----
 dimensions:
   band = 5 ; <1>
@@ -173,6 +174,19 @@ variables:
 <1> Number of bands.
 <2> The `band` variable is a coordinate variable.
 <3> One of the standard names specifically for numerical band data. The other two are `sensor_band_central_radiation_wavenumber` and `sensor_band_central_radiation_frequency`. More generic names `radiation_frequency` and `radiation_wavelength` can also be used when appropriate.
+
+For non-monotonic band data:
+----
+dimensions:
+  num_band = 5 ; <1>
+
+variables:
+  double band(num_band) ; <2>
+    band:standard_name = "sensor_band_central_radiation_wavenumber" ;
+    band:units = "cm-1" ;
+----
+<1> Number of bands.
+<2> The `band` variable must be listed in the `coordinates` attribute of its swath data variable.
 ====
 
 Alphanumeric spectral coordinates are applicable to cases where bands cannot be differentiated solely numerically, for example, when polarization together with electromagnetic spectrum interval information has to be combined.
@@ -180,29 +194,28 @@ Alphanumeric spectral coordinates are applicable to cases where bands cannot be 
 [caption="Example {counter:example-count}: "]
 .Alphanumerical band coordinate.
 ====
-For the netCDF classic model:
-----
-dimensions:
-  band_enum = 5 ; <1>
-  band_strlen = 10 ; <2>
-
-variables:
-  char band(band_enum, band_strlen) ;
-    band:standard_name = "sensor_band_identifier" ; <3>
-----
-<1> Number of bands.
-<2> Number of characters of the longest band string identifier.
-<3> The standard name specifically for band string identifiers.
-
 For the netCDF extended model (strongly recommended to use):
 ----
 dimensions:
-  band_enum = 5 ;
+  num_band = 5 ;
 
 variables:
-  string band(band_enum) ;
+  string band(num_band) ;
     band:standard_name = "sensor_band_identifier" ;
 ----
+
+For the netCDF classic model:
+----
+dimensions:
+  num_band = 5 ;
+  band_strlen = 10 ; <1>
+
+variables:
+  char band(num_band, band_strlen) ;
+    band:standard_name = "sensor_band_identifier" ; <2>
+----
+<1> Number of characters of the longest band string identifier.
+<2> The standard name specifically for band string identifiers.
 ====
 
 === Radiometric Swath Data Encodings
@@ -253,10 +266,10 @@ Another encoding of the Multiband Swath with alphanumeric-valued band coordinate
 dimensions:
   time = UNLIMITED ;
   scan = 1024 ;
-  band_enum = 8 ;
+  num_band = 8 ;
 
 variables:
-  string band(band_enum) ;
+  string band(num_band) ;
     band:standard_name = "sensor_band_identifier" ;
 
   float lat(time, scan) ;
@@ -272,7 +285,7 @@ variables:
     time:units = "<units> since <datetime string>" ;
     time:calendar = "gregorian" ;
 
-  float swath_data(time, scan, band_enum) ;
+  float swath_data(time, scan, num_band) ;
     swath_data:featureType = "multibandSwath" ;
     swath_data:coordinates = "lon lat band" ;
 ----
