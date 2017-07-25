@@ -1,6 +1,7 @@
 = Encoding of Swath Data in the Climate and Forecast Convention
 :toc: preamble
 :toclevels: 4
+:sectnums:
 :icons: font
 
 ====
@@ -291,56 +292,6 @@ variables:
 ----
 ====
 
-==== Multiband with Field-of-View Geo-Shapes
-
-Sometimes it may be desirable to specify the geo-shape of each field-of-view (FOV) together with the swath data. The Multiband Swath encoding is extended with _boundary variables_ which define FOV geospatial extent. The encoding example below is appropriate if:
-
-* FOV geospatial extent can be represented with a single geopolygon with no holes; and
-* the number of vertices for all FOV geopolygons is the same.
-
-[caption="Example {counter:example-count}: "]
-.Multiband data with field-of-view geopolygons.
-====
-----
-dimensions:
-  time = 10 ;
-  scan = 512 ;
-  band = 5 ;
-  vertices = 4 ; <1>
-
-variables:
-  float band(band) ;
-    band:standard_name = "sensor_band_central_radiation_wavelength" ;
-    band:units = "μm" ;
-
-  float lat(time, scan) ;
-    lat:standard_name = "latitude" ;
-    lat:units = "degrees_north" ;
-    lat:bounds = "lat_vertex" ; <2>
-
-  float lat_vertex(time, scan, vertices) ; <3>
-
-  float lon(time, scan) ;
-    lon:standard_name = "longitude" ;
-    lon:units = "degrees_east" ;
-    lon:bounds = "lon_vertex" ; <2>
-
-  float lon_vertex(time, scan, vertices) ; <3>
-
-  double time(time) ;
-    time:standard_name = "time" ;
-    time:units = "<units> since <datetime string>" ;
-    time:calendar = "gregorian" ;
-
-  float swath_data(time, scan, band) ;
-    swath_data:featureType = "multibandSwath" ;
-    swath_data:coordinates = "lon lat" ;
-----
-<1> The dimension declares the number of FOV geopolygon vertices.
-<2> Boundary variables, `lat_vertex` and `lon_vertex`, are associated with their respective coordinates.
-<3> The boundary variables have one more dimension, the fastest-varying one, than their respective coordinates. They link an FOV `(time, scan)` with its geopolygon specified by the vertices `(lat_vertex(time, scan, n), lon_vertex(time, scan, n))`, for `n=0,..., vertices-1`. The geolocation `(lat(time, scan), lon(time, scan))` has to be contained within this geopolygon. The vertices must be ordered anticlockwise when viewed in the `lon`-`lat` plane from above.
-====
-
 ==== Multiband Image
 
 So far the presented encodings are for swath data where a single time instance applies to all across-track observations belonging to one along-track group. Single time instance can also apply to a number of successive along-track groups of observations, for example, in the case of two-dimensional imaging sensors which can acquire swath data as a multiband image.
@@ -424,51 +375,6 @@ variables:
 ====
 
 An interesting variation in the above encoding would be if the `FOR` and `FOV` dimensions exchanged places in the ordering, e.g. `(time, FOR, FOV, ...)` -> `(time, FOV, FOR, ...)`. The latter ordering corresponds to the spatial arrangement of the FORs and FOVs: FORs match the columns and FOVs match the rows of a two-dimensional imaging sensor. In other words: `FOR` -> `ncols` and `FOV` -> `nrows`.
-
-==== Multiband Image with Field-of-View Geo-Shapes
-
-This is an extension on the Multiband Image feature type when the geospatial extent of all field-of-views in each field-of-regard need to be provided. The assumptions and approach are identical as for the <<Multiband with Field-of-View Geo-Shapes>> encoding.
-
-[caption="Example {counter:example-count}: "]
-.Multiband Image data with field-of-view geopolygons.
-====
-----
-dimensions:
-  time = UNLIMITED ;
-  FOR = 30 ;
-  band = 1305 ;
-  FOV = 9 ;
-  vertices = 8 ;
-
-variables:
-  float band(band) ;
-    band:standard_name = "sensor_band_central_radiation_wavelength" ;
-    band:units = "μm" ;
-
-  float lat(time, FOR, FOV) ;
-    lat:standard_name = "latitude" ;
-    lat:units = "degrees_north" ;
-    lat:bounds = "lat_vertex" ;
-
-  float lat_vertex(time, FOR, FOV, vertices) ;
-
-  float lon(time, FOR, FOV) ;
-    lon:standard_name = "longitude" ;
-    lon:units = "degrees_east" ;
-    lon:bounds = "lon_vertex" ;
-
-  float lon_vertex(time, FOR, FOV, vertices) ;
-
-  double time(time) ;
-    time:standard_name = "time" ;
-    time:units = "<units> since <datetime string>" ;
-    time:calendar = "gregorian" ;
-
-  float swath_data(time, FOR, FOV, band) ;
-    swath_data:featureType = "multibandImageSwath" ;
-    swath_data:coordinates = "lon lat" ;
-----
-====
 
 === Geophysical Swath Data Encodings
 
@@ -878,11 +784,66 @@ variables:
 <1> `FOV_atrack` and `FOV_xtrack` are coordinates now compared to the previous example because the `lat` and `lon` auxiliary coordinates do not depend on them.
 ====
 
-=== Appendix A: Non-Compliant Geospatial Examples
+=== Encoding Field-of-View Geospatial Extent
+
+The encodings so far represented FOVs as geolocated points. Points in mathematics represent geometric entities with no length, area, or volume, i.e. they are zero-dimensional. Real FOVs, however, have finite geospatial extent. Each of the swath feature type encodings can be augmented with _boundary variables_ to describe FOV geospatial extent. This approach is appropriate if:
+
+* FOV geospatial extent can be represented with a single geopolygon with no holes; and
+* the number of vertices for all FOV geopolygons is the same.
+
+To illustrate the concept, boundary variables are added to the Profile feature type example:
+
+[caption="Example {counter:example-count}: "]
+.Profile data with field-of-view geopolygons.
+====
+----
+dimensions:
+  atrack = 512 ;
+  xtrack = 1024 ;
+  press = 15 ;
+  vertices = 4 ; <1>
+
+variables:
+  float press(press) ;
+    press:standard_name = "air_pressure" ;
+    press:units = "Pa" ;
+    press:positive = "up" ;
+
+  double time(atrack) ;
+    time:standard_name = "time" ;
+    time:units = "<units> since <datetime string>" ;
+    time:calendar = "gregorian" ;
+
+  float lat(atrack, xtrack) ;
+    lat:standard_name = "latitude" ;
+    lat:units = "degrees_north" ;
+    lat:bounds = "lat_vertex" ; <2>
+
+  float lon(atrack, xtrack) ;
+    lon:standard_name = "longitude" ;
+    lon:units = "degrees_east" ;
+    lon:bounds = "lon_vertex" ; <2>
+
+  float lat_vertex(atrack, xtrack, vertices) ; <3>
+
+  float lon_vertex(atrack, xtrack, vertices) ; <3>
+
+  float swath_data(atrack, xtrack, press) ;
+    swath_data:featureType = "profileSwath" ;
+    swath_data:coordinates = "time lon lat" ;
+----
+<1> The dimension declares the number of FOV geopolygon vertices.
+<2> Boundary variables, `lat_vertex` and `lon_vertex`, are associated with their respective coordinates.
+<3> The boundary variables.
+====
+
+Boundary variables have one more dimension, the fastest-varying one, than their respective coordinates. In the example above they link an FOV (`atrack`, `xtrack`) with its geopolygon specified by the vertices (`lat_vertex`(`atrack`, `xtrack`, `n`), `lon_vertex`(`atrack`, `xtrack`, `n`)), for `n`=`0`,..., `vertices`-1. The geolocation (`lat`(`atrack`, `xtrack`), `lon`(`atrack`, `xtrack`)) must be contained within this geopolygon. The vertices must be ordered anticlockwise when viewed in the `lon`-`lat` plane from above.
+
+== Appendix A: Non-Compliant Geospatial Examples
 
 The following examples are from a variety of satellite swath data stored in the netCDF, HDF4, and HDF5 file formats. This is to illustrate the variety of encodings for swath data, which on one hand provides an impetus to define a CF standard, but on the other hand these exemplify the difficulty in getting all satellite data to conform to a standard.
 
-==== MODIS: HDF-EOS Format
+=== MODIS: HDF-EOS Format
 
 The Moderate Resolution Imaging Spectroradiometer (MODIS) is a key instrument aboard the Terra (originally known as EOS AM-1) and Aqua (originally known as EOS PM-1) satellites. <<Appendix B: References,[1]>>
 
@@ -929,7 +890,7 @@ CF non-compliant attributes:
 ----
 ====
 
-==== TRMM: NetCDF Format
+=== TRMM: NetCDF Format
 
 The Tropical Rainfall Measuring Mission (TRMM), a joint mission of NASA and the Japan Aerospace Exploration Agency, was launched in 1997 to study rainfall for weather and climate research. The satellite was retired on 8 April 2015. <<Appendix B: References,[2]>>
 
@@ -978,7 +939,7 @@ variables:
 ----
 ====
 
-==== SSM/I: NetCDF Format
+=== SSM/I: NetCDF Format
 
 The Special Sensor Microwave Imager (SSM/I) Sensor is carried aboard Defense Meteorological Satellite Program (DMSP) satellites DMSP F-8, DMSP F-10, DMSP F-11, DMSP F-12, and DMSP F-13. <<Appendix B: References,[3]>>
 
@@ -1028,7 +989,7 @@ variables:
 ----
 ====
 
-=== Appendix B: References
+== Appendix B: References
 
 [1] https://modis.gsfc.nasa.gov/about/
 
