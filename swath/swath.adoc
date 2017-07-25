@@ -7,7 +7,7 @@
 ====
 Proposal status: *[red]#DRAFT#*.
 
-Last modified: 2017-05-16
+Last modified: 2017-07-24
 ====
 
 // Example counter
@@ -332,7 +332,7 @@ variables:
 <2> Number of columns of the two-dimensional imaging sensor.
 ====
 
-The same encoding is applicable to swath data from hyperspectral sounding instruments which make observations with their field-of-views arranged into a grid, typically 2-by-2 or 3-by-3. Such grouping of the field-of-views is referred to as one field-of-regard (FOR). The following example is identical to the previous one except for two dimensions with changed names.
+The same encoding is applicable to swath data from hyperspectral sounding instruments which make observations with their fields-of-view arranged into a grid, typically 2-by-2 or 3-by-3. Such grouping of the fields-of-view is referred to as one field-of-regard (FOR). The following example is identical to the previous one except for two dimensions with changed names.
 
 [caption="Example {counter:example-count}: "]
 .Multiband Image data for each field-of-regard/field-of-view.
@@ -369,9 +369,9 @@ variables:
     swath_data:featureType = "multibandImageSwath" ;
     swath_data:coordinates = "lon lat" ;
 ----
-<1> The number of field-of-regards in one across-track scan.
-<2> The number of field-of-views within one field-of-regard.
-<3> This variable can be left out if there is no need to define a particular ordering of field-of-views within the field-of-regard.
+<1> The number of fields-of-regard in one across-track scan.
+<2> The number of fields-of-view within one field-of-regard.
+<3> This variable can be left out if there is no need to define a particular ordering of fields-of-view within the field-of-regard.
 ====
 
 An interesting variation in the above encoding would be if the `FOR` and `FOV` dimensions exchanged places in the ordering, e.g. `(time, FOR, FOV, ...)` -> `(time, FOV, FOR, ...)`. The latter ordering corresponds to the spatial arrangement of the FORs and FOVs: FORs match the columns and FOVs match the rows of a two-dimensional imaging sensor. In other words: `FOR` -> `ncols` and `FOV` -> `nrows`.
@@ -657,10 +657,10 @@ variables:
 ----
 ====
 
-As in the few previous encoding examples, assuming that `nrows` represents field-of-regards (FOR) and `ncols` represents field-of-views (FOV), this feature type can also serve for storing profiles from hyperspectral sounders for each field-of-view. The following example illustrates this:
+As in the few previous encoding examples, assuming that `nrows` represents fields-of-regard (FOR) and `ncols` represents fields-of-view (FOV), this feature type can also serve for storing profiles from hyperspectral sounders for each field-of-view. The following example illustrates this:
 
 [caption="Example {counter:example-count}: "]
-.Image Profile data for field-of-regards (FOR) and field-of-views (FOV).
+.Image Profile data for fields-of-regard (FOR) and fields-of-view (FOV).
 ====
 ----
 dimensions:
@@ -696,13 +696,13 @@ variables:
 
 ==== Field-of-Regard Profile
 
-There are two more ways to encode swath data from field-of-views and field-of-regards. The differing features of these encodings are:
+There are two more ways to encode swath data from fields-of-view and fields-of-regard. The differing features of these encodings are:
 
-* How much latitude/longitude data is provided: for all field-of-views in each field-of-regard, or just for each field-of-regard as a whole.
-* A two-dimensional layout of field-of-views within the field-of-regard.
+* How much latitude/longitude data is provided: for all fields-of-view in each field-of-regard, or just for each field-of-regard as a whole.
+* A two-dimensional layout of fields-of-view within the field-of-regard.
 
 [caption="Example {counter:example-count}: "]
-.Field-of-Regard Profile data with latitude and longitude data for all field-of-views in each field-of-regard.
+.Field-of-Regard Profile data with latitude and longitude data for all fields-of-view in each field-of-regard.
 ====
 ----
 dimensions:
@@ -735,10 +735,10 @@ variables:
     swath_data:featureType = "FORProfileSwath" ;
     swath_data:coordinates = "lon lat" ;
 ----
-<1> Number of field-of-regards in one across-track scan.
+<1> Number of fields-of-regard in one across-track scan.
 <2> Along-track (_row_) dimension of the field-of-view _matrix_.
 <3> Across-track (_column_) dimension of the field-of-view _matrix_.
-<4> Latitude and longitude for all field-of-views in the field-of-regard.
+<4> Latitude and longitude for all fields-of-view in the field-of-regard.
 ====
 
 [caption="Example {counter:example-count}: "]
@@ -845,7 +845,7 @@ The following examples are from a variety of satellite swath data stored in the 
 
 === MODIS: HDF-EOS Format
 
-The Moderate Resolution Imaging Spectroradiometer (MODIS) is a key instrument aboard the Terra (originally known as EOS AM-1) and Aqua (originally known as EOS PM-1) satellites. <<Appendix B: References,[1]>>
+The Moderate Resolution Imaging Spectroradiometer (MODIS) is a key instrument aboard the Terra (originally known as EOS AM-1) and Aqua (originally known as EOS PM-1) satellites. <<1>>
 
 CF non-compliant attributes:
 
@@ -892,7 +892,7 @@ CF non-compliant attributes:
 
 === TRMM: NetCDF Format
 
-The Tropical Rainfall Measuring Mission (TRMM), a joint mission of NASA and the Japan Aerospace Exploration Agency, was launched in 1997 to study rainfall for weather and climate research. The satellite was retired on 8 April 2015. <<Appendix B: References,[2]>>
+The Tropical Rainfall Measuring Mission (TRMM), a joint mission of NASA and the Japan Aerospace Exploration Agency, was launched in 1997 to study rainfall for weather and climate research. The satellite was retired on 8 April 2015. <<2>>
 
 CF non-compliant attributes:
 
@@ -941,7 +941,7 @@ variables:
 
 === SSM/I: NetCDF Format
 
-The Special Sensor Microwave Imager (SSM/I) Sensor is carried aboard Defense Meteorological Satellite Program (DMSP) satellites DMSP F-8, DMSP F-10, DMSP F-11, DMSP F-12, and DMSP F-13. <<Appendix B: References,[3]>>
+The Special Sensor Microwave Imager (SSM/I) Sensor is carried aboard Defense Meteorological Satellite Program (DMSP) satellites DMSP F-8, DMSP F-10, DMSP F-11, DMSP F-12, and DMSP F-13. <<3>>
 
 CF non-compliant attributes:
 
@@ -991,8 +991,8 @@ variables:
 
 == Appendix B: References
 
-[1] https://modis.gsfc.nasa.gov/about/
+[[[1]]] https://modis.gsfc.nasa.gov/about/
 
-[2] https://pmm.nasa.gov/trmm
+[[[2]]] https://pmm.nasa.gov/trmm
 
-[3] https://eosweb.larc.nasa.gov/GUIDE/sensor_documents/ssmi_sensor.html
+[[[3]]] https://eosweb.larc.nasa.gov/GUIDE/sensor_documents/ssmi_sensor.html
