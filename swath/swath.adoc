@@ -33,7 +33,7 @@ Radiometric swath data are further processed to retrieve geophysical parameters.
 * The geospatial extent for radiometric swath data is always two-dimensional (area), while for geophysical swath data it can also be three-dimensional.
 * Geophysical swath data may also include coordinates that represent altitude.
 
-The proposed encodings are independent from the observation method and are applicable to swath data acquired by instruments on either satellites, airplanes, or unmanned aerial systems. The `swath_data` variable in the examples is a generic representative of any parameter that can be stored in swath data files. The order of its dimensions in the examples is not the only possible or allowed. It should be tailored in actual files based on expected data access patterns.
+The proposed encodings are independent from the observation method and are applicable to swath data acquired by instruments on either satellites, airplanes, or unmanned aerial systems. The `swath_data` variable in the examples is a generic representative of any parameter that can be stored in swath data files. The order of its dimensions as shown in the examples is not the only one possible or allowed. It should be tailored in actual files based on expected data access patterns.
 
 All the swath encodings in this proposal use the `featureType` variable attribute for storing the swath encoding type identifiers. Currently this requirement breaks the backward compatibility with the CF version 1 conventions. However, the convention's version 1.7 draft http://cfconventions.org/cf-conventions/cf-conventions.html#_features_and_feature_types[allows] for the possibility the `featureType` attribute may become a variable attribute at some later time.
 
@@ -65,11 +65,11 @@ variables:
     crs:inverse_flattening = 298.257223563 ; <7>
 ----
 <1> The dimension representing along-track platform movement.
-<2> The dimension representing across-track platform movement.
+<2> The dimension representing data collected across-track to platform movement.
 <3> Required use of the `units` attribute and its values for the latitude and longitude coordinates.
 <4> Required use of the `standard_name` attribute, identifying the latitude and longitude coordinates.
-<5> The grid mapping variable. The term "grid" is for historical reasons only.
-<6> The identifier for a coordinate reference system based on latitude-longitude locations on a geoid datum.
+<5> The grid mapping variable. The term "grid" is for historical reasons only. It's name and data type are arbitrary.
+<6> The value is an identifier that can describe any combination of a geoid, coordinate reference system, and map projection. In this case it is the latitude-longitude reference system.
 <7> The attributes related to describing the WGS-84 geoid datum.
 ====
 
