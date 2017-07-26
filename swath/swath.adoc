@@ -39,7 +39,7 @@ All the swath encodings in this proposal use the `featureType` variable attribut
 
 === Geospatial Coordinates
 
-Geospatial coordinates for swath data reflect the instrument scanning and stepping in terms of the latitude and longitude for each field-of-view. Because of this the rank of these coordinates is at least two, but can be larger, with the slowest varying dimension representing forward (along-track) movement of the platform. The reference of latitude-longitude coordinates is a geodetic datum (planetodetic for other planetary bodies). The following example demonstrates a typical case of swath data latitude and longitude coordinates on the WGS-84 geoid.
+Geospatial coordinates for swath data are comprised of a horizontal and, in some cases, a vertical component. The horizontal component reflects the instrument scanning and stepping in terms of the latitude and longitude for each field-of-view. Because of this the rank of the latitude and longitude coordinates is at least two, but can be larger, with the slowest varying dimension representing forward (along-track) movement of the platform. The reference of latitude-longitude coordinates is a geodetic datum (planetodetic for other planetary bodies). The following example demonstrates a typical case of swath data latitude and longitude coordinates on the WGS-84 geoid.
 
 [caption="Example {counter:example-count}: "]
 .Latitude and longitude coordinates on the WGS-84 geoid for a scanning instrument.
@@ -117,6 +117,8 @@ does preclude the possibility of CF compliance for many existing archives of sat
 
 * The MODIS Level 1b data (see <<MODIS: HDF-EOS Format>> in Appendix A) stores latitude/longitude for every 5th scan (`atrack`) line and field-of-view (`xtrack`), beginning at position `(atrack = 3, xtrack = 3)`.
 * The GOES-16 Advanced Baseline Imager (ABI) data is reprojected to a fixed grid, which is a normalized geostationary projection. The projection coordinates of the fixed grid are stored rather than latitude/longitude information.
+
+The vertical component of geospatial coordinates represents the  altitude associated with swath data. Any of the supported vertical coordinate types are acceptable.
 
 === Time Coordinates
 
@@ -505,7 +507,7 @@ variables:
 
 ==== Profile
 
-This feature type consists of the Swath type with an altitude coordinate. All types of altitude coordinates are allowed.
+This feature type consists of the Swath type with a vertical coordinate. All types of vertical coordinates are allowed.
 
 [caption="Example {counter:example-count}: "]
 .Profile data.
