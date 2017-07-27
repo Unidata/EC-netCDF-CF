@@ -221,6 +221,18 @@ variables:
 <2> The standard name specifically for band string identifiers.
 ====
 
+=== Group Hierarchies
+
+This kind of hierarchies is established using the grouping feature of the netCDF Enhanced Data Model and is colloquially known as _groups in files_. Since the current CF convention is not based on the Enhanced Data Model such files are not strictly CF compliant. However, groups are present in many swath data files.
+
+The proposed encodings are deliberately group-agnostic although that does not mean the use of groups is prohibited. Swath data files with groups can adhere to the encodings by obeying these simple rules:
+
+* Swath data variables, their coordinates, and all other relevant variables can be stored in any group.
+* The variable attributes remain with their swath variables, just like in files without groups.
+* Any reference to variables, for example in attributes, should use their names that represent the complete hierarchy starting from the top group.
+
+These rules will be adapted based on any developments with official support for group hierarchies in the CF convention.
+
 === Radiometric Swath Data Encodings
 
 ==== Multiband
