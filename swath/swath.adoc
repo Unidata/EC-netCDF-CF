@@ -7,7 +7,7 @@
 ====
 Proposal status: *[red]#DRAFT#*.
 
-Last modified: 2017-07-24
+Last modified: 2017-08-03
 ====
 
 // Example counter
@@ -220,18 +220,6 @@ variables:
 <1> Number of characters of the longest band string identifier.
 <2> The standard name specifically for band string identifiers.
 ====
-
-=== Group Hierarchies
-
-This kind of hierarchies is established using the grouping feature of the netCDF Enhanced Data Model and is colloquially known as _groups in files_. Since the current CF convention is not based on the Enhanced Data Model such files are not strictly CF compliant. However, groups are present in many swath data files.
-
-The proposed encodings are deliberately group-agnostic although that does not mean the use of groups is prohibited. Swath data files with groups can adhere to the encodings by obeying these simple rules:
-
-* Swath data variables, their coordinates, and all other relevant variables can be stored in any group.
-* The variable attributes remain with their swath variables, just like in files without groups.
-* Any reference to variables, for example in attributes, should use their names that represent the complete hierarchy starting from the top group.
-
-These rules will be adapted based on any developments with official support for group hierarchies in the CF convention.
 
 === Radiometric Swath Data Encodings
 
@@ -852,6 +840,74 @@ variables:
 ====
 
 Boundary variables have one more dimension, the fastest-varying one, than their respective coordinates. In the example above they link an FOV (`atrack`, `xtrack`) with its geopolygon specified by the vertices (`lat_vertex`(`atrack`, `xtrack`, `n`), `lon_vertex`(`atrack`, `xtrack`, `n`)), for `n`=`0`,..., `vertices`-1. The geolocation (`lat`(`atrack`, `xtrack`), `lon`(`atrack`, `xtrack`)) must be contained within this geopolygon. The vertices must be ordered anticlockwise when viewed in the `lon`-`lat` plane from above.
+
+=== Group Hierarchies
+
+This kind of hierarchies is created using the grouping feature of the netCDF Enhanced Data Model and is colloquially known as _groups in files_. Since the current CF convention is not based on the Enhanced Data Model such files are not strictly CF compliant. However, groups are present in many swath data files.
+
+The proposed encodings are deliberately group-agnostic although that does not mean the use of groups is prohibited. Swath data files with groups can adhere to the proposed encodings by obeying these simple rules:
+
+* Swath data variables, their coordinates, or any other related variable can be stored in any group.
+* The variable attributes remain with their swath variables, just like in files without groups.
+* Any reference to variables, for example in attributes, should use their names that represent the complete hierarchy starting from the top group.
+
+These rules will be adapted based on any developments with official support for group hierarchies in the CF convention.
+
+[caption="Example {counter:example-count}: "]
+.A swath file with groups holding science, coordinate with FOV geospatial extent, and ancillary data.
+====
+----
+dimensions:
+  vertex = 4;
+  time = 392;
+  band = 4;
+  xtrack = 35;
+
+variables:
+  double time(time);
+    :standard_name = "time";
+    :units = "<units> since <datetime string>";
+    :calendar = "gregorian"
+
+  float band(band);
+    :standard_name = "sensor_band_central_radiation_wavelength";
+    :units = "nm";
+
+group: ancillary {
+  variables:
+    float ancil_data(time, xtrack, band);
+      :coordinates = "/time /geolocation/lat /geolocation/lon /band";
+}
+
+group: geolocation {
+  variables:
+    float lat_vertex(time, xtrack, vertex=4);
+
+    float lon_vertex(time, xtrack, vertex=4);
+
+    float lat(time, xtrack);
+      :standard_name = "latitude";
+      :units = "degrees_north";
+      :bounds = "/geolocation/lat_vertex";
+
+    float lon(time, xtrack);
+      :standard_name = "longitude";
+      :units = "degrees_east";
+      :bounds = "/geolocation/lon_vertex";
+}
+
+group: science {
+  variables:
+    float science_data(time, xtrack);
+      :coordinates = "/time /geolocation/lat /geolocation/lon";
+      :units = "K";
+
+    float radiance(time, xtrack, band);
+      :coordinates = "/time /geolocation/lat /geolocation/lon /band";
+      :units = "W sr m−2";
+}
+----
+====
 
 == Appendix A: Non-Compliant Geospatial Examples
 
