@@ -875,7 +875,7 @@ variables:
 
 group: ancillary {
   variables:
-    float ancil_data(time, xtrack, band);
+    float quality(time, xtrack, band);
       :coordinates = "/time /geolocation/lat /geolocation/lon /band";
 }
 
@@ -901,10 +901,12 @@ group: science {
     float science_data(time, xtrack);
       :coordinates = "/time /geolocation/lat /geolocation/lon";
       :units = "K";
+      :ancillary_variables = "/ancillary/quality"
 
     float radiance(time, xtrack, band);
       :coordinates = "/time /geolocation/lat /geolocation/lon /band";
       :units = "W sr m−2";
+      :ancillary_variables = "/ancillary/quality"
 }
 ----
 ====
