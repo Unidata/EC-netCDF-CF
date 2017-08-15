@@ -843,7 +843,7 @@ Boundary variables have one more dimension, the fastest-varying one, than their 
 
 === Group Hierarchies
 
-This kind of hierarchies is created using the grouping feature of the netCDF Enhanced Data Model and is colloquially known as _groups in files_. Since the current CF convention is not based on the Enhanced Data Model such files are not strictly CF compliant. However, groups are present in many swath data files.
+This kind of hierarchy is created using the grouping feature of the netCDF Enhanced Data Model and is colloquially known as _groups in files_. Since the current CF convention is not based on the Enhanced Data Model such files are not strictly CF compliant. However, groups are present in many swath data files.
 
 The proposed encodings are deliberately group-agnostic although that does not mean the use of groups is prohibited. Swath data files with groups can adhere to the proposed encodings by obeying these simple rules:
 
