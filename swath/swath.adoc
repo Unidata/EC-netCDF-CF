@@ -33,7 +33,7 @@ Radiometric swath data are further processed to retrieve geophysical parameters.
 * The geospatial extent for radiometric swath data is always two-dimensional (area), while for geophysical swath data it can also be three-dimensional.
 * Geophysical swath data may also include coordinates that represent altitude.
 
-The proposed encodings are independent from the observation method and are applicable to swath data acquired by instruments on either satellites, airplanes, or unmanned aerial systems. The `swath_data` variable in the examples is a generic representative of any parameter that can be stored in swath data files. The order of its dimensions as shown in the examples is not the only one possible or allowed. It should be tailored in actual files based on expected data access patterns.
+The proposed encodings are independent from the observation method and are applicable to swath data acquired by instruments on either satellites, airplanes, or unmanned aerial systems. The `swath_data` variable in the examples is a generic representation of any parameter that can be stored in swath data files. The order of its dimensions as shown in the examples is not the only one possible or allowed. It should be tailored in actual files based on expected data access patterns.
 
 All the swath encodings in this proposal use the `featureType` variable attribute for storing the swath encoding type identifiers. Currently this requirement breaks the backward compatibility with the CF version 1 conventions. However, the convention's version 1.7 draft http://cfconventions.org/cf-conventions/cf-conventions.html#_features_and_feature_types[allows] for the possibility the `featureType` attribute may become a variable attribute at some later time.
 
@@ -296,7 +296,7 @@ variables:
 
 ==== Multiband Image
 
-So far the presented encodings are for swath data where a single time instance applies to all across-track observations belonging to one along-track group. Single time instance can also apply to a number of successive along-track groups of observations, for example, in the case of two-dimensional imaging sensors which can acquire swath data as a multiband image.
+So far, the presented encodings are for swath data where a single time instance applies to all across-track observations belonging to one along-track group. Single time instance can also apply to a number of successive along-track groups of observations, for example, in the case of two-dimensional imaging sensors which can acquire swath data as a multiband image.
 
 [caption="Example {counter:example-count}: "]
 .Multiband Image data.
@@ -848,7 +848,7 @@ This kind of hierarchy is created using the grouping feature of the netCDF Enhan
 The proposed encodings are deliberately group-agnostic although that does not mean the use of groups is prohibited. Swath data files with groups can adhere to the proposed encodings by obeying these simple rules:
 
 * Swath data variables, their coordinates, or any other related variable can be stored in any group.
-* The variable attributes remain with their swath variables, just like in files without groups.
+* The variable attributes remain with their swath variables, similar to files without groups.
 * Any reference to variables, for example in attributes, should use their names that represent the complete hierarchy starting from the top group.
 
 These rules will be adapted based on any developments with official support for group hierarchies in the CF convention.
