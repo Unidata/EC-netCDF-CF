@@ -1,13 +1,12 @@
 = Encoding of Swath Data in the Climate and Forecast Convention
+Aleksandar Jelenak; David Santek; Kent Yang; Robert Carp
 :toc: preamble
 :toclevels: 4
 :sectnums:
 :icons: font
 
 ====
-Proposal status: *[red]#DRAFT#*.
-
-Last modified: 2017-08-03
+Proposal status: *[red]#DRAFT/2017-08-31#*.
 ====
 
 // Example counter
@@ -115,7 +114,7 @@ It is important to note here that the requirements to:
 
 does preclude the possibility of CF compliance for many existing archives of satellite swath data. For example:
 
-* The MODIS Level 1b data (see <<MODIS: HDF-EOS Format>> in Appendix A) stores latitude/longitude for every 5th scan (`atrack`) line and field-of-view (`xtrack`), beginning at position `(atrack = 3, xtrack = 3)`.
+* The MODIS Level 1b data (see <<MODIS: HDF-EOS Format>>) stores latitude and longitude for every 5th scan (`atrack`) line and field-of-view (`xtrack`), beginning at position `(atrack = 3, xtrack = 3)`.
 * The GOES-16 Advanced Baseline Imager (ABI) data is reprojected to a fixed grid, which is a normalized geostationary projection. The projection coordinates of the fixed grid are stored rather than latitude/longitude information.
 
 The vertical component of geospatial coordinates represents the  altitude associated with swath data. Any of the supported vertical coordinate types are acceptable.
@@ -881,9 +880,9 @@ group: ancillary {
 
 group: geolocation {
   variables:
-    float lat_vertex(time, xtrack, vertex=4);
+    float lat_vertex(time, xtrack, vertex);
 
-    float lon_vertex(time, xtrack, vertex=4);
+    float lon_vertex(time, xtrack, vertex);
 
     float lat(time, xtrack);
       :standard_name = "latitude";
@@ -911,7 +910,8 @@ group: science {
 ----
 ====
 
-== Appendix A: Non-Compliant Geospatial Examples
+[appendix]
+== Non-Compliant Geospatial Examples
 
 The following examples are from a variety of satellite swath data stored in the netCDF, HDF4, and HDF5 file formats. This is to illustrate the variety of encodings for swath data, which on one hand provides an impetus to define a CF standard, but on the other hand these exemplify the difficulty in getting all satellite data to conform to a standard.
 
@@ -1061,7 +1061,19 @@ variables:
 ----
 ====
 
-== Appendix B: References
+[appendix]
+== How To Contribute
+
+The adoption of this document relies on its quality and applicability which greatly depends on community feedback. Below are several ways how to contribute to the development:
+
+* The document is hosted in the Unidata's GitHub repository for this project: https://github.com/Unidata/EC-netCDF-CF.
+
+* The most up-to-date version of the document is displayed http://gist.asciidoctor.org/?github-Unidata%2FEC-netCDF-CF%2F%2Fswath%2Fswath.adoc[here].
+
+* Comments or suggestions are welcome either as https://github.com/Unidata/EC-netCDF-CF/issues[issues], https://github.com/Unidata/EC-netCDF-CF/pulls[pull requests], or emails to the mailto:ajelenak%40hdfgroup.org,dave.santek%40ssec.wisc.edu?subject=CF%20Swath%20Proposal[authors].
+
+[appendix]
+== References
 
 [[[1]]] https://modis.gsfc.nasa.gov/about/
 
