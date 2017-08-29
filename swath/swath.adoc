@@ -1070,7 +1070,28 @@ The adoption of this document relies on its quality and applicability which grea
 
 * The most up-to-date version of the document is displayed http://gist.asciidoctor.org/?github-Unidata%2FEC-netCDF-CF%2F%2Fswath%2Fswath.adoc[here].
 
+* Test swath files are available for the examples in this document (https://eosdap.hdfgroup.org:8080/opendap/data/earth-cube-cf2/swath/contents.html[Hyrax], https://eosdap.hdfgroup.org:8888/thredds/catalog/testAll/cf2/swath/catalog.html[THREDDS]) and real swath files from the community (https://eosdap.hdfgroup.org:8080/opendap/data/earth-cube-cf2/swath-real/contents.html[Hyrax], https://eosdap.hdfgroup.org:8888/thredds/catalog/testAll/cf2/swath-real/catalog.html[THREDDS]).
+
 * Comments or suggestions are welcome either as https://github.com/Unidata/EC-netCDF-CF/issues[issues], https://github.com/Unidata/EC-netCDF-CF/pulls[pull requests], or emails to the mailto:ajelenak%40hdfgroup.org,dave.santek%40ssec.wisc.edu?subject=CF%20Swath%20Proposal[authors].
+
+[appendix]
+== Revision History
+
+[width="90%",cols="25%,75%",options="header"]
+|===
+|Release |Description
+
+|DRAFT/2017-08-31
+a|
+* Section on group hierarchy.
+* Describing field-of-view geospatial extents extended to all swath encodings.
+* `featureType` variable attribute removed from all examples and text.
+* Vertical coordinates included in the geospatial coordinates section.
+* An example for non-monotonic spectral coordinate.
+
+|DRAFT/2017-05-16
+|Initial version.
+|===
 
 [appendix]
 == References
