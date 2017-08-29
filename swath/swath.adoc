@@ -35,8 +35,6 @@ Radiometric swath data are further processed to retrieve geophysical parameters.
 
 The proposed encodings are independent from the observation method and are applicable to swath data acquired by instruments on either satellites, airplanes, or unmanned aerial systems. The `swath_data` variable in the examples is a generic representation of any parameter that can be stored in swath data files. The order of its dimensions as shown in the examples is not the only one possible or allowed. It should be tailored in actual files based on expected data access patterns.
 
-All the swath encodings in this proposal use the `featureType` variable attribute for storing the swath encoding type identifiers. Currently this requirement breaks the backward compatibility with the CF version 1 conventions. However, the convention's version 1.7 draft http://cfconventions.org/cf-conventions/cf-conventions.html#_features_and_feature_types[allows] for the possibility the `featureType` attribute may become a variable attribute at some later time.
-
 === Geospatial Coordinates
 
 Geospatial coordinates for swath data are comprised of a horizontal and, in some cases, a vertical component. The horizontal component reflects the instrument scanning and stepping in terms of the latitude and longitude for each field-of-view. Because of this the rank of the latitude and longitude coordinates is at least two, but can be larger, with the slowest varying dimension representing forward (along-track) movement of the platform. The reference of latitude-longitude coordinates is a geodetic datum (planetodetic for other planetary bodies). The following example demonstrates a typical case of swath data latitude and longitude coordinates on the WGS-84 geoid.
@@ -255,7 +253,6 @@ variables:
     time:calendar = "gregorian" ;
 
   float swath_data(time, scan, band) ;
-    swath_data:featureType = "multibandSwath" ;
     swath_data:coordinates = "lon lat" ;
 ----
 ====
@@ -289,7 +286,6 @@ variables:
     time:calendar = "gregorian" ;
 
   float swath_data(time, scan, num_band) ;
-    swath_data:featureType = "multibandSwath" ;
     swath_data:coordinates = "lon lat band" ;
 ----
 ====
@@ -327,7 +323,6 @@ variables:
     time:calendar = "gregorian" ;
 
   float swath_data(time, nrows, ncols, band) ;
-    swath_data:featureType = "multibandImageSwath" ;
     swath_data:coordinates = "lon lat" ;
 ----
 <1> Number of rows of the two-dimensional imaging sensor.
@@ -368,7 +363,6 @@ variables:
     time:calendar = "gregorian" ;
 
   float swath_data(time, FOR, FOV, band) ;
-    swath_data:featureType = "multibandImageSwath" ;
     swath_data:coordinates = "lon lat" ;
 ----
 <1> The number of fields-of-regard in one across-track scan.
@@ -382,7 +376,7 @@ An interesting variation in the above encoding would be if the `FOR` and `FOV` d
 
 ==== Swath
 
-Very common feature type in use for scalar-valued geophysical parameters.
+Very common encoding used for storing surface-based geophysical parameters.
 
 [caption="Example {counter:example-count}: "]
 .Swath data.
@@ -407,7 +401,6 @@ variables:
     lon:units = "degrees_east" ;
 
   float swath_data(time, scan) ;
-    swath_data:featureType = "swath" ;
     swath_data:coordinates = "lon lat" ;
 ----
 ====
@@ -437,7 +430,6 @@ variables:
     lon:units = "degrees_east" ;
 
   float swath_data(atrack, xtrack) ;
-    swath_data:featureType = "swath" ;
     swath_data:coordinates = "time lon lat" ; <1>
 ----
 <1> `time` is here an auxiliary coordinate (because `time` is defined with the `atrack` dimension) and must be listed in the `coordinates` attribute.
@@ -445,7 +437,7 @@ variables:
 
 ==== Image Swath
 
-This is the geophysical analog of the Multiband Image Swath feature type.
+This is the geophysical analog of the Multiband Image Swath encoding.
 
 [caption="Example {counter:example-count}: "]
 .Image Swath data.
@@ -471,13 +463,12 @@ variables:
     time:calendar = "gregorian" ;
 
   float swath_data(time, nrows, ncols) ;
-    swath_data:featureType = "imageSwath" ;
     swath_data:coordinates = "lon lat" ;
 ----
 ====
 
 [caption="Example {counter:example-count}: "]
-.The version of Image Swath feature type for each field-of-regard/field-of-view.
+.The version of Image Swath data for each field-of-regard/field-of-view.
 ====
 ----
 dimensions:
@@ -500,14 +491,13 @@ variables:
     lon:units = "degrees_east" ;
 
   float swath_data(time, FOR, FOV) ;
-    swath_data:featureType = "imageSwath" ;
     swath_data:coordinates = "lon lat" ;
 ----
 ====
 
 ==== Profile
 
-This feature type consists of the Swath type with a vertical coordinate. All types of vertical coordinates are allowed.
+This encoding consists of the Swath encoding with a vertical coordinate. All types of vertical coordinates are allowed.
 
 [caption="Example {counter:example-count}: "]
 .Profile data.
@@ -538,7 +528,6 @@ variables:
     time:calendar = "gregorian" ;
 
   float swath_data(time, scan, press) ;
-    swath_data:featureType = "profileSwath" ;
     swath_data:coordinates = "lon lat" ;
 ----
 ====
@@ -572,14 +561,13 @@ variables:
     lon:units = "degrees_east" ;
 
   float swath_data(atrack, xtrack, press) ;
-    swath_data:featureType = "profileSwath" ;
     swath_data:coordinates = "time lon lat" ;
 ----
 ====
 
 ==== Multiband Profile
 
-An interesting trait of this feature type is a spectral band coordinate in the encoding of a geophysical parameter.
+An interesting trait of this encoding is the presence of a spectral coordinate.
 
 [caption="Example {counter:example-count}: "]
 .Multiband Profile data.
@@ -615,14 +603,13 @@ variables:
     time:calendar = "gregorian" ;
 
   float swath_data(time, scan, press, band) ;
-    swath_data:featureType = "multibandProfileSwath" ;
     swath_data:coordinates = "lon lat" ;
 ----
 ====
 
 ==== Image Profile
 
-Adding an altitude coordinate to the Image Swath feature type makes this one.
+Adding an altitude coordinate to the Image Swath encoding makes this one.
 
 [caption="Example {counter:example-count}: "]
 .Image Profile data.
@@ -654,12 +641,11 @@ variables:
     time:calendar = "gregorian" ;
 
   float swath_data(time, nrows, ncols, press) ;
-    swath_data:featureType = "imageProfileSwath" ;
     swath_data:coordinates = "lon lat" ;
 ----
 ====
 
-As in the few previous encoding examples, assuming that `nrows` represents fields-of-regard (FOR) and `ncols` represents fields-of-view (FOV), this feature type can also serve for storing profiles from hyperspectral sounders for each field-of-view. The following example illustrates this:
+As in the few previous encoding examples, assuming that `nrows` represents fields-of-regard (FOR) and `ncols` represents fields-of-view (FOV), the above encoding can also serve for storing profiles from hyperspectral sounders for each field-of-view. The following example illustrates this:
 
 [caption="Example {counter:example-count}: "]
 .Image Profile data for fields-of-regard (FOR) and fields-of-view (FOV).
@@ -691,7 +677,6 @@ variables:
     time:calendar = "gregorian" ;
 
   float swath_data(time, FOR, FOV, press) ;
-    swath_data:featureType = "imageProfileSwath" ;
     swath_data:coordinates = "lon lat" ;
 ----
 ====
@@ -734,7 +719,6 @@ variables:
     time:calendar = "gregorian" ;
 
   float swath_data(time, FOR, FOV_atrack, FOV_xtrack, press) ;
-    swath_data:featureType = "FORProfileSwath" ;
     swath_data:coordinates = "lon lat" ;
 ----
 <1> Number of fields-of-regard in one across-track scan.
@@ -780,7 +764,6 @@ variables:
     time:calendar = "gregorian" ;
 
   float swath_data(time, FOR, FOV_atrack, FOV_xtrack, press) ;
-    swath_data:featureType = "FORProfileSwath" ;
     swath_data:coordinates = "lon lat" ;
 ----
 <1> `FOV_atrack` and `FOV_xtrack` are coordinates now compared to the previous example because the `lat` and `lon` auxiliary coordinates do not depend on them.
@@ -788,12 +771,12 @@ variables:
 
 === Encoding Field-of-View Geospatial Extent
 
-The encodings so far represented FOVs as geolocated points. Points in mathematics represent geometric entities with no length, area, or volume, i.e. they are zero-dimensional. Real FOVs, however, have finite geospatial extent. Each of the swath feature type encodings can be augmented with _boundary variables_ to describe FOV geospatial extent. This approach is appropriate if:
+The encodings so far represented FOVs as geolocated points. Points in mathematics represent geometric entities with no length, area, or volume, i.e. they are zero-dimensional. Real FOVs, however, have finite geospatial extent. Each of the swath encodings can be augmented with _boundary variables_ to describe FOV geospatial extent. This approach is appropriate if:
 
 * FOV geospatial extent can be represented with a single geopolygon with no holes; and
 * the number of vertices for all FOV geopolygons is the same.
 
-To illustrate the concept, boundary variables are added to the Profile feature type example:
+To illustrate the concept, boundary variables are added to the Profile encoding example:
 
 [caption="Example {counter:example-count}: "]
 .Profile data with field-of-view geopolygons.
@@ -831,7 +814,6 @@ variables:
   float lon_vertex(atrack, xtrack, vertices) ; <3>
 
   float swath_data(atrack, xtrack, press) ;
-    swath_data:featureType = "profileSwath" ;
     swath_data:coordinates = "time lon lat" ;
 ----
 <1> The dimension declares the number of FOV geopolygon vertices.
