@@ -4,6 +4,7 @@ Aleksandar Jelenak; David Santek; Kent Yang; Robert Carp
 :toclevels: 4
 :sectnums:
 :icons: font
+:linkattrs:
 
 ====
 Proposal status: *[red]#DRAFT/2017-08-31#*.
@@ -14,13 +15,13 @@ Proposal status: *[red]#DRAFT/2017-08-31#*.
 
 == Introduction
 
-This is a proposal for an extension of the http://cfconventions.org[Climate and Forecast metadata convention] (CF) to standardize the encodings of Earth Science swath data in the original instrument viewing geometry. It is based on the CF http://cfconventions.org/cf-conventions/cf-conventions.html[version 1.7] (currently in draft) although backward compatibility is not necessarily an objective.
+This is a proposal for an extension of the http://cfconventions.org[Climate and Forecast metadata convention^] (CF) to standardize the encodings of Earth Science swath data in the original instrument viewing geometry. It is based on the CF http://cfconventions.org/cf-conventions/cf-conventions.html[version 1.7^] (currently in draft) although backward compatibility is not necessarily an objective.
 
-The work is done under the U.S. National Science Foundation award https://www.nsf.gov/awardsearch/showAward?AWD_ID=1541031[1541031]: "EarthCube IA: Advancing netCDF-CF for the Geoscience Community".
+The work is done under the U.S. National Science Foundation award https://www.nsf.gov/awardsearch/showAward?AWD_ID=1541031[1541031^]: "EarthCube IA: Advancing netCDF-CF for the Geoscience Community".
 
 The community-provided examples were valuable resource in preparing this proposal. These examples are collected in a GitHub repository at https://github.com/diwg/diwg.
 
-Encoding examples are expressed using the http://www.unidata.ucar.edu/software/netcdf/netcdf/CDL-Syntax.html#CDL-Syntax[NetCDF Common Data Language] (CDL) with only the relevant file content to illustrate the concept.
+Encoding examples are expressed using the http://www.unidata.ucar.edu/software/netcdf/netcdf/CDL-Syntax.html#CDL-Syntax[NetCDF Common Data Language^] (CDL) with only the relevant file content to illustrate the concept.
 
 == Swath Data Encodings
 
@@ -154,7 +155,7 @@ variables:
 <1> Time coordinates with the rank greater than one must be listed in the `coordinates` attribute of their swath data variables.
 ====
 
-NOTE: Some satellite swath data use the International Atomic Time (TAI) which currently is not supported by the CF convention (see this http://mailman.cgd.ucar.edu/pipermail/cf-metadata/2015/058061.html[thread] on the CF mailing list for background). The encoding examples in this proposal use the Gregorian calendar.
+NOTE: Some satellite swath data use the International Atomic Time (TAI) which currently is not supported by the CF convention (see this http://mailman.cgd.ucar.edu/pipermail/cf-metadata/2015/058061.html[thread^] on the CF mailing list for background). The encoding examples in this proposal use the Gregorian calendar.
 
 === Spectral Coordinates
 
@@ -1068,11 +1069,11 @@ The adoption of this document relies on its quality and applicability which grea
 
 * The document is hosted in the Unidata's GitHub repository for this project: https://github.com/Unidata/EC-netCDF-CF.
 
-* The most up-to-date version of the document is displayed http://gist.asciidoctor.org/?github-Unidata%2FEC-netCDF-CF%2F%2Fswath%2Fswath.adoc[here].
+* The most up-to-date version of the document is displayed http://gist.asciidoctor.org/?github-Unidata%2FEC-netCDF-CF%2F%2Fswath%2Fswath.adoc[here^].
 
-* Test swath files are available for the examples in this document (https://eosdap.hdfgroup.org:8080/opendap/data/earth-cube-cf2/swath/contents.html[Hyrax], https://eosdap.hdfgroup.org:8888/thredds/catalog/testAll/cf2/swath/catalog.html[THREDDS]) and real swath files from the community (https://eosdap.hdfgroup.org:8080/opendap/data/earth-cube-cf2/swath-real/contents.html[Hyrax], https://eosdap.hdfgroup.org:8888/thredds/catalog/testAll/cf2/swath-real/catalog.html[THREDDS]).
+* Test swath files are available for the examples in this document (https://eosdap.hdfgroup.org:8080/opendap/data/earth-cube-cf2/swath/contents.html[Hyrax^], https://eosdap.hdfgroup.org:8888/thredds/catalog/testAll/cf2/swath/catalog.html[THREDDS^]) and real swath files from the community (https://eosdap.hdfgroup.org:8080/opendap/data/earth-cube-cf2/swath-real/contents.html[Hyrax^], https://eosdap.hdfgroup.org:8888/thredds/catalog/testAll/cf2/swath-real/catalog.html[THREDDS^]).
 
-* Comments or suggestions are welcome either as https://github.com/Unidata/EC-netCDF-CF/issues[issues], https://github.com/Unidata/EC-netCDF-CF/pulls[pull requests], or emails to the mailto:ajelenak%40hdfgroup.org,dave.santek%40ssec.wisc.edu?subject=CF%20Swath%20Proposal[authors].
+* Comments or suggestions are welcome either as https://github.com/Unidata/EC-netCDF-CF/issues[issues^], https://github.com/Unidata/EC-netCDF-CF/pulls[pull requests^], or emails to the mailto:ajelenak%40hdfgroup.org,dave.santek%40ssec.wisc.edu?subject=CF%20Swath%20Proposal[authors].
 
 [appendix]
 == Revision History
