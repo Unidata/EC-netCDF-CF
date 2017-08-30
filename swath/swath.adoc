@@ -15,7 +15,7 @@ Proposal status: *[red]#DRAFT/2017-08-31#*.
 
 == Introduction
 
-This is a proposal for an extension of the http://cfconventions.org[Climate and Forecast metadata convention^] (CF) to standardize the encodings of Earth Science swath data in the original instrument viewing geometry. The aim is that some form of this document be included in the CF convention at some future version. The proposal is based on the CF http://cfconventions.org/cf-conventions/cf-conventions.html[version 1.7^] (currently in draft) although backward compatibility is not necessarily an objective.
+This is a proposal for an extension of the http://cfconventions.org[Climate and Forecast metadata convention^] (CF) to standardize the encodings of Earth Science swath data in the original instrument viewing geometry. The aim is that some form of this document be included in a future version of the CF convention. The proposal is based on the CF http://cfconventions.org/cf-conventions/cf-conventions.html[version 1.7^] (currently in draft) although backward compatibility is not necessarily an objective.
 
 The work is done under the U.S. National Science Foundation award https://www.nsf.gov/awardsearch/showAward?AWD_ID=1541031[1541031^]: "EarthCube IA: Advancing netCDF-CF for the Geoscience Community".
 
@@ -33,7 +33,7 @@ Radiometric swath data are further processed to retrieve geophysical parameters.
 * The geospatial extent for radiometric swath data is always two-dimensional (area), while for geophysical swath data it can also be three-dimensional.
 * Geophysical swath data may also include coordinates that represent altitude.
 
-The proposed encodings are independent from the observation method and are applicable to swath data acquired by instruments on either satellites, airplanes, or unmanned aerial systems. The `swath_data` variable in the examples is a generic representation of any parameter that can be stored in swath data files. The order of its dimensions as shown in the examples is not the only one possible or allowed. It should be tailored in actual files based on expected data access patterns.
+The proposed encodings are independent from the observation method and are applicable to swath data acquired by instruments on either satellites, airplanes, or unmanned aerial systems. The `swath_data` variable in the examples is a generic representation of any parameter that can be stored in swath data files. The order of its dimensions as shown in the examples is not the only one possible or allowed. It should be tailored to expected data access patterns in actual files.
 
 === Geospatial Coordinates
 
