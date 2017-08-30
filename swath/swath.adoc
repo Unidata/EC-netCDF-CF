@@ -15,7 +15,7 @@ Proposal status: *[red]#DRAFT/2017-08-31#*.
 
 == Introduction
 
-This is a proposal for an extension of the http://cfconventions.org[Climate and Forecast metadata convention^] (CF) to standardize the encodings of Earth Science swath data in the original instrument viewing geometry. It is based on the CF http://cfconventions.org/cf-conventions/cf-conventions.html[version 1.7^] (currently in draft) although backward compatibility is not necessarily an objective.
+This is a proposal for an extension of the http://cfconventions.org[Climate and Forecast metadata convention^] (CF) to standardize the encodings of Earth Science swath data in the original instrument viewing geometry. The aim is that some form of this document be included in the CF convention at some future version. The proposal is based on the CF http://cfconventions.org/cf-conventions/cf-conventions.html[version 1.7^] (currently in draft) although backward compatibility is not necessarily an objective.
 
 The work is done under the U.S. National Science Foundation award https://www.nsf.gov/awardsearch/showAward?AWD_ID=1541031[1541031^]: "EarthCube IA: Advancing netCDF-CF for the Geoscience Community".
 
@@ -1043,13 +1043,9 @@ variables:
 [appendix]
 == How To Contribute
 
-The adoption of this document relies on its quality and applicability which greatly depends on community feedback. Below are several ways how to contribute to its development:
+The adoption of this document relies on its quality and applicability which greatly depends on community feedback. The document is hosted in a GitHub https://github.com/Unidata/EC-netCDF-CF[repository^] and its most up-to-date version can be viewed http://gist.asciidoctor.org/?github-Unidata%2FEC-netCDF-CF%2F%2Fswath%2Fswath.adoc[here^]. Comments or suggestions are welcome either as https://github.com/Unidata/EC-netCDF-CF/issues[issues^], https://github.com/Unidata/EC-netCDF-CF/pulls[pull requests^], or emails to the mailto:ajelenak%40hdfgroup.org,dave.santek%40ssec.wisc.edu?subject=CF%20Swath%20Proposal[authors].
 
-* The document is hosted in a GitHub https://github.com/Unidata/EC-netCDF-CF[repository^] and the most up-to-date version can be viewed http://gist.asciidoctor.org/?github-Unidata%2FEC-netCDF-CF%2F%2Fswath%2Fswath.adoc[here^].
-
-* Test swath files are available for both the examples in this document (https://eosdap.hdfgroup.org:8080/opendap/data/earth-cube-cf2/swath/contents.html[Hyrax^], https://eosdap.hdfgroup.org:8888/thredds/catalog/testAll/cf2/swath/catalog.html[THREDDS^]) and real community-supplied files (https://eosdap.hdfgroup.org:8080/opendap/data/earth-cube-cf2/swath-real/contents.html[Hyrax^], https://eosdap.hdfgroup.org:8888/thredds/catalog/testAll/cf2/swath-real/catalog.html[THREDDS^]).
-
-* Comments or suggestions are welcome either as https://github.com/Unidata/EC-netCDF-CF/issues[issues^], https://github.com/Unidata/EC-netCDF-CF/pulls[pull requests^], or emails to the mailto:ajelenak%40hdfgroup.org,dave.santek%40ssec.wisc.edu?subject=CF%20Swath%20Proposal[authors].
+Sample swath files for testing data access software are available for both the document's examples (https://eosdap.hdfgroup.org:8080/opendap/data/earth-cube-cf2/swath/contents.html[Hyrax^], https://eosdap.hdfgroup.org:8888/thredds/catalog/testAll/cf2/swath/catalog.html[THREDDS^]) and community-submitted files (https://eosdap.hdfgroup.org:8080/opendap/data/earth-cube-cf2/swath-real/contents.html[Hyrax^], https://eosdap.hdfgroup.org:8888/thredds/catalog/testAll/cf2/swath-real/catalog.html[THREDDS^]).
 
 [appendix]
 == Revision History
