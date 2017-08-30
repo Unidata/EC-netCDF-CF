@@ -836,55 +836,55 @@ These rules will be adapted based on any developments with official support for 
 ====
 ----
 dimensions:
-  vertex = 4  ;
-  time = 392  ;
-  band = 4  ;
-  xtrack = 35  ;
+  vertex = 4 ;
+  time = 392 ;
+  band = 4 ;
+  xtrack = 35 ;
 
 variables:
-  double time(time)  ;
-    :standard_name = "time"  ;
-    :units = "<units> since <datetime string>"  ;
+  double time(time) ;
+    :standard_name = "time" ;
+    :units = "<units> since <datetime string>" ;
     :calendar = "gregorian"
 
-  float band(band)  ;
-    :standard_name = "sensor_band_central_radiation_wavelength"  ;
-    :units = "nm"  ;
+  float band(band) ;
+    :standard_name = "sensor_band_central_radiation_wavelength" ;
+    :units = "nm" ;
 
 group: ancillary {
   variables:
-    float quality(time, xtrack, band)  ;
-      :coordinates = "/time /geolocation/lat /geolocation/lon /band"  ;
+    float quality(time, xtrack, band) ;
+      :coordinates = "/time /geolocation/lat /geolocation/lon /band" ;
 }
 
 group: geolocation {
   variables:
-    float lat_vertex(time, xtrack, vertex)  ;
+    float lat_vertex(time, xtrack, vertex) ;
 
-    float lon_vertex(time, xtrack, vertex)  ;
+    float lon_vertex(time, xtrack, vertex) ;
 
-    float lat(time, xtrack)  ;
-      :standard_name = "latitude"  ;
-      :units = "degrees_north"  ;
-      :bounds = "/geolocation/lat_vertex"  ;
+    float lat(time, xtrack) ;
+      :standard_name = "latitude" ;
+      :units = "degrees_north" ;
+      :bounds = "/geolocation/lat_vertex" ;
 
-    float lon(time, xtrack)  ;
-      :standard_name = "longitude"  ;
-      :units = "degrees_east"  ;
-      :bounds = "/geolocation/lon_vertex"  ;
+    float lon(time, xtrack) ;
+      :standard_name = "longitude" ;
+      :units = "degrees_east" ;
+      :bounds = "/geolocation/lon_vertex" ;
 }
 
 group: science {
   variables:
-    float science_data(time, xtrack)  ;
-      :coordinates = "/time /geolocation/lat /geolocation/lon"  ;
-      :units = "K"  ;
-      :ancillary_variables = "/ancillary/quality"  ;
+    float science_data(time, xtrack) ;
+      :coordinates = "/time /geolocation/lat /geolocation/lon" ;
+      :units = "K" ;
+      :ancillary_variables = "/ancillary/quality" ;
 
-    float radiance(time, xtrack, band)  ;
-      :coordinates = "/time /geolocation/lat /geolocation/lon /band"  ;
-      :units = "W sr m−2"  ;
-      :ancillary_variables = "/ancillary/quality"  ;
+    float radiance(time, xtrack, band) ;
+      :coordinates = "/time /geolocation/lat /geolocation/lon /band" ;
+      :units = "W sr m−2" ;
+      :ancillary_variables = "/ancillary/quality" ;
 }
 ----
 ====
@@ -955,38 +955,38 @@ CF non-compliant attributes:
 ====
 ----
 dimensions:
-  line = 2939  ;
-  samp_lo = 104  ;
-  samp_hi = 208  ;
+  line = 2939 ;
+  samp_lo = 104 ;
+  samp_hi = 208 ;
 
 variables:
-  short lat_hi(line, samp_hi)  ;
-    lat_hi:units = "std_latitude"  ;
-    lat_hi:missing_value = -32768s  ;
-    lat_hi:valid_min = -9000s  ;
-    lat_hi:valid_max = 9000s  ;
-    lat_hi:scale_factor = 0.01  ;
+  short lat_hi(line, samp_hi) ;
+    lat_hi:units = "std_latitude" ;
+    lat_hi:missing_value = -32768s ;
+    lat_hi:valid_min = -9000s ;
+    lat_hi:valid_max = 9000s ;
+    lat_hi:scale_factor = 0.01 ;
 
-  short lat_lo(line, samp_lo)  ;
-    lat_lo:units = "std_latitude"  ;
-    lat_lo:missing_value = -32768s  ;
-    lat_lo:valid_min = -9000s  ;
-    lat_lo:valid_max = 9000s  ;
-    lat_lo:scale_factor = 0.01  ;
+  short lat_lo(line, samp_lo) ;
+    lat_lo:units = "std_latitude" ;
+    lat_lo:missing_value = -32768s ;
+    lat_lo:valid_min = -9000s ;
+    lat_lo:valid_max = 9000s ;
+    lat_lo:scale_factor = 0.01 ;
 
-  short lon_hi(line, samp_hi)  ;
-    lon_hi:units = "std_longitude"  ;
-    lon_hi:missing_value = -32768s  ;
-    lon_hi:valid_min = -18000s  ;
-    lon_hi:valid_max = 18000s  ;
-    lon_hi:scale_factor = 0.01  ;
+  short lon_hi(line, samp_hi) ;
+    lon_hi:units = "std_longitude" ;
+    lon_hi:missing_value = -32768s ;
+    lon_hi:valid_min = -18000s ;
+    lon_hi:valid_max = 18000s ;
+    lon_hi:scale_factor = 0.01 ;
 
-  short lon_lo(line, samp_lo)  ;
-    lon_lo:units = "std_longitude"  ;
-    lon_lo:missing_value = -32768s  ;
-    lon_lo:valid_min = -18000s  ;
-    lon_lo:valid_max = 18000s  ;
-    lon_lo:scale_factor = 0.01  ;
+  short lon_lo(line, samp_lo) ;
+    lon_lo:units = "std_longitude" ;
+    lon_lo:missing_value = -32768s ;
+    lon_lo:valid_min = -18000s ;
+    lon_lo:valid_max = 18000s ;
+    lon_lo:scale_factor = 0.01 ;
 ----
 ====
 
@@ -1004,39 +1004,39 @@ CF non-compliant attributes:
 ====
 ----
 dimensions:
-  miline_hi = 1124  ;
-  misamp_hi = 128  ;
-  miline_lo = 562  ;
-  misamp_lo = 64  ;
+  miline_hi = 1124 ;
+  misamp_hi = 128 ;
+  miline_lo = 562 ;
+  misamp_lo = 64 ;
 
 variables:
-  short lat_hi(miline_hi, misamp_hi)  ;
-    lat_hi:units = "std_latitude"  ;
-    lat_hi:missing_value = -32768s  ;
-    lat_hi:valid_min = -32768s  ;
-    lat_hi:valid_max = 32767s  ;
-    lat_hi:scale_factor = 0.01  ;
+  short lat_hi(miline_hi, misamp_hi) ;
+    lat_hi:units = "std_latitude" ;
+    lat_hi:missing_value = -32768s ;
+    lat_hi:valid_min = -32768s ;
+    lat_hi:valid_max = 32767s ;
+    lat_hi:scale_factor = 0.01 ;
 
-  short lat_lo(miline_lo, misamp_lo)  ;
-    lat_lo:units = "std_latitude"  ;
-    lat_lo:missing_value = -32768s  ;
-    lat_lo:valid_min = -32768s  ;
-    lat_lo:valid_max = 32767s  ;
-    lat_lo:scale_factor = 0.01  ;
+  short lat_lo(miline_lo, misamp_lo) ;
+    lat_lo:units = "std_latitude" ;
+    lat_lo:missing_value = -32768s ;
+    lat_lo:valid_min = -32768s ;
+    lat_lo:valid_max = 32767s ;
+    lat_lo:scale_factor = 0.01 ;
 
-  short lon_hi(miline_hi, misamp_hi)  ;
-    lon_hi:units = "std_longitude"  ;
-    lon_hi:missing_value = -32768s  ;
-    lon_hi:valid_min = -32768s  ;
-    lon_hi:valid_max = 32767s  ;
-    lon_hi:scale_factor = 0.01  ;
+  short lon_hi(miline_hi, misamp_hi) ;
+    lon_hi:units = "std_longitude" ;
+    lon_hi:missing_value = -32768s ;
+    lon_hi:valid_min = -32768s ;
+    lon_hi:valid_max = 32767s ;
+    lon_hi:scale_factor = 0.01 ;
 
-  short lon_lo(miline_lo, misamp_lo)  ;
-    lon_lo:units = "std_longitude"  ;
-    lon_lo:missing_value = -32768s  ;
-    lon_lo:valid_min = -32768s  ;
-    lon_lo:valid_max = 32767s  ;
-    lon_lo:scale_factor = 0.01  ;
+  short lon_lo(miline_lo, misamp_lo) ;
+    lon_lo:units = "std_longitude" ;
+    lon_lo:missing_value = -32768s ;
+    lon_lo:valid_min = -32768s ;
+    lon_lo:valid_max = 32767s ;
+    lon_lo:scale_factor = 0.01 ;
 ----
 ====
 
