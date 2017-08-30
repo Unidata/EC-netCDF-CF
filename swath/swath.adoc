@@ -292,7 +292,7 @@ variables:
 
 ==== Multiband Image
 
-So far, the presented encodings are for swath data where a single time instance applies to all across-track observations belonging to one along-track group. Single time instance can also apply to a number of successive along-track groups of observations, for example, in the case of two-dimensional imaging sensors which can acquire swath data as a multiband image.
+The previous encoding is for swath data where a single time instance applies to all across-track observations belonging to one along-track scanning cycle. Single time instance can also apply to a number of successive along-track scanning cycles, for example, when two-dimensional imaging sensors acquire swath data as a multiband image.
 
 [caption="Example {counter:example-count}: "]
 .Multiband Image data.
@@ -346,9 +346,6 @@ variables:
     band:standard_name = "sensor_band_central_radiation_wavelength" ;
     band:units = "μm" ;
 
-  short FOV(FOV); <3>
-    FOV:long_name = "Field-of-view ordinal number" ;
-
   float lat(time, FOR, FOV) ;
     lat:standard_name = "latitude" ;
     lat:units = "degrees_north" ;
@@ -367,7 +364,6 @@ variables:
 ----
 <1> The number of fields-of-regard in one across-track scan.
 <2> The number of fields-of-view within one field-of-regard.
-<3> This variable can be left out if there is no need to define a particular ordering of fields-of-view within the field-of-regard.
 ====
 
 An interesting variation in the above encoding would be if the `FOR` and `FOV` dimensions exchanged places in the ordering, e.g. `(time, FOR, FOV, ...)` -> `(time, FOV, FOR, ...)`. The latter ordering corresponds to the spatial arrangement of the FORs and FOVs: FORs match the columns and FOVs match the rows of a two-dimensional imaging sensor. In other words: `FOR` -> `ncols` and `FOV` -> `nrows`.
@@ -432,12 +428,12 @@ variables:
   float swath_data(atrack, xtrack) ;
     swath_data:coordinates = "time lon lat" ; <1>
 ----
-<1> `time` is here an auxiliary coordinate (because `time` is defined with the `atrack` dimension) and must be listed in the `coordinates` attribute.
+<1> `time` is an auxiliary coordinate (because it is defined with the `atrack` dimension) and must be listed in the `coordinates` attribute.
 ====
 
 ==== Image Swath
 
-This is the geophysical analog of the Multiband Image Swath encoding.
+This is the geophysical analog of the Multiband Image encoding.
 
 [caption="Example {counter:example-count}: "]
 .Image Swath data.
@@ -840,55 +836,55 @@ These rules will be adapted based on any developments with official support for 
 ====
 ----
 dimensions:
-  vertex = 4;
-  time = 392;
-  band = 4;
-  xtrack = 35;
+  vertex = 4  ;
+  time = 392  ;
+  band = 4  ;
+  xtrack = 35  ;
 
 variables:
-  double time(time);
-    :standard_name = "time";
-    :units = "<units> since <datetime string>";
+  double time(time)  ;
+    :standard_name = "time"  ;
+    :units = "<units> since <datetime string>"  ;
     :calendar = "gregorian"
 
-  float band(band);
-    :standard_name = "sensor_band_central_radiation_wavelength";
-    :units = "nm";
+  float band(band)  ;
+    :standard_name = "sensor_band_central_radiation_wavelength"  ;
+    :units = "nm"  ;
 
 group: ancillary {
   variables:
-    float quality(time, xtrack, band);
-      :coordinates = "/time /geolocation/lat /geolocation/lon /band";
+    float quality(time, xtrack, band)  ;
+      :coordinates = "/time /geolocation/lat /geolocation/lon /band"  ;
 }
 
 group: geolocation {
   variables:
-    float lat_vertex(time, xtrack, vertex);
+    float lat_vertex(time, xtrack, vertex)  ;
 
-    float lon_vertex(time, xtrack, vertex);
+    float lon_vertex(time, xtrack, vertex)  ;
 
-    float lat(time, xtrack);
-      :standard_name = "latitude";
-      :units = "degrees_north";
-      :bounds = "/geolocation/lat_vertex";
+    float lat(time, xtrack)  ;
+      :standard_name = "latitude"  ;
+      :units = "degrees_north"  ;
+      :bounds = "/geolocation/lat_vertex"  ;
 
-    float lon(time, xtrack);
-      :standard_name = "longitude";
-      :units = "degrees_east";
-      :bounds = "/geolocation/lon_vertex";
+    float lon(time, xtrack)  ;
+      :standard_name = "longitude"  ;
+      :units = "degrees_east"  ;
+      :bounds = "/geolocation/lon_vertex"  ;
 }
 
 group: science {
   variables:
-    float science_data(time, xtrack);
-      :coordinates = "/time /geolocation/lat /geolocation/lon";
-      :units = "K";
-      :ancillary_variables = "/ancillary/quality"
+    float science_data(time, xtrack)  ;
+      :coordinates = "/time /geolocation/lat /geolocation/lon"  ;
+      :units = "K"  ;
+      :ancillary_variables = "/ancillary/quality"  ;
 
-    float radiance(time, xtrack, band);
-      :coordinates = "/time /geolocation/lat /geolocation/lon /band";
-      :units = "W sr m−2";
-      :ancillary_variables = "/ancillary/quality"
+    float radiance(time, xtrack, band)  ;
+      :coordinates = "/time /geolocation/lat /geolocation/lon /band"  ;
+      :units = "W sr m−2"  ;
+      :ancillary_variables = "/ancillary/quality"  ;
 }
 ----
 ====
@@ -914,32 +910,32 @@ CF non-compliant attributes:
 ----
   group: MODIS_SWATH_Type_L1B {
     dimensions:
-      2*nscans = 406;
-      1KM_geo_dim = 271;
+      2*nscans = 406 ;
+      1KM_geo_dim = 271 ;
 
     variables:
-      int 10*nscans(2*nscans=406);
-        :_DimensionMap = "";
+      int 10*nscans(2*nscans=406) ;
+        :_DimensionMap = "" ;
 
-      int Max_EV_frames(1KM_geo_dim=271);
-        :_DimensionMap = "";
+      int Max_EV_frames(1KM_geo_dim=271) ;
+        :_DimensionMap = "" ;
 
 
     group: Geolocation_Fields {
       variables:
-        float Latitude(2*nscans=406, 1KM_geo_dim=271);
-          :units = "degrees_north";
-          :valid_range = -90.0f, 90.0f; // float
-          :_FillValue = -999.0f; // float
-          :line_numbers = "3,8";
-          :frame_numbers = "3,8,13,...";
+        float Latitude(2*nscans=406, 1KM_geo_dim=271) ;
+          :units = "degrees_north" ;
+          :valid_range = -90.0f, 90.0f ; // float
+          :_FillValue = -999.0f ; // float
+          :line_numbers = "3,8" ;
+          :frame_numbers = "3,8,13,..." ;
 
-        float Longitude(2*nscans=406, 1KM_geo_dim=271);
-          :units = "degrees_east";
-          :valid_range = -180.0f, 180.0f; // float
-          :_FillValue = -999.0f; // float
-          :line_numbers = "3,8";
-          :frame_numbers = "3,8,13,...";
+        float Longitude(2*nscans=406, 1KM_geo_dim=271) ;
+          :units = "degrees_east" ;
+          :valid_range = -180.0f, 180.0f ; // float
+          :_FillValue = -999.0f ; // float
+          :line_numbers = "3,8" ;
+          :frame_numbers = "3,8,13,..." ;
     }
 }
 ----
@@ -959,38 +955,38 @@ CF non-compliant attributes:
 ====
 ----
 dimensions:
-  line = 2939 ;
-  samp_lo = 104 ;
-  samp_hi = 208 ;
+  line = 2939  ;
+  samp_lo = 104  ;
+  samp_hi = 208  ;
 
 variables:
-  short lat_hi(line, samp_hi) ;
-    lat_hi:units = "std_latitude" ;
-    lat_hi:missing_value = -32768s ;
-    lat_hi:valid_min = -9000s ;
-    lat_hi:valid_max = 9000s ;
-    lat_hi:scale_factor = 0.01 ;
+  short lat_hi(line, samp_hi)  ;
+    lat_hi:units = "std_latitude"  ;
+    lat_hi:missing_value = -32768s  ;
+    lat_hi:valid_min = -9000s  ;
+    lat_hi:valid_max = 9000s  ;
+    lat_hi:scale_factor = 0.01  ;
 
-  short lat_lo(line, samp_lo) ;
-    lat_lo:units = "std_latitude" ;
-    lat_lo:missing_value = -32768s ;
-    lat_lo:valid_min = -9000s ;
-    lat_lo:valid_max = 9000s ;
-    lat_lo:scale_factor = 0.01 ;
+  short lat_lo(line, samp_lo)  ;
+    lat_lo:units = "std_latitude"  ;
+    lat_lo:missing_value = -32768s  ;
+    lat_lo:valid_min = -9000s  ;
+    lat_lo:valid_max = 9000s  ;
+    lat_lo:scale_factor = 0.01  ;
 
-  short lon_hi(line, samp_hi) ;
-    lon_hi:units = "std_longitude" ;
-    lon_hi:missing_value = -32768s ;
-    lon_hi:valid_min = -18000s ;
-    lon_hi:valid_max = 18000s ;
-    lon_hi:scale_factor = 0.01 ;
+  short lon_hi(line, samp_hi)  ;
+    lon_hi:units = "std_longitude"  ;
+    lon_hi:missing_value = -32768s  ;
+    lon_hi:valid_min = -18000s  ;
+    lon_hi:valid_max = 18000s  ;
+    lon_hi:scale_factor = 0.01  ;
 
-  short lon_lo(line, samp_lo) ;
-    lon_lo:units = "std_longitude" ;
-    lon_lo:missing_value = -32768s ;
-    lon_lo:valid_min = -18000s ;
-    lon_lo:valid_max = 18000s ;
-    lon_lo:scale_factor = 0.01 ;
+  short lon_lo(line, samp_lo)  ;
+    lon_lo:units = "std_longitude"  ;
+    lon_lo:missing_value = -32768s  ;
+    lon_lo:valid_min = -18000s  ;
+    lon_lo:valid_max = 18000s  ;
+    lon_lo:scale_factor = 0.01  ;
 ----
 ====
 
@@ -1008,52 +1004,50 @@ CF non-compliant attributes:
 ====
 ----
 dimensions:
-  miline_hi = 1124 ;
-  misamp_hi = 128 ;
-  miline_lo = 562 ;
-  misamp_lo = 64 ;
+  miline_hi = 1124  ;
+  misamp_hi = 128  ;
+  miline_lo = 562  ;
+  misamp_lo = 64  ;
 
 variables:
-  short lat_hi(miline_hi, misamp_hi) ;
-    lat_hi:units = "std_latitude" ;
-    lat_hi:missing_value = -32768s ;
-    lat_hi:valid_min = -32768s ;
-    lat_hi:valid_max = 32767s ;
-    lat_hi:scale_factor = 0.01 ;
+  short lat_hi(miline_hi, misamp_hi)  ;
+    lat_hi:units = "std_latitude"  ;
+    lat_hi:missing_value = -32768s  ;
+    lat_hi:valid_min = -32768s  ;
+    lat_hi:valid_max = 32767s  ;
+    lat_hi:scale_factor = 0.01  ;
 
-  short lat_lo(miline_lo, misamp_lo) ;
-    lat_lo:units = "std_latitude" ;
-    lat_lo:missing_value = -32768s ;
-    lat_lo:valid_min = -32768s ;
-    lat_lo:valid_max = 32767s ;
-    lat_lo:scale_factor = 0.01 ;
+  short lat_lo(miline_lo, misamp_lo)  ;
+    lat_lo:units = "std_latitude"  ;
+    lat_lo:missing_value = -32768s  ;
+    lat_lo:valid_min = -32768s  ;
+    lat_lo:valid_max = 32767s  ;
+    lat_lo:scale_factor = 0.01  ;
 
-  short lon_hi(miline_hi, misamp_hi) ;
-    lon_hi:units = "std_longitude" ;
-    lon_hi:missing_value = -32768s ;
-    lon_hi:valid_min = -32768s ;
-    lon_hi:valid_max = 32767s ;
-    lon_hi:scale_factor = 0.01 ;
+  short lon_hi(miline_hi, misamp_hi)  ;
+    lon_hi:units = "std_longitude"  ;
+    lon_hi:missing_value = -32768s  ;
+    lon_hi:valid_min = -32768s  ;
+    lon_hi:valid_max = 32767s  ;
+    lon_hi:scale_factor = 0.01  ;
 
-  short lon_lo(miline_lo, misamp_lo) ;
-    lon_lo:units = "std_longitude" ;
-    lon_lo:missing_value = -32768s ;
-    lon_lo:valid_min = -32768s ;
-    lon_lo:valid_max = 32767s ;
-    lon_lo:scale_factor = 0.01 ;
+  short lon_lo(miline_lo, misamp_lo)  ;
+    lon_lo:units = "std_longitude"  ;
+    lon_lo:missing_value = -32768s  ;
+    lon_lo:valid_min = -32768s  ;
+    lon_lo:valid_max = 32767s  ;
+    lon_lo:scale_factor = 0.01  ;
 ----
 ====
 
 [appendix]
 == How To Contribute
 
-The adoption of this document relies on its quality and applicability which greatly depends on community feedback. Below are several ways how to contribute to the development:
+The adoption of this document relies on its quality and applicability which greatly depends on community feedback. Below are several ways how to contribute to its development:
 
-* The document is hosted in the Unidata's GitHub repository for this project: https://github.com/Unidata/EC-netCDF-CF.
+* The document is hosted in a GitHub https://github.com/Unidata/EC-netCDF-CF[repository^] and the most up-to-date version can be viewed http://gist.asciidoctor.org/?github-Unidata%2FEC-netCDF-CF%2F%2Fswath%2Fswath.adoc[here^].
 
-* The most up-to-date version of the document is displayed http://gist.asciidoctor.org/?github-Unidata%2FEC-netCDF-CF%2F%2Fswath%2Fswath.adoc[here^].
-
-* Test swath files are available for the examples in this document (https://eosdap.hdfgroup.org:8080/opendap/data/earth-cube-cf2/swath/contents.html[Hyrax^], https://eosdap.hdfgroup.org:8888/thredds/catalog/testAll/cf2/swath/catalog.html[THREDDS^]) and real swath files from the community (https://eosdap.hdfgroup.org:8080/opendap/data/earth-cube-cf2/swath-real/contents.html[Hyrax^], https://eosdap.hdfgroup.org:8888/thredds/catalog/testAll/cf2/swath-real/catalog.html[THREDDS^]).
+* Test swath files are available for both the examples in this document (https://eosdap.hdfgroup.org:8080/opendap/data/earth-cube-cf2/swath/contents.html[Hyrax^], https://eosdap.hdfgroup.org:8888/thredds/catalog/testAll/cf2/swath/catalog.html[THREDDS^]) and real community-supplied files (https://eosdap.hdfgroup.org:8080/opendap/data/earth-cube-cf2/swath-real/contents.html[Hyrax^], https://eosdap.hdfgroup.org:8888/thredds/catalog/testAll/cf2/swath-real/catalog.html[THREDDS^]).
 
 * Comments or suggestions are welcome either as https://github.com/Unidata/EC-netCDF-CF/issues[issues^], https://github.com/Unidata/EC-netCDF-CF/pulls[pull requests^], or emails to the mailto:ajelenak%40hdfgroup.org,dave.santek%40ssec.wisc.edu?subject=CF%20Swath%20Proposal[authors].
 
@@ -1067,7 +1061,7 @@ The adoption of this document relies on its quality and applicability which grea
 |DRAFT/2017-08-31
 a|
 * Section on group hierarchy.
-* Describing field-of-view geospatial extents extended to all swath encodings.
+* Describing field-of-view geospatial extents can be used in all swath encodings.
 * `featureType` variable attribute removed from all examples and text.
 * Vertical coordinates included in the geospatial coordinates section.
 * An example for non-monotonic spectral coordinate.
