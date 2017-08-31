@@ -1,12 +1,13 @@
 = Encoding of Swath Data in the Climate and Forecast Convention
+Aleksandar Jelenak; David Santek; Kent Yang; Robert Carp
 :toc: preamble
 :toclevels: 4
+:sectnums:
 :icons: font
+:linkattrs:
 
 ====
-Proposal status: *[red]#DRAFT#*.
-
-Last modified: 2017-05-16
+Proposal status: *[red]#DRAFT/2017-08-31#*.
 ====
 
 // Example counter
@@ -14,13 +15,13 @@ Last modified: 2017-05-16
 
 == Introduction
 
-This is a proposal for an extension of the http://cfconventions.org[Climate and Forecast metadata convention] (CF) to standardize the encodings of Earth Science swath data in the original instrument viewing geometry. It is based on the CF http://cfconventions.org/cf-conventions/cf-conventions.html[version 1.7] (currently in draft) although backward compatibility is not necessarily an objective.
+This is a proposal for an extension of the http://cfconventions.org[Climate and Forecast metadata convention^] (CF) to standardize the encodings of Earth Science swath data in the original instrument viewing geometry. The aim is that some form of this document be included in a future version of the CF convention. The proposal is based on the CF http://cfconventions.org/cf-conventions/cf-conventions.html[version 1.7^] (currently in draft) although backward compatibility is not necessarily an objective.
 
-The work is done under the U.S. National Science Foundation award https://www.nsf.gov/awardsearch/showAward?AWD_ID=1541031[1541031]: "EarthCube IA: Advancing netCDF-CF for the Geoscience Community".
+The work is done under the U.S. National Science Foundation award https://www.nsf.gov/awardsearch/showAward?AWD_ID=1541031[1541031^]: "EarthCube IA: Advancing netCDF-CF for the Geoscience Community".
 
 The community-provided examples were valuable resource in preparing this proposal. These examples are collected in a GitHub repository at https://github.com/diwg/diwg.
 
-Encoding examples are expressed using the http://www.unidata.ucar.edu/software/netcdf/netcdf/CDL-Syntax.html#CDL-Syntax[NetCDF Common Data Language] (CDL) with only the relevant file content to illustrate the concept.
+Encoding examples are expressed using the http://www.unidata.ucar.edu/software/netcdf/netcdf/CDL-Syntax.html#CDL-Syntax[NetCDF Common Data Language^] (CDL) with only the relevant file content to illustrate the concept.
 
 == Swath Data Encodings
 
@@ -32,13 +33,11 @@ Radiometric swath data are further processed to retrieve geophysical parameters.
 * The geospatial extent for radiometric swath data is always two-dimensional (area), while for geophysical swath data it can also be three-dimensional.
 * Geophysical swath data may also include coordinates that represent altitude.
 
-The proposed encodings are independent from the observation method and are applicable to swath data acquired by instruments on either satellites, airplanes, or unmanned aerial systems. The `swath_data` variable in the examples is a generic representative of any parameter that can be stored in swath data files. The order of its dimensions in the examples is not the only possible or allowed. It should be tailored in actual files based on expected data access patterns.
-
-All the swath encodings in this proposal use the `featureType` variable attribute for storing the swath encoding type identifiers. Currently this requirement breaks the backward compatibility with the CF version 1 conventions. However, the convention's version 1.7 draft http://cfconventions.org/cf-conventions/cf-conventions.html#_features_and_feature_types[allows] for the possibility the `featureType` attribute may become a variable attribute at some later time.
+The proposed encodings are independent from the observation method and are applicable to swath data acquired by instruments on either satellites, airplanes, or unmanned aerial systems. The `swath_data` variable in the examples is a generic representation of any parameter that can be stored in swath data files. The order of its dimensions as shown in the examples is not the only one possible or allowed. It should be tailored to expected data access patterns in actual files.
 
 === Geospatial Coordinates
 
-Geospatial coordinates for swath data reflect the instrument scanning and stepping in terms of the latitude and longitude for each field-of-view. Because of this the rank of these coordinates is at least two, but can be larger, with the slowest varying dimension representing forward (along-track) movement of the platform. The reference of latitude-longitude coordinates is a geodetic datum (planetodetic for other planetary bodies). The following example demonstrates a typical case of swath data latitude and longitude coordinates on the WGS-84 geoid.
+Geospatial coordinates for swath data are comprised of a horizontal and, in some cases, a vertical component. The horizontal component reflects the instrument scanning and stepping in terms of the latitude and longitude for each field-of-view. Because of this the rank of the latitude and longitude coordinates is at least two, but can be larger, with the slowest varying dimension representing forward (along-track) movement of the platform. The reference of latitude-longitude coordinates is a geodetic datum (planetodetic for other planetary bodies). The following example demonstrates a typical case of swath data latitude and longitude coordinates on the WGS-84 geoid.
 
 [caption="Example {counter:example-count}: "]
 .Latitude and longitude coordinates on the WGS-84 geoid for a scanning instrument.
@@ -64,11 +63,11 @@ variables:
     crs:inverse_flattening = 298.257223563 ; <7>
 ----
 <1> The dimension representing along-track platform movement.
-<2> The dimension representing across-track platform movement.
+<2> The dimension representing data collected across-track to platform movement.
 <3> Required use of the `units` attribute and its values for the latitude and longitude coordinates.
 <4> Required use of the `standard_name` attribute, identifying the latitude and longitude coordinates.
-<5> The grid mapping variable. The term "grid" is for historical reasons only.
-<6> The identifier for a coordinate reference system based on latitude-longitude locations on a geoid datum.
+<5> The grid mapping variable. The term "grid" is for historical reasons only. It's name and data type are arbitrary.
+<6> The value is an identifier that can describe any combination of a geoid, coordinate reference system, and map projection. In this case it is the latitude-longitude reference system.
 <7> The attributes related to describing the WGS-84 geoid datum.
 ====
 
@@ -114,8 +113,10 @@ It is important to note here that the requirements to:
 
 does preclude the possibility of CF compliance for many existing archives of satellite swath data. For example:
 
-* The MODIS Level 1b data (see <<MODIS: HDF-EOS Format>> in Appendix A) stores latitude/longitude for every 5th scan (`atrack`) line and field-of-view (`xtrack`), beginning at position `(atrack = 3, xtrack = 3)`.
+* The MODIS Level 1b data (see <<MODIS: HDF-EOS Format>>) stores latitude and longitude for every 5th scan (`atrack`) line and field-of-view (`xtrack`), beginning at position `(atrack = 3, xtrack = 3)`.
 * The GOES-16 Advanced Baseline Imager (ABI) data is reprojected to a fixed grid, which is a normalized geostationary projection. The projection coordinates of the fixed grid are stored rather than latitude/longitude information.
+
+The vertical component of geospatial coordinates represents the  altitude associated with swath data. Any of the supported vertical coordinate types are acceptable.
 
 === Time Coordinates
 
@@ -152,15 +153,16 @@ variables:
 <1> Time coordinates with the rank greater than one must be listed in the `coordinates` attribute of their swath data variables.
 ====
 
-NOTE: Some satellite swath data use the International Atomic Time (TAI) which currently is not supported by the CF convention (see this http://mailman.cgd.ucar.edu/pipermail/cf-metadata/2015/058061.html[thread] on the CF mailing list for background). The encoding examples in this proposal use the Gregorian calendar.
+NOTE: Some satellite swath data use the International Atomic Time (TAI) which currently is not supported by the CF convention (see this http://mailman.cgd.ucar.edu/pipermail/cf-metadata/2015/058061.html[thread^] on the CF mailing list for background). The encoding examples in this proposal use the Gregorian calendar.
 
 === Spectral Coordinates
 
-The information about the electromagnetic radiation intervals (bands, channels) at which swath data were acquired is encoded as spectral coordinates. The coordinate values can either be stored as physical properties (e.g., wavelength, wavenumber, or frequency) or alphanumeric strings.
+The information about the electromagnetic radiation intervals (bands, channels) at which swath data were acquired is encoded as spectral coordinates. The coordinate values can either be stored as physical properties (wavelength, wavenumber, frequency) or alphanumeric strings.
 
 [caption="Example {counter:example-count}: "]
 .Numerical spectral coordinate.
 ====
+For monotonically increasing or decreasing band data:
 ----
 dimensions:
   band = 5 ; <1>
@@ -172,7 +174,20 @@ variables:
 ----
 <1> Number of bands.
 <2> The `band` variable is a coordinate variable.
-<3> One of the standard names specifically for numerical band data. The other two names are `sensor_band_central_radiation_wavenumber` and `sensor_band_central_radiation_frequency`.
+<3> One of the standard names specifically for numerical band data. The other two are `sensor_band_central_radiation_wavenumber` and `sensor_band_central_radiation_frequency`. More generic names `radiation_frequency` and `radiation_wavelength` can also be used when appropriate.
+
+For non-monotonic band data:
+----
+dimensions:
+  num_band = 5 ; <1>
+
+variables:
+  double band(num_band) ; <2>
+    band:standard_name = "sensor_band_central_radiation_wavenumber" ;
+    band:units = "cm-1" ;
+----
+<1> Number of bands.
+<2> The `band` variable must be listed in the `coordinates` attribute of its swath data variable.
 ====
 
 Alphanumeric spectral coordinates are applicable to cases where bands cannot be differentiated solely numerically, for example, when polarization together with electromagnetic spectrum interval information has to be combined.
@@ -180,29 +195,28 @@ Alphanumeric spectral coordinates are applicable to cases where bands cannot be 
 [caption="Example {counter:example-count}: "]
 .Alphanumerical band coordinate.
 ====
-For the netCDF classic model:
-----
-dimensions:
-  band_enum = 5 ; <1>
-  band_strlen = 10 ; <2>
-
-variables:
-  char band(band_enum, band_strlen) ;
-    band:standard_name = "sensor_band_identifier" ; <3>
-----
-<1> Number of bands.
-<2> Number of characters of the longest band string identifier.
-<3> The standard name specifically for band string identifiers.
-
 For the netCDF extended model (strongly recommended to use):
 ----
 dimensions:
-  band_enum = 5 ;
+  num_band = 5 ;
 
 variables:
-  string band(band_enum) ;
+  string band(num_band) ;
     band:standard_name = "sensor_band_identifier" ;
 ----
+
+For the netCDF classic model:
+----
+dimensions:
+  num_band = 5 ;
+  band_strlen = 10 ; <1>
+
+variables:
+  char band(num_band, band_strlen) ;
+    band:standard_name = "sensor_band_identifier" ; <2>
+----
+<1> Number of characters of the longest band string identifier.
+<2> The standard name specifically for band string identifiers.
 ====
 
 === Radiometric Swath Data Encodings
@@ -239,7 +253,6 @@ variables:
     time:calendar = "gregorian" ;
 
   float swath_data(time, scan, band) ;
-    swath_data:featureType = "multibandSwath" ;
     swath_data:coordinates = "lon lat" ;
 ----
 ====
@@ -253,10 +266,10 @@ Another encoding of the Multiband Swath with alphanumeric-valued band coordinate
 dimensions:
   time = UNLIMITED ;
   scan = 1024 ;
-  band_enum = 8 ;
+  num_band = 8 ;
 
 variables:
-  string band(band_enum) ;
+  string band(num_band) ;
     band:standard_name = "sensor_band_identifier" ;
 
   float lat(time, scan) ;
@@ -272,65 +285,14 @@ variables:
     time:units = "<units> since <datetime string>" ;
     time:calendar = "gregorian" ;
 
-  float swath_data(time, scan, band_enum) ;
-    swath_data:featureType = "multibandSwath" ;
+  float swath_data(time, scan, num_band) ;
     swath_data:coordinates = "lon lat band" ;
 ----
 ====
 
-==== Multiband with Field-of-View Geo-Shapes
-
-Sometimes it may be desirable to specify the geo-shape of each field-of-view (FOV) together with the swath data. The Multiband Swath encoding is extended with _boundary variables_ which define FOV geospatial extent. The encoding example below is appropriate if:
-
-* FOV geospatial extent can be represented with a single geopolygon with no holes; and
-* the number of vertices for all FOV geopolygons is the same.
-
-[caption="Example {counter:example-count}: "]
-.Multiband data with field-of-view geopolygons.
-====
-----
-dimensions:
-  time = 10 ;
-  scan = 512 ;
-  band = 5 ;
-  vertices = 4 ; <1>
-
-variables:
-  float band(band) ;
-    band:standard_name = "sensor_band_central_radiation_wavelength" ;
-    band:units = "μm" ;
-
-  float lat(time, scan) ;
-    lat:standard_name = "latitude" ;
-    lat:units = "degrees_north" ;
-    lat:bounds = "lat_vertex" ; <2>
-
-  float lat_vertex(time, scan, vertices) ; <3>
-
-  float lon(time, scan) ;
-    lon:standard_name = "longitude" ;
-    lon:units = "degrees_east" ;
-    lon:bounds = "lon_vertex" ; <2>
-
-  float lon_vertex(time, scan, vertices) ; <3>
-
-  double time(time) ;
-    time:standard_name = "time" ;
-    time:units = "<units> since <datetime string>" ;
-    time:calendar = "gregorian" ;
-
-  float swath_data(time, scan, band) ;
-    swath_data:featureType = "multibandSwath" ;
-    swath_data:coordinates = "lon lat" ;
-----
-<1> The dimension declares the number of FOV geopolygon vertices.
-<2> Boundary variables, `lat_vertex` and `lon_vertex`, are associated with their respective coordinates.
-<3> The boundary variables have one more dimension, the fastest-varying one, than their respective coordinates. They link an FOV `(time, scan)` with its geopolygon specified by the vertices `(lat_vertex(time, scan, n), lon_vertex(time, scan, n))`, for `n=0,..., vertices-1`. The geolocation `(lat(time, scan), lon(time, scan))` has to be contained within this geopolygon. The vertices must be ordered anticlockwise when viewed in the `lon`-`lat` plane from above.
-====
-
 ==== Multiband Image
 
-So far the presented encodings are for swath data where a single time instance applies to all across-track observations belonging to one along-track group. Single time instance can also apply to a number of successive along-track groups of observations, for example, in the case of two-dimensional imaging sensors which can acquire swath data as a multiband image.
+The previous encoding is for swath data where a single time instance applies to all across-track observations belonging to one along-track scanning cycle. Single time instance can also apply to a number of successive along-track scanning cycles, for example, when two-dimensional imaging sensors acquire swath data as a multiband image.
 
 [caption="Example {counter:example-count}: "]
 .Multiband Image data.
@@ -361,14 +323,13 @@ variables:
     time:calendar = "gregorian" ;
 
   float swath_data(time, nrows, ncols, band) ;
-    swath_data:featureType = "multibandImageSwath" ;
     swath_data:coordinates = "lon lat" ;
 ----
 <1> Number of rows of the two-dimensional imaging sensor.
 <2> Number of columns of the two-dimensional imaging sensor.
 ====
 
-The same encoding is applicable to swath data from hyperspectral sounding instruments which make observations with their detectors arranged into a grid, typically 2-by-2 or 3-by-3. Such grouping of the field-of-views is referred to as one field-of-regard (FOR). The following example is identical to the previous one except for two dimensions with changed names.
+The same encoding is applicable to swath data from hyperspectral sounding instruments which make observations with their fields-of-view arranged into a grid, typically 2-by-2 or 3-by-3. Such grouping of the fields-of-view is referred to as one field-of-regard (FOR). The following example is identical to the previous one except for two dimensions with changed names.
 
 [caption="Example {counter:example-count}: "]
 .Multiband Image data for each field-of-regard/field-of-view.
@@ -385,9 +346,6 @@ variables:
     band:standard_name = "sensor_band_central_radiation_wavelength" ;
     band:units = "μm" ;
 
-  short FOV(FOV); <3>
-    FOV:long_name = "Field-of-view ordinal number" ;
-
   float lat(time, FOR, FOV) ;
     lat:standard_name = "latitude" ;
     lat:units = "degrees_north" ;
@@ -402,66 +360,19 @@ variables:
     time:calendar = "gregorian" ;
 
   float swath_data(time, FOR, FOV, band) ;
-    swath_data:featureType = "multibandImageSwath" ;
     swath_data:coordinates = "lon lat" ;
 ----
-<1> The number of field-of-regards in one across-track scan.
-<2> The number of field-of-views within one field-of-regard.
-<3> This variable can be left out if there is no need to define a particular ordering of field-of-views within the field-of-regard.
+<1> The number of fields-of-regard in one across-track scan.
+<2> The number of fields-of-view within one field-of-regard.
 ====
 
 An interesting variation in the above encoding would be if the `FOR` and `FOV` dimensions exchanged places in the ordering, e.g. `(time, FOR, FOV, ...)` -> `(time, FOV, FOR, ...)`. The latter ordering corresponds to the spatial arrangement of the FORs and FOVs: FORs match the columns and FOVs match the rows of a two-dimensional imaging sensor. In other words: `FOR` -> `ncols` and `FOV` -> `nrows`.
-
-==== Multiband Image with Field-of-View Geo-Shapes
-
-This is an extension on the Multiband Image feature type when the geospatial extent of all field-of-views in each field-of-regard need to be provided. The assumptions and approach are identical as for the <<Multiband with Field-of-View Geo-Shapes>> encoding.
-
-[caption="Example {counter:example-count}: "]
-.Multiband Image data with field-of-view geopolygons.
-====
-----
-dimensions:
-  time = UNLIMITED ;
-  FOR = 30 ;
-  band = 1305 ;
-  FOV = 9 ;
-  vertices = 8 ;
-
-variables:
-  float band(band) ;
-    band:standard_name = "sensor_band_central_radiation_wavelength" ;
-    band:units = "μm" ;
-
-  float lat(time, FOR, FOV) ;
-    lat:standard_name = "latitude" ;
-    lat:units = "degrees_north" ;
-    lat:bounds = "lat_vertex" ;
-
-  float lat_vertex(time, FOR, FOV, vertices) ;
-
-  float lon(time, FOR, FOV) ;
-    lon:standard_name = "longitude" ;
-    lon:units = "degrees_east" ;
-    lon:bounds = "lon_vertex" ;
-
-  float lon_vertex(time, FOR, FOV, vertices) ;
-
-  double time(time) ;
-    time:standard_name = "time" ;
-    time:units = "<units> since <datetime string>" ;
-    time:calendar = "gregorian" ;
-
-  float swath_data(time, FOR, FOV, band) ;
-    swath_data:featureType = "multibandImageSwath" ;
-    swath_data:coordinates = "lon lat" ;
-----
-====
 
 === Geophysical Swath Data Encodings
 
 ==== Swath
 
-Very common feature type in use for scalar-valued geophysical parameters.
+Very common encoding used for storing surface-based geophysical parameters.
 
 [caption="Example {counter:example-count}: "]
 .Swath data.
@@ -486,7 +397,6 @@ variables:
     lon:units = "degrees_east" ;
 
   float swath_data(time, scan) ;
-    swath_data:featureType = "swath" ;
     swath_data:coordinates = "lon lat" ;
 ----
 ====
@@ -516,15 +426,14 @@ variables:
     lon:units = "degrees_east" ;
 
   float swath_data(atrack, xtrack) ;
-    swath_data:featureType = "swath" ;
     swath_data:coordinates = "time lon lat" ; <1>
 ----
-<1> `time` is here an auxiliary coordinate (because `time` is defined with the `atrack` dimension) and must be listed in the `coordinates` attribute.
+<1> `time` is an auxiliary coordinate (because it is defined with the `atrack` dimension) and must be listed in the `coordinates` attribute.
 ====
 
 ==== Image Swath
 
-This is the geophysical analog of the Multiband Image Swath feature type.
+This is the geophysical analog of the Multiband Image encoding.
 
 [caption="Example {counter:example-count}: "]
 .Image Swath data.
@@ -550,13 +459,12 @@ variables:
     time:calendar = "gregorian" ;
 
   float swath_data(time, nrows, ncols) ;
-    swath_data:featureType = "imageSwath" ;
     swath_data:coordinates = "lon lat" ;
 ----
 ====
 
 [caption="Example {counter:example-count}: "]
-.The version of Image Swath feature type for each field-of-regard/field-of-view.
+.The version of Image Swath data for each field-of-regard/field-of-view.
 ====
 ----
 dimensions:
@@ -579,14 +487,13 @@ variables:
     lon:units = "degrees_east" ;
 
   float swath_data(time, FOR, FOV) ;
-    swath_data:featureType = "imageSwath" ;
     swath_data:coordinates = "lon lat" ;
 ----
 ====
 
 ==== Profile
 
-This feature type consists of the Swath type with an altitude coordinate. All types of altitude coordinates are allowed.
+This encoding consists of the Swath encoding with a vertical coordinate. All types of vertical coordinates are allowed.
 
 [caption="Example {counter:example-count}: "]
 .Profile data.
@@ -617,7 +524,6 @@ variables:
     time:calendar = "gregorian" ;
 
   float swath_data(time, scan, press) ;
-    swath_data:featureType = "profileSwath" ;
     swath_data:coordinates = "lon lat" ;
 ----
 ====
@@ -651,14 +557,13 @@ variables:
     lon:units = "degrees_east" ;
 
   float swath_data(atrack, xtrack, press) ;
-    swath_data:featureType = "profileSwath" ;
     swath_data:coordinates = "time lon lat" ;
 ----
 ====
 
 ==== Multiband Profile
 
-An interesting trait of this feature type is a spectral band coordinate in the encoding of a geophysical parameter.
+An interesting trait of this encoding is the presence of a spectral coordinate.
 
 [caption="Example {counter:example-count}: "]
 .Multiband Profile data.
@@ -694,14 +599,13 @@ variables:
     time:calendar = "gregorian" ;
 
   float swath_data(time, scan, press, band) ;
-    swath_data:featureType = "multibandProfileSwath" ;
     swath_data:coordinates = "lon lat" ;
 ----
 ====
 
 ==== Image Profile
 
-Adding an altitude coordinate to the Image Swath feature type makes this one.
+Adding an altitude coordinate to the Image Swath encoding makes this one.
 
 [caption="Example {counter:example-count}: "]
 .Image Profile data.
@@ -733,15 +637,14 @@ variables:
     time:calendar = "gregorian" ;
 
   float swath_data(time, nrows, ncols, press) ;
-    swath_data:featureType = "imageProfileSwath" ;
     swath_data:coordinates = "lon lat" ;
 ----
 ====
 
-As in the few previous encoding examples, assuming that `nrows` represents field-of-regards (FOR) and `ncols` represents field-of-views (FOV), this feature type can also serve for storing profiles from hyperspectral sounders for each field-of-view. The following example illustrates this:
+As in the few previous encoding examples, assuming that `nrows` represents fields-of-regard (FOR) and `ncols` represents fields-of-view (FOV), the above encoding can also serve for storing profiles from hyperspectral sounders for each field-of-view. The following example illustrates this:
 
 [caption="Example {counter:example-count}: "]
-.Image Profile data for field-of-regards (FOR) and field-of-views (FOV).
+.Image Profile data for fields-of-regard (FOR) and fields-of-view (FOV).
 ====
 ----
 dimensions:
@@ -770,20 +673,19 @@ variables:
     time:calendar = "gregorian" ;
 
   float swath_data(time, FOR, FOV, press) ;
-    swath_data:featureType = "imageProfileSwath" ;
     swath_data:coordinates = "lon lat" ;
 ----
 ====
 
 ==== Field-of-Regard Profile
 
-There are two more ways to encode swath data from field-of-views and field-of-regards. The differing features of these encodings are:
+There are two more ways to encode swath data from fields-of-view and fields-of-regard. The differing features of these encodings are:
 
-* How much latitude/longitude data is provided: for all field-of-views in each field-of-regard, or just for each field-of-regard as a whole.
-* A two-dimensional layout of field-of-views within the field-of-regard.
+* How much latitude/longitude data is provided: for all fields-of-view in each field-of-regard, or just for each field-of-regard as a whole.
+* A two-dimensional layout of fields-of-view within the field-of-regard.
 
 [caption="Example {counter:example-count}: "]
-.Field-of-Regard Profile data with latitude and longitude data for all field-of-views in each field-of-regard.
+.Field-of-Regard Profile data with latitude and longitude data for all fields-of-view in each field-of-regard.
 ====
 ----
 dimensions:
@@ -813,13 +715,12 @@ variables:
     time:calendar = "gregorian" ;
 
   float swath_data(time, FOR, FOV_atrack, FOV_xtrack, press) ;
-    swath_data:featureType = "FORProfileSwath" ;
     swath_data:coordinates = "lon lat" ;
 ----
-<1> Number of field-of-regards in one across-track scan.
+<1> Number of fields-of-regard in one across-track scan.
 <2> Along-track (_row_) dimension of the field-of-view _matrix_.
 <3> Across-track (_column_) dimension of the field-of-view _matrix_.
-<4> Latitude and longitude for all field-of-views in the field-of-regard.
+<4> Latitude and longitude for all fields-of-view in the field-of-regard.
 ====
 
 [caption="Example {counter:example-count}: "]
@@ -859,19 +760,143 @@ variables:
     time:calendar = "gregorian" ;
 
   float swath_data(time, FOR, FOV_atrack, FOV_xtrack, press) ;
-    swath_data:featureType = "FORProfileSwath" ;
     swath_data:coordinates = "lon lat" ;
 ----
 <1> `FOV_atrack` and `FOV_xtrack` are coordinates now compared to the previous example because the `lat` and `lon` auxiliary coordinates do not depend on them.
 ====
 
-=== Appendix A: Non-Compliant Geospatial Examples
+=== Encoding Field-of-View Geospatial Extent
+
+The encodings so far represented FOVs as geolocated points. Points in mathematics represent geometric entities with no length, area, or volume, i.e. they are zero-dimensional. Real FOVs, however, have finite geospatial extent. Each of the swath encodings can be augmented with _boundary variables_ to describe FOV geospatial extent. This approach is appropriate if:
+
+* FOV geospatial extent can be represented with a single geopolygon with no holes; and
+* the number of vertices for all FOV geopolygons is the same.
+
+To illustrate the concept, boundary variables are added to the Profile encoding example:
+
+[caption="Example {counter:example-count}: "]
+.Profile data with field-of-view geopolygons.
+====
+----
+dimensions:
+  atrack = 512 ;
+  xtrack = 1024 ;
+  press = 15 ;
+  vertices = 4 ; <1>
+
+variables:
+  float press(press) ;
+    press:standard_name = "air_pressure" ;
+    press:units = "Pa" ;
+    press:positive = "up" ;
+
+  double time(atrack) ;
+    time:standard_name = "time" ;
+    time:units = "<units> since <datetime string>" ;
+    time:calendar = "gregorian" ;
+
+  float lat(atrack, xtrack) ;
+    lat:standard_name = "latitude" ;
+    lat:units = "degrees_north" ;
+    lat:bounds = "lat_vertex" ; <2>
+
+  float lon(atrack, xtrack) ;
+    lon:standard_name = "longitude" ;
+    lon:units = "degrees_east" ;
+    lon:bounds = "lon_vertex" ; <2>
+
+  float lat_vertex(atrack, xtrack, vertices) ; <3>
+
+  float lon_vertex(atrack, xtrack, vertices) ; <3>
+
+  float swath_data(atrack, xtrack, press) ;
+    swath_data:coordinates = "time lon lat" ;
+----
+<1> The dimension declares the number of FOV geopolygon vertices.
+<2> Boundary variables, `lat_vertex` and `lon_vertex`, are associated with their respective coordinates.
+<3> The boundary variables.
+====
+
+Boundary variables have one more dimension, the fastest-varying one, than their respective coordinates. In the example above they link an FOV (`atrack`, `xtrack`) with its geopolygon specified by the vertices (`lat_vertex`(`atrack`, `xtrack`, `n`), `lon_vertex`(`atrack`, `xtrack`, `n`)), for `n`=`0`,..., `vertices`-1. The geolocation (`lat`(`atrack`, `xtrack`), `lon`(`atrack`, `xtrack`)) must be contained within this geopolygon. The vertices must be ordered anticlockwise when viewed in the `lon`-`lat` plane from above.
+
+=== Group Hierarchies
+
+This kind of hierarchy is created using the grouping feature of the netCDF Enhanced Data Model and is colloquially known as _groups in files_. Since the current CF convention is not based on the Enhanced Data Model such files are not strictly CF compliant. However, groups are present in many swath data files.
+
+The proposed encodings are deliberately group-agnostic although that does not mean the use of groups is prohibited. Swath data files with groups can adhere to the proposed encodings by obeying these simple rules:
+
+* Swath data variables, their coordinates, or any other related variable can be stored in any group.
+* The variable attributes remain with their swath variables, similar to files without groups.
+* Any reference to variables, for example in attributes, should use their names that represent the complete hierarchy starting from the top group.
+
+These rules will be adapted based on any developments with official support for group hierarchies in the CF convention.
+
+[caption="Example {counter:example-count}: "]
+.A swath file with groups holding science, coordinate with FOV geospatial extent, and ancillary data.
+====
+----
+dimensions:
+  vertex = 4 ;
+  time = 392 ;
+  band = 4 ;
+  xtrack = 35 ;
+
+variables:
+  double time(time) ;
+    :standard_name = "time" ;
+    :units = "<units> since <datetime string>" ;
+    :calendar = "gregorian"
+
+  float band(band) ;
+    :standard_name = "sensor_band_central_radiation_wavelength" ;
+    :units = "nm" ;
+
+group: ancillary {
+  variables:
+    float quality(time, xtrack, band) ;
+      :coordinates = "/time /geolocation/lat /geolocation/lon /band" ;
+}
+
+group: geolocation {
+  variables:
+    float lat_vertex(time, xtrack, vertex) ;
+
+    float lon_vertex(time, xtrack, vertex) ;
+
+    float lat(time, xtrack) ;
+      :standard_name = "latitude" ;
+      :units = "degrees_north" ;
+      :bounds = "/geolocation/lat_vertex" ;
+
+    float lon(time, xtrack) ;
+      :standard_name = "longitude" ;
+      :units = "degrees_east" ;
+      :bounds = "/geolocation/lon_vertex" ;
+}
+
+group: science {
+  variables:
+    float science_data(time, xtrack) ;
+      :coordinates = "/time /geolocation/lat /geolocation/lon" ;
+      :units = "K" ;
+      :ancillary_variables = "/ancillary/quality" ;
+
+    float radiance(time, xtrack, band) ;
+      :coordinates = "/time /geolocation/lat /geolocation/lon /band" ;
+      :units = "W sr m−2" ;
+      :ancillary_variables = "/ancillary/quality" ;
+}
+----
+====
+
+[appendix]
+== Non-Compliant Geospatial Examples
 
 The following examples are from a variety of satellite swath data stored in the netCDF, HDF4, and HDF5 file formats. This is to illustrate the variety of encodings for swath data, which on one hand provides an impetus to define a CF standard, but on the other hand these exemplify the difficulty in getting all satellite data to conform to a standard.
 
-==== MODIS: HDF-EOS Format
+=== MODIS: HDF-EOS Format
 
-The Moderate Resolution Imaging Spectroradiometer (MODIS) is a key instrument aboard the Terra (originally known as EOS AM-1) and Aqua (originally known as EOS PM-1) satellites. <<Appendix B: References,[1]>>
+The Moderate Resolution Imaging Spectroradiometer (MODIS) is a key instrument aboard the Terra (originally known as EOS AM-1) and Aqua (originally known as EOS PM-1) satellites. <<1>>
 
 CF non-compliant attributes:
 
@@ -885,40 +910,40 @@ CF non-compliant attributes:
 ----
   group: MODIS_SWATH_Type_L1B {
     dimensions:
-      2*nscans = 406;
-      1KM_geo_dim = 271;
+      2*nscans = 406 ;
+      1KM_geo_dim = 271 ;
 
     variables:
-      int 10*nscans(2*nscans=406);
-        :_DimensionMap = "";
+      int 10*nscans(2*nscans=406) ;
+        :_DimensionMap = "" ;
 
-      int Max_EV_frames(1KM_geo_dim=271);
-        :_DimensionMap = "";
+      int Max_EV_frames(1KM_geo_dim=271) ;
+        :_DimensionMap = "" ;
 
 
     group: Geolocation_Fields {
       variables:
-        float Latitude(2*nscans=406, 1KM_geo_dim=271);
-          :units = "degrees_north";
-          :valid_range = -90.0f, 90.0f; // float
-          :_FillValue = -999.0f; // float
-          :line_numbers = "3,8";
-          :frame_numbers = "3,8,13,...";
+        float Latitude(2*nscans=406, 1KM_geo_dim=271) ;
+          :units = "degrees_north" ;
+          :valid_range = -90.0f, 90.0f ; // float
+          :_FillValue = -999.0f ; // float
+          :line_numbers = "3,8" ;
+          :frame_numbers = "3,8,13,..." ;
 
-        float Longitude(2*nscans=406, 1KM_geo_dim=271);
-          :units = "degrees_east";
-          :valid_range = -180.0f, 180.0f; // float
-          :_FillValue = -999.0f; // float
-          :line_numbers = "3,8";
-          :frame_numbers = "3,8,13,...";
+        float Longitude(2*nscans=406, 1KM_geo_dim=271) ;
+          :units = "degrees_east" ;
+          :valid_range = -180.0f, 180.0f ; // float
+          :_FillValue = -999.0f ; // float
+          :line_numbers = "3,8" ;
+          :frame_numbers = "3,8,13,..." ;
     }
 }
 ----
 ====
 
-==== TRMM: NetCDF Format
+=== TRMM: NetCDF Format
 
-The Tropical Rainfall Measuring Mission (TRMM), a joint mission of NASA and the Japan Aerospace Exploration Agency, was launched in 1997 to study rainfall for weather and climate research. The satellite was retired on 8 April 2015. <<Appendix B: References,[2]>>
+The Tropical Rainfall Measuring Mission (TRMM), a joint mission of NASA and the Japan Aerospace Exploration Agency, was launched in 1997 to study rainfall for weather and climate research. The satellite was retired on 8 April 2015. <<2>>
 
 CF non-compliant attributes:
 
@@ -965,9 +990,9 @@ variables:
 ----
 ====
 
-==== SSM/I: NetCDF Format
+=== SSM/I: NetCDF Format
 
-The Special Sensor Microwave Imager (SSM/I) Sensor is carried aboard Defense Meteorological Satellite Program (DMSP) satellites DMSP F-8, DMSP F-10, DMSP F-11, DMSP F-12, and DMSP F-13. <<Appendix B: References,[3]>>
+The Special Sensor Microwave Imager (SSM/I) Sensor is carried aboard Defense Meteorological Satellite Program (DMSP) satellites DMSP F-8, DMSP F-10, DMSP F-11, DMSP F-12, and DMSP F-13. <<3>>
 
 CF non-compliant attributes:
 
@@ -1015,10 +1040,37 @@ variables:
 ----
 ====
 
-=== Appendix B: References
+[appendix]
+== How To Contribute
 
-[1] https://modis.gsfc.nasa.gov/about/
+The adoption of this document relies on its quality and applicability which greatly depends on community feedback. The document is hosted in a GitHub https://github.com/Unidata/EC-netCDF-CF[repository^] and its most up-to-date version can be viewed http://gist.asciidoctor.org/?github-Unidata%2FEC-netCDF-CF%2F%2Fswath%2Fswath.adoc[here^]. Comments or suggestions are welcome either as https://github.com/Unidata/EC-netCDF-CF/issues[issues^], https://github.com/Unidata/EC-netCDF-CF/pulls[pull requests^], or emails to the mailto:ajelenak%40hdfgroup.org,dave.santek%40ssec.wisc.edu?subject=CF%20Swath%20Proposal[authors].
 
-[2] https://pmm.nasa.gov/trmm
+Sample swath files for testing data access software are available for both the document's examples (https://eosdap.hdfgroup.org:8080/opendap/data/earth-cube-cf2/swath/contents.html[Hyrax^], https://eosdap.hdfgroup.org:8888/thredds/catalog/testAll/cf2/swath/catalog.html[THREDDS^]) and community-submitted files (https://eosdap.hdfgroup.org:8080/opendap/data/earth-cube-cf2/swath-real/contents.html[Hyrax^], https://eosdap.hdfgroup.org:8888/thredds/catalog/testAll/cf2/swath-real/catalog.html[THREDDS^]).
 
-[3] https://eosweb.larc.nasa.gov/GUIDE/sensor_documents/ssmi_sensor.html
+[appendix]
+== Revision History
+
+[width="90%",cols="25%,75%",options="header"]
+|===
+|Release |Description
+
+|DRAFT/2017-08-31
+a|
+* Section on group hierarchy.
+* Describing field-of-view geospatial extents can be used in all swath encodings.
+* `featureType` variable attribute removed from all examples and text.
+* Vertical coordinates included in the geospatial coordinates section.
+* An example for non-monotonic spectral coordinate.
+
+|DRAFT/2017-05-16
+|Initial version.
+|===
+
+[appendix]
+== References
+
+[[[1]]] https://modis.gsfc.nasa.gov/about/
+
+[[[2]]] https://pmm.nasa.gov/trmm
+
+[[[3]]] https://eosweb.larc.nasa.gov/GUIDE/sensor_documents/ssmi_sensor.html
