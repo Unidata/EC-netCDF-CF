@@ -7,7 +7,7 @@ Aleksandar Jelenak; David Santek; Kent Yang; Robert Carp
 :linkattrs:
 
 ====
-Proposal status: *[red]#DRAFT/2017-08-31#*.
+Proposal status: *[red]#FINAL DRAFT/2018-03-01#*.
 ====
 
 // Example counter
@@ -15,17 +15,17 @@ Proposal status: *[red]#DRAFT/2017-08-31#*.
 
 == Introduction
 
-This is a proposal for an extension of the http://cfconventions.org[Climate and Forecast metadata convention^] (CF) to standardize the encodings of Earth Science swath data in the original instrument viewing geometry. The aim is that some form of this document be included in a future version of the CF convention. The proposal is based on the CF http://cfconventions.org/cf-conventions/cf-conventions.html[version 1.7^] (currently in draft) although backward compatibility is not necessarily an objective.
+This is a proposal for an extension of the http://cfconventions.org[Climate and Forecast metadata convention^] (CF) to standardize the encodings of Earth Science swath data in the original instrument viewing geometry. The aim is to have some form of this document added to a future version of the CF convention. The proposal is based on the CF http://cfconventions.org/Data/cf-conventions/cf-conventions-1.7/cf-conventions.html[version 1.7^] although backward compatibility is not necessarily an objective.
 
 The work is done under the U.S. National Science Foundation award https://www.nsf.gov/awardsearch/showAward?AWD_ID=1541031[1541031^]: "EarthCube IA: Advancing netCDF-CF for the Geoscience Community".
 
 The community-provided examples were valuable resource in preparing this proposal. These examples are collected in a GitHub repository at https://github.com/diwg/diwg.
 
-Encoding examples are expressed using the http://www.unidata.ucar.edu/software/netcdf/netcdf/CDL-Syntax.html#CDL-Syntax[NetCDF Common Data Language^] (CDL) with only the relevant file content to illustrate the concept.
+Encoding examples here are expressed using the http://www.unidata.ucar.edu/software/netcdf/netcdf/CDL-Syntax.html#CDL-Syntax[NetCDF Common Data Language^] (CDL) with only the relevant file content to illustrate the concept. They should not be construed as complete and used as templates.
 
 == Swath Data Encodings
 
-Earth Science swath data originates as electromagnetic radiation collected from a specific direction into a solid angle and then measured at a number of intervals of the electromagnetic spectrum, called _bands_ or _channels_. The combination of the direction and the solid angle defines a _field-of-view_ (FOV). At any given instant an instrument sweeps its FOV over an area of Earth while its platform (an object carrying such instrument) moves. Successive FOV observations are usually combined to cover a larger portion of Earth, sometimes even the entire Earth. When these successive observations are plotted on maps they appear to cover a swath on the Earth's surface, hence the name.
+Earth Science swath data originates as electromagnetic radiation collected from a specific direction into a solid angle and then measured at a number of intervals of the electromagnetic spectrum, called _bands_ or _channels_. The combination of the direction, the solid angle, and the instrument data acquisition settings defines one observation or measurement. At any given instant an instrument sweeps over an area of the Earth while its platform (an object carrying such instrument) moves. Successive observations are usually combined to cover a larger portion of the Earth, sometimes even the entire Earth. When these successive observations are plotted on maps they appear to cover a swath on the Earth's surface, hence the name for this type of data.
 
 Radiometric swath data are further processed to retrieve geophysical parameters. In the satellite remote sensing context, the former are commonly referred to as _Level 1_ while the latter are called _Level 2_ swath data. Thus there are two distinctive swath data domains for which we define encodings: radiometric and geophysical. The chief differences between these two domains are:
 
@@ -37,7 +37,7 @@ The proposed encodings are independent from the observation method and are appli
 
 === Geospatial Coordinates
 
-Geospatial coordinates for swath data are comprised of a horizontal and, in some cases, a vertical component. The horizontal component reflects the instrument scanning and stepping in terms of the latitude and longitude for each field-of-view. Because of this the rank of the latitude and longitude coordinates is at least two, but can be larger, with the slowest varying dimension representing forward (along-track) movement of the platform. The reference of latitude-longitude coordinates is a geodetic datum (planetodetic for other planetary bodies). The following example demonstrates a typical case of swath data latitude and longitude coordinates on the WGS-84 geoid.
+Geospatial coordinates for swath data are comprised of a horizontal and, in some cases, a vertical component. The horizontal component reflects the instrument scanning and stepping in terms of the latitude and longitude for each observation. Because of this the rank of the latitude and longitude coordinates is at least two, but can be larger, with the slowest varying dimension representing forward (along-track) movement of the platform. The reference of latitude-longitude coordinates is a geodetic datum (planetodetic for other planetary bodies). The following example demonstrates a typical case of swath data latitude and longitude coordinates on the WGS-84 geoid.
 
 [caption="Example {counter:example-count}: "]
 .Latitude and longitude coordinates on the WGS-84 geoid for a scanning instrument.
@@ -106,17 +106,15 @@ variables:
 <2> The grid mapping variable with the attributes describing the Geostationary projection.
 ====
 
-It is important to note here that the requirements to:
+[NOTE]
+====
+It is important to mention here that the requirements to provide geospatial coordinate data for every observation, or include latitude and longitude coordinates in addition to projection coordinates, does preclude the possibility of CF compliance for many existing archives of satellite swath data. For example:
 
-1. provide geospatial coordinate data for every field-of-view, or
-2. include latitude and longitude coordinates in addition to projection coordinates,
+* The MODIS Level 1B data (see <<MODIS: HDF-EOS Format>>) stores latitude and longitude for every 5th scan (`atrack`) line and across-track observation (`xtrack`), beginning at position `(atrack = 3, xtrack = 3)`.
+* The GOES-16 Advanced Baseline Imager (ABI) data is reprojected to a fixed grid, which is a normalized geostationary projection. The projection coordinates of the fixed grid are stored rather than latitude/longitude coordinates.
+====
 
-does preclude the possibility of CF compliance for many existing archives of satellite swath data. For example:
-
-* The MODIS Level 1b data (see <<MODIS: HDF-EOS Format>>) stores latitude and longitude for every 5th scan (`atrack`) line and field-of-view (`xtrack`), beginning at position `(atrack = 3, xtrack = 3)`.
-* The GOES-16 Advanced Baseline Imager (ABI) data is reprojected to a fixed grid, which is a normalized geostationary projection. The projection coordinates of the fixed grid are stored rather than latitude/longitude information.
-
-The vertical component of geospatial coordinates represents the  altitude associated with swath data. Any of the supported vertical coordinate types are acceptable.
+The vertical component of geospatial coordinates represents the altitude associated with swath data. Any of the supported vertical coordinate types are acceptable.
 
 === Time Coordinates
 
@@ -257,7 +255,7 @@ variables:
 ----
 ====
 
-Another encoding of the Multiband Swath with alphanumeric-valued band coordinate because numerical information may not always be sufficient to distinguish between spectral bands.
+Another example of the Multiband Swath encoding with alphanumeric-valued band coordinate because numerical information may not always be sufficient to distinguish between spectral bands.
 
 [caption="Example {counter:example-count}: "]
 .Multiband data with alphanumeric spectral coordinate.
@@ -329,16 +327,16 @@ variables:
 <2> Number of columns of the two-dimensional imaging sensor.
 ====
 
-The same encoding is applicable to swath data from hyperspectral sounding instruments which make observations with their fields-of-view arranged into a grid, typically 2-by-2 or 3-by-3. Such grouping of the fields-of-view is referred to as one field-of-regard (FOR). The following example is identical to the previous one except for two dimensions with changed names.
+The same encoding is applicable to swath data from hyperspectral sounding instruments which make observations arranged into a grid, typically 2-by-2 or 3-by-3. Such grouping of the observations comprises one field-of-regard (FOR). The following example is identical to the previous one except for two dimensions with changed names.
 
 [caption="Example {counter:example-count}: "]
-.Multiband Image data for each field-of-regard/field-of-view.
+.Multiband Image data for each field-of-regard/observation.
 ====
 ----
 dimensions:
   time = 50 ;
   FOR = 45 ; <1>
-  FOV = 9 ; <2>
+  obs = 9 ; <2>
   band = 1305 ;
 
 variables:
@@ -346,11 +344,11 @@ variables:
     band:standard_name = "sensor_band_central_radiation_wavelength" ;
     band:units = "μm" ;
 
-  float lat(time, FOR, FOV) ;
+  float lat(time, FOR, obs) ;
     lat:standard_name = "latitude" ;
     lat:units = "degrees_north" ;
 
-  float lon(time, FOR, FOV) ;
+  float lon(time, FOR, obs) ;
     lon:standard_name = "longitude" ;
     lon:units = "degrees_east" ;
 
@@ -359,20 +357,20 @@ variables:
     time:units = "<units> since <datetime string>" ;
     time:calendar = "gregorian" ;
 
-  float swath_data(time, FOR, FOV, band) ;
+  float swath_data(time, FOR, obs, band) ;
     swath_data:coordinates = "lon lat" ;
 ----
 <1> The number of fields-of-regard in one across-track scan.
-<2> The number of fields-of-view within one field-of-regard.
+<2> The number of observations within one field-of-regard.
 ====
 
-An interesting variation in the above encoding would be if the `FOR` and `FOV` dimensions exchanged places in the ordering, e.g. `(time, FOR, FOV, ...)` -> `(time, FOV, FOR, ...)`. The latter ordering corresponds to the spatial arrangement of the FORs and FOVs: FORs match the columns and FOVs match the rows of a two-dimensional imaging sensor. In other words: `FOR` -> `ncols` and `FOV` -> `nrows`.
+An interesting variation in the above encoding would be if the `FOR` and `obs` dimensions exchanged places in the ordering, e.g. `(time, FOR, obs, ...)` -> `(time, obs, FOR, ...)`. The latter ordering corresponds to the spatial arrangement of the fields-of-regard and their observations: `FOR` match the columns and `obs` match the rows of a two-dimensional imaging sensor. In other words: `FOR` -> `ncols` and `obs` -> `nrows`.
 
 === Geophysical Swath Data Encodings
 
 ==== Swath
 
-Very common encoding used for storing surface-based geophysical parameters.
+Very common encoding used for storing 2D geophysical parameters.
 
 [caption="Example {counter:example-count}: "]
 .Swath data.
@@ -401,7 +399,7 @@ variables:
 ----
 ====
 
-For completeness, the example below uses along- and across-track dimensions.
+For completeness, the example below uses along- and across-track dimensions instead.
 
 [caption="Example {counter:example-count}: "]
 .Swath data utilizing along- and across-track dimensions.
@@ -433,7 +431,7 @@ variables:
 
 ==== Image Swath
 
-This is the geophysical analog of the Multiband Image encoding.
+This encoding is the geophysical analog of the Multiband Image encoding.
 
 [caption="Example {counter:example-count}: "]
 .Image Swath data.
@@ -464,13 +462,13 @@ variables:
 ====
 
 [caption="Example {counter:example-count}: "]
-.The version of Image Swath data for each field-of-regard/field-of-view.
+.The version of Image Swath data for each field-of-regard/observation.
 ====
 ----
 dimensions:
   time = UNLIMITED ;
   FOR = 30 ;
-  FOV = 9 ;
+  obs = 9 ;
 
 variables:
   double time(time) ;
@@ -478,15 +476,15 @@ variables:
     time:units = "<units> since <datetime string>" ;
     time:calendar = "gregorian" ;
 
-  float lat(time, FOR, FOV) ;
+  float lat(time, FOR, obs) ;
     lat:standard_name = "latitude" ;
     lat:units = "degrees_north" ;
 
-  float lon(time, FOR, FOV) ;
+  float lon(time, FOR, obs) ;
     lon:standard_name = "longitude" ;
     lon:units = "degrees_east" ;
 
-  float swath_data(time, FOR, FOV) ;
+  float swath_data(time, FOR, obs) ;
     swath_data:coordinates = "lon lat" ;
 ----
 ====
@@ -563,7 +561,7 @@ variables:
 
 ==== Multiband Profile
 
-An interesting trait of this encoding is the presence of a spectral coordinate.
+An interesting trait of this encoding is the presence of a spectral coordinate when storing geophysical parameters.
 
 [caption="Example {counter:example-count}: "]
 .Multiband Profile data.
@@ -605,7 +603,7 @@ variables:
 
 ==== Image Profile
 
-Adding an altitude coordinate to the Image Swath encoding makes this one.
+This encoding consists of the the Image Swath with an altitude coordinate.
 
 [caption="Example {counter:example-count}: "]
 .Image Profile data.
@@ -641,16 +639,16 @@ variables:
 ----
 ====
 
-As in the few previous encoding examples, assuming that `nrows` represents fields-of-regard (FOR) and `ncols` represents fields-of-view (FOV), the above encoding can also serve for storing profiles from hyperspectral sounders for each field-of-view. The following example illustrates this:
+As in the few previous encoding examples, assuming that `nrows` represents fields-of-regard (FOR) and `ncols` represents observations (`obs`), the above encoding can also serve for storing profiles from hyperspectral sounders. The following example illustrates this:
 
 [caption="Example {counter:example-count}: "]
-.Image Profile data for fields-of-regard (FOR) and fields-of-view (FOV).
+.Image Profile data for fields-of-regard (FOR) with their observations.
 ====
 ----
 dimensions:
   time = 1 ;
   FOR = 1024 ;
-  FOV = 3600 ;
+  obs = 3600 ;
   press = 100 ;
 
 variables:
@@ -659,11 +657,11 @@ variables:
     press:units = "Pa" ;
     press:positive = "up" ;
 
-  float lat(time, FOR, FOV) ;
+  float lat(time, FOR, obs) ;
     lat:standard_name = "latitude" ;
     lat:units = "degrees_north" ;
 
-  float lon(time, FOR, FOV) ;
+  float lon(time, FOR, obs) ;
     lon:standard_name = "longitude" ;
     lon:units = "degrees_east" ;
 
@@ -672,28 +670,28 @@ variables:
     time:units = "<units> since <datetime string>" ;
     time:calendar = "gregorian" ;
 
-  float swath_data(time, FOR, FOV, press) ;
+  float swath_data(time, FOR, obs, press) ;
     swath_data:coordinates = "lon lat" ;
 ----
 ====
 
 ==== Field-of-Regard Profile
 
-There are two more ways to encode swath data from fields-of-view and fields-of-regard. The differing features of these encodings are:
+There are two more ways to encode swath data with fields-of-regard and their observations. The differences between these encodings are:
 
-* How much latitude/longitude data is provided: for all fields-of-view in each field-of-regard, or just for each field-of-regard as a whole.
-* A two-dimensional layout of fields-of-view within the field-of-regard.
+* How much latitude/longitude data are provided: for all observations in each field-of-regard, or just for each field-of-regard as a whole.
+* A two-dimensional layout of observations within the field-of-regard.
 
 [caption="Example {counter:example-count}: "]
-.Field-of-Regard Profile data with latitude and longitude data for all fields-of-view in each field-of-regard.
+.Field-of-Regard Profile data with latitude and longitude coordinates for each observation in every field-of-regard.
 ====
 ----
 dimensions:
   time = 10 ;
   FOR = 30 ; <1>
   press = 15 ;
-  FOV_atrack = 3 ; <2>
-  FOV_xtrack = 3 ; <3>
+  obs_atrack = 3 ; <2>
+  obs_xtrack = 3 ; <3>
 
 variables:
   float press(press) ;
@@ -701,11 +699,11 @@ variables:
     press:units = "Pa" ;
     press:positive = "up" ;
 
-  float lat(time, FOR, FOV_atrack, FOV_xtrack) ; <4>
+  float lat(time, FOR, obs_atrack, obs_xtrack) ; <4>
     lat:standard_name = "latitude" ;
     lat:units = "degrees_north" ;
 
-  float lon(time, FOR, FOV_atrack, FOV_xtrack) ; <4>
+  float lon(time, FOR, obs_atrack, obs_xtrack) ; <4>
     lon:standard_name = "longitude" ;
     lon:units = "degrees_east" ;
 
@@ -714,32 +712,32 @@ variables:
     time:units = "<units> since <datetime string>" ;
     time:calendar = "gregorian" ;
 
-  float swath_data(time, FOR, FOV_atrack, FOV_xtrack, press) ;
+  float swath_data(time, FOR, obs_atrack, obs_xtrack, press) ;
     swath_data:coordinates = "lon lat" ;
 ----
 <1> Number of fields-of-regard in one across-track scan.
-<2> Along-track (_row_) dimension of the field-of-view _matrix_.
-<3> Across-track (_column_) dimension of the field-of-view _matrix_.
-<4> Latitude and longitude for all fields-of-view in the field-of-regard.
+<2> Along-track (_row_) dimension of the observations _matrix_.
+<3> Across-track (_column_) dimension of the observations _matrix_.
+<4> Latitude and longitude for all observations in every field-of-regard.
 ====
 
 [caption="Example {counter:example-count}: "]
-.Field-of-Regard Profile data with latitude and longitude data for each field-of-regard as a whole.
+.Field-of-Regard Profile data with latitude and longitude coordinates for each field-of-regard as a whole.
 ====
 ----
 dimensions:
   time = 10 ;
   FOR = 30 ;
   press = 15 ;
-  FOV_atrack = 3 ;
-  FOV_xtrack = 3 ;
+  obs_atrack = 3 ;
+  obs_xtrack = 3 ;
 
 variables:
-  short FOV_atrack(FOV_atrack): <1>
-    FOV_atrack:long_name = "Field-of-view along track ordinal number" ;
+  short obs_atrack(obs_atrack): <1>
+    obs_atrack:long_name = "Along-track observation ordinal number" ;
 
-  short FOV_xtrack(FOV_xtrack): <1>
-    FOV_xtrack:long_name = "Field-of-view across track ordinal number" ;
+  short obs_xtrack(obs_xtrack): <1>
+    obs_xtrack:long_name = "Across-track observation ordinal number" ;
 
   float press(press) ;
     press:standard_name = "air_pressure" ;
@@ -759,23 +757,23 @@ variables:
     time:units = "<units> since <datetime string>" ;
     time:calendar = "gregorian" ;
 
-  float swath_data(time, FOR, FOV_atrack, FOV_xtrack, press) ;
+  float swath_data(time, FOR, obs_atrack, obs_xtrack, press) ;
     swath_data:coordinates = "lon lat" ;
 ----
-<1> `FOV_atrack` and `FOV_xtrack` are coordinates now compared to the previous example because the `lat` and `lon` auxiliary coordinates do not depend on them.
+<1> `obs_atrack` and `obs_xtrack` are coordinates now compared to the previous example because the `lat` and `lon` auxiliary coordinates do not depend on them.
 ====
 
-=== Encoding Field-of-View Geospatial Extent
+=== Encoding Geospatial Extent of Observations
 
-The encodings so far represented FOVs as geolocated points. Points in mathematics represent geometric entities with no length, area, or volume, i.e. they are zero-dimensional. Real FOVs, however, have finite geospatial extent. Each of the swath encodings can be augmented with _boundary variables_ to describe FOV geospatial extent. This approach is appropriate if:
+The encodings so far represented observations as geolocated points. Points in mathematics represent geometric entities with no length, area, or volume, i.e. they are zero-dimensional. Real observations, however, have finite geospatial extent. Each of the swath encodings can be augmented with _boundary variables_ to describe the geospatial extent of each observation. This approach is appropriate if:
 
-* FOV geospatial extent can be represented with a single geopolygon with no holes; and
-* the number of vertices for all FOV geopolygons is the same.
+* Observation's geospatial extent can be represented with a single geopolygon with no holes; and
+* the number of vertices for all such geopolygons is the same.
 
 To illustrate the concept, boundary variables are added to the Profile encoding example:
 
 [caption="Example {counter:example-count}: "]
-.Profile data with field-of-view geopolygons.
+.Profile data with observation geopolygons.
 ====
 ----
 dimensions:
@@ -812,28 +810,23 @@ variables:
   float swath_data(atrack, xtrack, press) ;
     swath_data:coordinates = "time lon lat" ;
 ----
-<1> The dimension declares the number of FOV geopolygon vertices.
+<1> The dimension declares the number of geopolygon vertices.
 <2> Boundary variables, `lat_vertex` and `lon_vertex`, are associated with their respective coordinates.
 <3> The boundary variables.
 ====
 
-Boundary variables have one more dimension, the fastest-varying one, than their respective coordinates. In the example above they link an FOV (`atrack`, `xtrack`) with its geopolygon specified by the vertices (`lat_vertex`(`atrack`, `xtrack`, `n`), `lon_vertex`(`atrack`, `xtrack`, `n`)), for `n`=`0`,..., `vertices`-1. The geolocation (`lat`(`atrack`, `xtrack`), `lon`(`atrack`, `xtrack`)) must be contained within this geopolygon. The vertices must be ordered anticlockwise when viewed in the `lon`-`lat` plane from above.
+Boundary variables have one more dimension, the fastest-varying one, than their respective coordinates. In the example above they link an observation (`atrack`, `xtrack`) with its geopolygon specified by the vertices (`lat_vertex`(`atrack`, `xtrack`, `n`), `lon_vertex`(`atrack`, `xtrack`, `n`)), for `n`=`0`,..., `vertices`-1. The geolocation (`lat`(`atrack`, `xtrack`), `lon`(`atrack`, `xtrack`)) must be contained within this geopolygon. The vertices must be ordered counterclockwise when viewed in the `lon`-`lat` plane from above.
 
 === Group Hierarchies
 
 This kind of hierarchy is created using the grouping feature of the netCDF Enhanced Data Model and is colloquially known as _groups in files_. Since the current CF convention is not based on the Enhanced Data Model such files are not strictly CF compliant. However, groups are present in many swath data files.
 
-The proposed encodings are deliberately group-agnostic although that does not mean the use of groups is prohibited. Swath data files with groups can adhere to the proposed encodings by obeying these simple rules:
-
-* Swath data variables, their coordinates, or any other related variable can be stored in any group.
-* The variable attributes remain with their swath variables, similar to files without groups.
-* Any reference to variables, for example in attributes, should use their names that represent the complete hierarchy starting from the top group.
-
-These rules will be adapted based on any developments with official support for group hierarchies in the CF convention.
+The swath data encodings presented here are deliberately group-agnostic although that does not mean the use of groups is prohibited. A proposal on https://docs.google.com/document/d/1KK6IZ2ZmpaUTVgrw-GlFd6almppjvGz6D7nxVTO3BtI/edit[group hierarchies^] in the CF convention is being developed as part of the same project as this proposal. The most relevant aspect of that proposal for swath data encodings is the set of rules describing how to locate variables referenced in CF attributes like `coordinates`. It is enough to use just variable names in such attributes for files without groups but this practice is ambiguous in the presence of groups as there could be more than one same-named variable. The group https://docs.google.com/document/d/1KK6IZ2ZmpaUTVgrw-GlFd6almppjvGz6D7nxVTO3BtI/edit[proposal^] describes how to handle all such cases. The following example illustrates two possible options for referencing variables in the swath encodings: using their names, or with the complete hierarchy starting from the top group.
 
 [caption="Example {counter:example-count}: "]
-.A swath file with groups holding science, coordinate with FOV geospatial extent, and ancillary data.
+.A swath file with groups holding science, ancillary, and coordinates with observation geospatial extent. Two approaches to referencing variables are shown depending on file content organization.
 ====
+Variables are located in separate groups based on their category: scientific, geolocation, quality information.
 ----
 dimensions:
   vertex = 4 ;
@@ -854,7 +847,7 @@ variables:
 group: ancillary {
   variables:
     float quality(time, xtrack, band) ;
-      :coordinates = "/time /geolocation/lat /geolocation/lon /band" ;
+      :coordinates = "/time /geolocation/lat /geolocation/lon /band" ;  <1>
 }
 
 group: geolocation {
@@ -866,7 +859,7 @@ group: geolocation {
     float lat(time, xtrack) ;
       :standard_name = "latitude" ;
       :units = "degrees_north" ;
-      :bounds = "/geolocation/lat_vertex" ;
+      :bounds = "/geolocation/lat_vertex" ;  <1>
 
     float lon(time, xtrack) ;
       :standard_name = "longitude" ;
@@ -879,7 +872,7 @@ group: science {
     float science_data(time, xtrack) ;
       :coordinates = "/time /geolocation/lat /geolocation/lon" ;
       :units = "K" ;
-      :ancillary_variables = "/ancillary/quality" ;
+      :ancillary_variables = "/ancillary/quality" ;  <1>
 
     float radiance(time, xtrack, band) ;
       :coordinates = "/time /geolocation/lat /geolocation/lon /band" ;
@@ -887,12 +880,67 @@ group: science {
       :ancillary_variables = "/ancillary/quality" ;
 }
 ----
+<1> Variable reference starting with a `/` represents the complete hierarchical path to that variable.
+
+All coordinate variables (temporal, spectral, geospatial) are located in a parent group of where other variables are.
+----
+dimensions:
+  vertex = 4 ;
+  time = 392 ;
+  band = 4 ;
+  xtrack = 35 ;
+
+variables:
+  double time(time) ;
+    :standard_name = "time" ;
+    :units = "<units> since <datetime string>" ;
+    :calendar = "gregorian"
+
+  float band(band) ;
+    :standard_name = "sensor_band_central_radiation_wavelength" ;
+    :units = "nm" ;
+
+  float lat_vertex(time, xtrack, vertex) ;
+
+  float lon_vertex(time, xtrack, vertex) ;
+
+  float lat(time, xtrack) ;
+    :standard_name = "latitude" ;
+    :units = "degrees_north" ;
+    :bounds = "lat_vertex" ;
+
+  float lon(time, xtrack) ;
+    :standard_name = "longitude" ;
+    :units = "degrees_east" ;
+    :bounds = "lon_vertex" ;
+
+group: ancillary {
+  variables:
+    float quality(time, xtrack, band) ;
+      :coordinates = "time lat lon band" ;  <1>
+}
+
+group: science {
+  variables:
+    float science_data(time, xtrack) ;
+      :coordinates = "time lat lon" ;
+      :units = "K" ;
+      :ancillary_variables = "/ancillary/quality" ;  <2>
+
+    float radiance(time, xtrack, band) ;
+      :coordinates = "time lat lon band" ;
+      :units = "W sr m−2" ;
+      :ancillary_variables = "/ancillary/quality" ;
+}
+----
+<1> Variable references without any `/` character require search up the ancestral group hierarchy to locate the first variable of the same name.
+<2> It is allowed to mix different methods for referencing variables in the same file.
 ====
 
 [appendix]
 == Non-Compliant Geospatial Examples
 
-The following examples are from a variety of satellite swath data stored in the netCDF, HDF4, and HDF5 file formats. This is to illustrate the variety of encodings for swath data, which on one hand provides an impetus to define a CF standard, but on the other hand these exemplify the difficulty in getting all satellite data to conform to a standard.
+The following examples are from a variety of satellite swath data stored in the netCDF, HDF4, and HDF5 file formats. This is to illustrate the variety of encodings for swath data, which on one hand provides an impetus to define a CF standard, but on the other hand exemplify the difficulty in getting all satellite data to conform to a standard.
 
 === MODIS: HDF-EOS Format
 
@@ -1054,10 +1102,16 @@ Sample swath files for testing data access software are available for both the d
 |===
 |Release |Description
 
+|FINAL DRAFT/2018-03-01
+a|
+* Updated the status of the CF convention's version 1.7 and its link.
+* Replaced "field-of-view" with "observation".
+* Updated the Group Hierarchies section.
+
 |DRAFT/2017-08-31
 a|
-* Section on group hierarchy.
-* Describing field-of-view geospatial extents can be used in all swath encodings.
+* A section on group hierarchy.
+* A section on field-of-view geospatial extents for all swath encodings.
 * `featureType` variable attribute removed from all examples and text.
 * Vertical coordinates included in the geospatial coordinates section.
 * An example for non-monotonic spectral coordinate.
