@@ -7,7 +7,7 @@ Aleksandar Jelenak; David Santek; Kent Yang; Robert Carp
 :linkattrs:
 
 ====
-Proposal status: *[red]#FINAL DRAFT/2018-03-01#*.
+Proposal status: *[red]#FINAL DRAFT/2018-04-27#*.
 ====
 
 // Example counter
@@ -821,7 +821,7 @@ Boundary variables have one more dimension, the fastest-varying one, than their 
 
 This kind of hierarchy is created using the grouping feature of the netCDF Enhanced Data Model and is colloquially known as _groups in files_. Since the current CF convention is not based on the Enhanced Data Model such files are not strictly CF compliant. However, groups are present in many swath data files.
 
-The swath data encodings presented here are deliberately group-agnostic although that does not mean the use of groups is prohibited. A proposal on https://docs.google.com/document/d/1KK6IZ2ZmpaUTVgrw-GlFd6almppjvGz6D7nxVTO3BtI/edit[group hierarchies^] in the CF convention is being developed as part of the same project as this proposal. The most relevant aspect of that proposal for swath data encodings is the set of rules describing how to locate variables referenced in CF attributes like `coordinates`. It is enough to use just variable names in such attributes for files without groups but this practice is ambiguous in the presence of groups as there could be more than one same-named variable. The group https://docs.google.com/document/d/1KK6IZ2ZmpaUTVgrw-GlFd6almppjvGz6D7nxVTO3BtI/edit[proposal^] describes how to handle all such cases. The following example illustrates two possible options for referencing variables in the swath encodings: using their names, or with the complete hierarchy starting from the top group.
+The swath data encodings presented here are deliberately group-agnostic although that does not mean the use of groups is prohibited. A proposal on https://github.com/diwg/cf2/blob/master/group/cf2-group.adoc[group hierarchies^] in the CF convention is being developed as part of the same project as this proposal. The most relevant aspect of that proposal for swath data encodings is the set of rules describing how to locate variables referenced in CF attributes like `coordinates`. It is enough to use just variable names in such attributes for files without groups but this practice is ambiguous in the presence of groups as there could be more than one same-named variable. The group https://github.com/diwg/cf2/blob/master/group/cf2-group.adoc[proposal^] describes how to handle all such cases. The following example illustrates two possible options for referencing variables in the swath encodings: using their names, or with the complete hierarchy starting from the top group.
 
 [caption="Example {counter:example-count}: "]
 .A swath file with groups holding science, ancillary, and coordinates with observation geospatial extent. Two approaches to referencing variables are shown depending on file content organization.
@@ -1101,6 +1101,10 @@ Sample swath files for testing data access software are available for both the d
 [width="90%",cols="25%,75%",options="header"]
 |===
 |Release |Description
+
+|FINAL DRAFT/2018-04-27
+a|
+* Updated the link for the CF2 Group proposal document.
 
 |FINAL DRAFT/2018-03-01
 a|
