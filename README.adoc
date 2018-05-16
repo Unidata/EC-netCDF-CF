@@ -18,3 +18,31 @@ and engagement with new geoscience domains as well as other standards
 groups will lead to strong community agreement around the proposed
 enhancements.
 
+
+== Current Proposals
+
+Geometries Proposal:
+
+* Proposal text:
+** See the new "Geometries" section of CF chapter 7 "Data Representative of Cells"  GitHub Asciidoc https://github.com/dblodgett-usgs/cf-conventions/blob/7768e33e7edff459482e8ef8057ea6b8e015c9eb/ch07.adoc#geometries[here].
+** Discussion of the proposal took place on link:https://github.com/cf-convention/cf-conventions/pull/115[GitHub PR #115] and on https://cf-trac.llnl.gov/trac/ticket/164[CF Trac Ticket #164].
+* Status: Accepted for CF 1.8
+* Software Implementations: Python library (prototype)
+
+Satellite Swath Proposal:
+
+* Proposal https://github.com/Unidata/EC-netCDF-CF/blob/master/swath/swath.adoc[Text]
+* Status: Request for Comment to CF email list (http://mailman.cgd.ucar.edu/pipermail/cf-metadata/2018/060126.html[here]).
+
+CF2-Group Proposal:
+
+* Proposal https://github.com/diwg/cf2/blob/master/group/cf2-group.adoc[Text]
+* Status: Request for Comment to CF email list (http://mailman.cgd.ucar.edu/pipermail/cf-metadata/2018/060126.html[here]).
+
+
+== Proposals under development
+
+Quantification of Uncertainty:
+
+* Proposal text (https://docs.google.com/document/d/18WDbacUkflaZEdM8dHJ9Uu6zcMwT29QQVC6Q4FHkj98/edit[Google Doc])
+* Status: Under development
