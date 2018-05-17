@@ -4,7 +4,7 @@ The main goals of the EarthCube "Advancing netCDF-CF for the
 Geoscience Community" project are to work with the existing netCDF-CF
 community to:
 
-* Increase the range of geoscience domains using netCDF-CF
+* Increase the range of geoscience domains using netCDF-CF and active in the community
 * Extend the netCDF-CF standard to support data from a wider range of
   geoscience domains
 * Collaborate with other standards groups such as the OGC, ESIP, RDA,
