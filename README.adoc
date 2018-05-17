@@ -4,8 +4,7 @@ The main goals of the EarthCube "Advancing netCDF-CF for the
 Geoscience Community" project are to work with the existing netCDF-CF
 community to:
 
-* Increase the range of geoscience domains using netCDF-CF and active
-  in the community
+* Increase the range of geoscience domains using netCDF-CF
 * Extend the netCDF-CF standard to support data from a wider range of
   geoscience domains
 * Collaborate with other standards groups such as the OGC, ESIP, RDA,
@@ -24,10 +23,10 @@ enhancements.
 Geometries Proposal:
 
 * Proposal text:
-** See the new "Geometries" section of CF chapter 7 "Data Representative of Cells"  GitHub Asciidoc https://github.com/dblodgett-usgs/cf-conventions/blob/7768e33e7edff459482e8ef8057ea6b8e015c9eb/ch07.adoc#geometries[here].
+** See the new "Geometries" section of CF chapter 7 "Data Representative of Cells"  GitHub Asciidoc https://github.com/dblodgett-usgs/cf-conventions/blob/master/ch07.adoc#geometries[here].
 ** Discussion of the proposal took place on link:https://github.com/cf-convention/cf-conventions/pull/115[GitHub PR #115] and on https://cf-trac.llnl.gov/trac/ticket/164[CF Trac Ticket #164].
 * Status: Accepted for CF 1.8
-* Software Implementations: Python library (prototype)
+* Software Implementations: https://github.com/twhiteaker/netCDF-CF-simple-geometry[Python] and https://github.com/dblodgett-usgs/NCDFSG[R] (prototypes)
 
 Satellite Swath Proposal:
 
