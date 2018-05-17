@@ -1,0 +1,92 @@
+digraph {
+    label="Decision flowchart for swath data encodings\nAleksandar Jelenak <ajelenak@hdfgroup.org>\n2018-05-16";
+
+    graph[fontname="Helvetica", fontsize=12];
+    node[fontname="Helvetica", fontsize=12];
+    edge[fontname="Helvetica", fontsize=12];
+
+    node[shape="box", style="rounded,filled", fillcolor="red",
+         fontcolor="white", label="UNKNOWN"]
+        unknown;
+
+    node[shape="box", style="rounded,filled", fillcolor="skyblue",
+         fontcolor="black"]
+        ncvar;
+
+    node[shape="box", style="rounded,filled", fillcolor="green"]
+        mband;
+        mband_image;
+        mband_prof;
+        swath;
+        image_swath;
+        profile;
+        image_profile;
+        FOR_profile;
+
+    node[shape="box", style=""]
+        coords;
+
+    node[shape="diamond", style=""]
+        if_band_coord;
+        if_vert_coord;
+        if_vert_coord_1;
+        are_latlon_3d;
+        are_latlonvar_3d;
+        are_latlonvar_2d;
+        are_latlon_2d;
+        is_ncvar_5d;
+
+    ncvar[label="Swath-like\nNetCDF Variable\n\"nc var\""];
+    coords[label="Identify coordinates"];
+    if_band_coord[label="Has a spectral\ncoordinate?"];
+    if_vert_coord[label="Has a vertical\ncoordinate?"];
+    if_vert_coord_1[label="Has a vertical\ncoordinate?"];
+    mband_prof[label="Multiband Profile"];
+    mband[label="Multiband"];
+    mband_image[label="Multiband Image"];
+    are_latlon_3d[label="Are lat/lon\ncoords 3d?"];
+    are_latlon_3d_1[label="Are lat/lon\ncoords 3d?"];
+    are_latlon_2d[label="Are lat/lon\ncoords 2d?"];
+    are_latlon_2d_1[label="Are lat/lon\ncoords 2d?"];
+    swath[label="Swath"];
+    image_swath[label="Image Swath"];
+    are_latlonvar_3d[label="Are lat/lon\nand nc var 3d?"];
+    are_latlonvar_2d[label="Are lat/lon\nand nc var 2d?"];
+    profile[label="Profile"];
+    image_profile[label="Image Profile"];
+    FOR_profile[label="Field-of-Regard Profile"];
+    is_ncvar_5d[label="Is nc var 5d?"];
+
+    ncvar -> coords;
+    coords -> if_band_coord
+
+    if_band_coord -> if_vert_coord [label="true"];
+    if_band_coord -> if_vert_coord_1 [label="false"];
+
+    if_vert_coord -> mband_prof [label="true"];
+    if_vert_coord -> are_latlon_3d [label="false"];
+
+    are_latlon_3d -> are_latlon_2d_1 [label="false"];
+    are_latlon_3d -> mband_image [label="true"];
+
+    are_latlon_2d_1 -> mband [label="true"];
+    are_latlon_2d_1 -> unknown [label="false"];
+
+    if_vert_coord_1 -> are_latlonvar_3d [label="false"];
+    if_vert_coord_1 -> are_latlon_2d [label="true"];
+
+    are_latlonvar_3d -> are_latlonvar_2d [label="false"];
+    are_latlonvar_3d -> image_swath [label="true"];
+
+    are_latlonvar_2d -> swath [label="true"];
+    are_latlonvar_2d -> unknown [label="false"];
+
+    are_latlon_2d -> profile [label="true"];
+    are_latlon_2d -> are_latlon_3d_1 [label="false"];
+
+    are_latlon_3d_1 -> image_profile [label="true"];
+    are_latlon_3d_1 -> is_ncvar_5d [label="false"];
+
+    is_ncvar_5d -> FOR_profile [label="true"];
+    is_ncvar_5d -> unknown [label="false"];
+}

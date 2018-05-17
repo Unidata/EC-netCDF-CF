@@ -1,0 +1,298 @@
+<svg width="835pt" height="839pt" viewBox="0 0 835 839" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 834.8)">
+<title>%0</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-834.8 831.1669,-834.8 831.1669,4 -4,4"></polygon>
+<text text-anchor="middle" x="413.5834" y="-36.4" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">Decision flowchart for swath data encodings</text>
+<text text-anchor="middle" x="413.5834" y="-22" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">Aleksandar Jelenak &lt;ajelenak@hdfgroup.org&gt;</text>
+<text text-anchor="middle" x="413.5834" y="-7.6" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">2018-05-16</text>
+<!-- unknown -->
+<g id="node1" class="node">
+<title>unknown</title>
+<path fill="#ff0000" stroke="#000000" d="M465.488,-87.2C465.488,-87.2 409.8556,-87.2 409.8556,-87.2 403.8556,-87.2 397.8556,-81.2 397.8556,-75.2 397.8556,-75.2 397.8556,-63.2 397.8556,-63.2 397.8556,-57.2 403.8556,-51.2 409.8556,-51.2 409.8556,-51.2 465.488,-51.2 465.488,-51.2 471.488,-51.2 477.488,-57.2 477.488,-63.2 477.488,-63.2 477.488,-75.2 477.488,-75.2 477.488,-81.2 471.488,-87.2 465.488,-87.2"></path>
+<text text-anchor="middle" x="437.6718" y="-65.6" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#ffffff">UNKNOWN</text>
+</g>
+<!-- ncvar -->
+<g id="node2" class="node">
+<title>ncvar</title>
+<path fill="#87ceeb" stroke="#000000" d="M336.8383,-830.9004C336.8383,-830.9004 254.5053,-830.9004 254.5053,-830.9004 248.5053,-830.9004 242.5053,-824.9004 242.5053,-818.9004 242.5053,-818.9004 242.5053,-791.4996 242.5053,-791.4996 242.5053,-785.4996 248.5053,-779.4996 254.5053,-779.4996 254.5053,-779.4996 336.8383,-779.4996 336.8383,-779.4996 342.8383,-779.4996 348.8383,-785.4996 348.8383,-791.4996 348.8383,-791.4996 348.8383,-818.9004 348.8383,-818.9004 348.8383,-824.9004 342.8383,-830.9004 336.8383,-830.9004"></path>
+<text text-anchor="middle" x="295.6718" y="-816" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">Swath-like</text>
+<text text-anchor="middle" x="295.6718" y="-801.6" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">NetCDF Variable</text>
+<text text-anchor="middle" x="295.6718" y="-787.2" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">"nc var"</text>
+</g>
+<!-- coords -->
+<g id="node11" class="node">
+<title>coords</title>
+<polygon fill="none" stroke="#000000" points="355.7034,-742.6 235.6402,-742.6 235.6402,-706.6 355.7034,-706.6 355.7034,-742.6"></polygon>
+<text text-anchor="middle" x="295.6718" y="-721" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">Identify coordinates</text>
+</g>
+<!-- ncvar&#45;&gt;coords -->
+<g id="edge1" class="edge">
+<title>ncvar-&gt;coords</title>
+<path fill="none" stroke="#000000" d="M295.6718,-779.254C295.6718,-770.9705 295.6718,-761.7563 295.6718,-753.2896"></path>
+<polygon fill="#000000" stroke="#000000" points="299.1719,-753.0912 295.6718,-743.0913 292.1719,-753.0913 299.1719,-753.0912"></polygon>
+</g>
+<!-- mband -->
+<g id="node3" class="node">
+<title>mband</title>
+<path fill="#00ff00" stroke="#000000" d="M297.681,-173.6C297.681,-173.6 253.6626,-173.6 253.6626,-173.6 247.6626,-173.6 241.6626,-167.6 241.6626,-161.6 241.6626,-161.6 241.6626,-149.6 241.6626,-149.6 241.6626,-143.6 247.6626,-137.6 253.6626,-137.6 253.6626,-137.6 297.681,-137.6 297.681,-137.6 303.681,-137.6 309.681,-143.6 309.681,-149.6 309.681,-149.6 309.681,-161.6 309.681,-161.6 309.681,-167.6 303.681,-173.6 297.681,-173.6"></path>
+<text text-anchor="middle" x="275.6718" y="-152" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">Multiband</text>
+</g>
+<!-- mband_image -->
+<g id="node4" class="node">
+<title>mband_image</title>
+<path fill="#00ff00" stroke="#000000" d="M92.8583,-278.8C92.8583,-278.8 12.4853,-278.8 12.4853,-278.8 6.4853,-278.8 .4853,-272.8 .4853,-266.8 .4853,-266.8 .4853,-254.8 .4853,-254.8 .4853,-248.8 6.4853,-242.8 12.4853,-242.8 12.4853,-242.8 92.8583,-242.8 92.8583,-242.8 98.8583,-242.8 104.8583,-248.8 104.8583,-254.8 104.8583,-254.8 104.8583,-266.8 104.8583,-266.8 104.8583,-272.8 98.8583,-278.8 92.8583,-278.8"></path>
+<text text-anchor="middle" x="52.6718" y="-257.2" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">Multiband Image</text>
+</g>
+<!-- mband_prof -->
+<g id="node5" class="node">
+<title>mband_prof</title>
+<path fill="#00ff00" stroke="#000000" d="M93.516,-402.8C93.516,-402.8 11.8276,-402.8 11.8276,-402.8 5.8276,-402.8 -.1724,-396.8 -.1724,-390.8 -.1724,-390.8 -.1724,-378.8 -.1724,-378.8 -.1724,-372.8 5.8276,-366.8 11.8276,-366.8 11.8276,-366.8 93.516,-366.8 93.516,-366.8 99.516,-366.8 105.516,-372.8 105.516,-378.8 105.516,-378.8 105.516,-390.8 105.516,-390.8 105.516,-396.8 99.516,-402.8 93.516,-402.8"></path>
+<text text-anchor="middle" x="52.6718" y="-381.2" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">Multiband Profile</text>
+</g>
+<!-- swath -->
+<g id="node6" class="node">
+<title>swath</title>
+<path fill="#00ff00" stroke="#000000" d="M522.6718,-173.6C522.6718,-173.6 492.6718,-173.6 492.6718,-173.6 486.6718,-173.6 480.6718,-167.6 480.6718,-161.6 480.6718,-161.6 480.6718,-149.6 480.6718,-149.6 480.6718,-143.6 486.6718,-137.6 492.6718,-137.6 492.6718,-137.6 522.6718,-137.6 522.6718,-137.6 528.6718,-137.6 534.6718,-143.6 534.6718,-149.6 534.6718,-149.6 534.6718,-161.6 534.6718,-161.6 534.6718,-167.6 528.6718,-173.6 522.6718,-173.6"></path>
+<text text-anchor="middle" x="507.6718" y="-152" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">Swath</text>
+</g>
+<!-- image_swath -->
+<g id="node7" class="node">
+<title>image_swath</title>
+<path fill="#00ff00" stroke="#000000" d="M365.6906,-278.8C365.6906,-278.8 303.653,-278.8 303.653,-278.8 297.653,-278.8 291.653,-272.8 291.653,-266.8 291.653,-266.8 291.653,-254.8 291.653,-254.8 291.653,-248.8 297.653,-242.8 303.653,-242.8 303.653,-242.8 365.6906,-242.8 365.6906,-242.8 371.6906,-242.8 377.6906,-248.8 377.6906,-254.8 377.6906,-254.8 377.6906,-266.8 377.6906,-266.8 377.6906,-272.8 371.6906,-278.8 365.6906,-278.8"></path>
+<text text-anchor="middle" x="334.6718" y="-257.2" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">Image Swath</text>
+</g>
+<!-- profile -->
+<g id="node8" class="node">
+<title>profile</title>
+<path fill="#00ff00" stroke="#000000" d="M645.6718,-278.8C645.6718,-278.8 615.6718,-278.8 615.6718,-278.8 609.6718,-278.8 603.6718,-272.8 603.6718,-266.8 603.6718,-266.8 603.6718,-254.8 603.6718,-254.8 603.6718,-248.8 609.6718,-242.8 615.6718,-242.8 615.6718,-242.8 645.6718,-242.8 645.6718,-242.8 651.6718,-242.8 657.6718,-248.8 657.6718,-254.8 657.6718,-254.8 657.6718,-266.8 657.6718,-266.8 657.6718,-272.8 651.6718,-278.8 645.6718,-278.8"></path>
+<text text-anchor="middle" x="630.6718" y="-257.2" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">Profile</text>
+</g>
+<!-- image_profile -->
+<g id="node9" class="node">
+<title>image_profile</title>
+<path fill="#00ff00" stroke="#000000" d="M643.8488,-173.6C643.8488,-173.6 581.4948,-173.6 581.4948,-173.6 575.4948,-173.6 569.4948,-167.6 569.4948,-161.6 569.4948,-161.6 569.4948,-149.6 569.4948,-149.6 569.4948,-143.6 575.4948,-137.6 581.4948,-137.6 581.4948,-137.6 643.8488,-137.6 643.8488,-137.6 649.8488,-137.6 655.8488,-143.6 655.8488,-149.6 655.8488,-149.6 655.8488,-161.6 655.8488,-161.6 655.8488,-167.6 649.8488,-173.6 643.8488,-173.6"></path>
+<text text-anchor="middle" x="612.6718" y="-152" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">Image Profile</text>
+</g>
+<!-- FOR_profile -->
+<g id="node10" class="node">
+<title>FOR_profile</title>
+<path fill="#00ff00" stroke="#000000" d="M806.8406,-87.2C806.8406,-87.2 694.503,-87.2 694.503,-87.2 688.503,-87.2 682.503,-81.2 682.503,-75.2 682.503,-75.2 682.503,-63.2 682.503,-63.2 682.503,-57.2 688.503,-51.2 694.503,-51.2 694.503,-51.2 806.8406,-51.2 806.8406,-51.2 812.8406,-51.2 818.8406,-57.2 818.8406,-63.2 818.8406,-63.2 818.8406,-75.2 818.8406,-75.2 818.8406,-81.2 812.8406,-87.2 806.8406,-87.2"></path>
+<text text-anchor="middle" x="750.6718" y="-65.6" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">Field-of-Regard Profile</text>
+</g>
+<!-- if_band_coord -->
+<g id="node12" class="node">
+<title>if_band_coord</title>
+<polygon fill="none" stroke="#000000" points="295.6718,-669.4011 202.8139,-632.8 295.6718,-596.1989 388.5297,-632.8 295.6718,-669.4011"></polygon>
+<text text-anchor="middle" x="295.6718" y="-636.4" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">Has a spectral</text>
+<text text-anchor="middle" x="295.6718" y="-622" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">coordinate?</text>
+</g>
+<!-- coords&#45;&gt;if_band_coord -->
+<g id="edge2" class="edge">
+<title>coords-&gt;if_band_coord</title>
+<path fill="none" stroke="#000000" d="M295.6718,-706.4633C295.6718,-698.7119 295.6718,-689.2685 295.6718,-679.7642"></path>
+<polygon fill="#000000" stroke="#000000" points="299.1719,-679.5043 295.6718,-669.5044 292.1719,-679.5044 299.1719,-679.5043"></polygon>
+</g>
+<!-- if_vert_coord -->
+<g id="node13" class="node">
+<title>if_vert_coord</title>
+<polygon fill="none" stroke="#000000" points="198.6718,-545.4011 109.8299,-508.8 198.6718,-472.1989 287.5137,-508.8 198.6718,-545.4011"></polygon>
+<text text-anchor="middle" x="198.6718" y="-512.4" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">Has a vertical</text>
+<text text-anchor="middle" x="198.6718" y="-498" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">coordinate?</text>
+</g>
+<!-- if_band_coord&#45;&gt;if_vert_coord -->
+<g id="edge3" class="edge">
+<title>if_band_coord-&gt;if_vert_coord</title>
+<path fill="none" stroke="#000000" d="M273.661,-604.6625C259.7707,-586.9058 241.6988,-563.8036 226.7766,-544.7277"></path>
+<polygon fill="#000000" stroke="#000000" points="229.5136,-542.5461 220.5955,-536.8262 224.0002,-546.8591 229.5136,-542.5461"></polygon>
+<text text-anchor="middle" x="261.0074" y="-567.2" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">true</text>
+</g>
+<!-- if_vert_coord_1 -->
+<g id="node14" class="node">
+<title>if_vert_coord_1</title>
+<polygon fill="none" stroke="#000000" points="417.6718,-545.4011 328.8299,-508.8 417.6718,-472.1989 506.5137,-508.8 417.6718,-545.4011"></polygon>
+<text text-anchor="middle" x="417.6718" y="-512.4" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">Has a vertical</text>
+<text text-anchor="middle" x="417.6718" y="-498" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">coordinate?</text>
+</g>
+<!-- if_band_coord&#45;&gt;if_vert_coord_1 -->
+<g id="edge4" class="edge">
+<title>if_band_coord-&gt;if_vert_coord_1</title>
+<path fill="none" stroke="#000000" d="M321.8439,-606.1989C340.3015,-587.4386 365.1571,-562.1756 384.9288,-542.0798"></path>
+<polygon fill="#000000" stroke="#000000" points="387.4433,-544.5145 391.9618,-534.9315 382.4535,-539.6052 387.4433,-544.5145"></polygon>
+<text text-anchor="middle" x="373.3414" y="-567.2" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">false</text>
+</g>
+<!-- if_vert_coord&#45;&gt;mband_prof -->
+<g id="edge5" class="edge">
+<title>if_vert_coord-&gt;mband_prof</title>
+<path fill="none" stroke="#000000" d="M169.4774,-484.0048C144.0972,-462.449 107.5066,-431.372 82.0674,-409.7661"></path>
+<polygon fill="#000000" stroke="#000000" points="84.1158,-406.9139 74.2281,-403.1081 79.5844,-412.2493 84.1158,-406.9139"></polygon>
+<text text-anchor="middle" x="141.0074" y="-443.2" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">true</text>
+</g>
+<!-- are_latlon_3d -->
+<g id="node15" class="node">
+<title>are_latlon_3d</title>
+<polygon fill="none" stroke="#000000" points="198.6718,-421.4011 123.4627,-384.8 198.6718,-348.1989 273.8809,-384.8 198.6718,-421.4011"></polygon>
+<text text-anchor="middle" x="198.6718" y="-388.4" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">Are lat/lon</text>
+<text text-anchor="middle" x="198.6718" y="-374" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">coords 3d?</text>
+</g>
+<!-- if_vert_coord&#45;&gt;are_latlon_3d -->
+<g id="edge6" class="edge">
+<title>if_vert_coord-&gt;are_latlon_3d</title>
+<path fill="none" stroke="#000000" d="M198.6718,-471.9316C198.6718,-459.4261 198.6718,-445.2785 198.6718,-432.0762"></path>
+<polygon fill="#000000" stroke="#000000" points="202.1719,-431.7404 198.6718,-421.7404 195.1719,-431.7405 202.1719,-431.7404"></polygon>
+<text text-anchor="middle" x="211.3414" y="-443.2" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">false</text>
+</g>
+<!-- are_latlonvar_3d -->
+<g id="node16" class="node">
+<title>are_latlonvar_3d</title>
+<polygon fill="none" stroke="#000000" points="417.6718,-421.4011 322.4404,-384.8 417.6718,-348.1989 512.9032,-384.8 417.6718,-421.4011"></polygon>
+<text text-anchor="middle" x="417.6718" y="-388.4" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">Are lat/lon</text>
+<text text-anchor="middle" x="417.6718" y="-374" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">and nc var 3d?</text>
+</g>
+<!-- if_vert_coord_1&#45;&gt;are_latlonvar_3d -->
+<g id="edge11" class="edge">
+<title>if_vert_coord_1-&gt;are_latlonvar_3d</title>
+<path fill="none" stroke="#000000" d="M417.6718,-471.9316C417.6718,-459.4261 417.6718,-445.2785 417.6718,-432.0762"></path>
+<polygon fill="#000000" stroke="#000000" points="421.1719,-431.7404 417.6718,-421.7404 414.1719,-431.7405 421.1719,-431.7404"></polygon>
+<text text-anchor="middle" x="430.3414" y="-443.2" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">false</text>
+</g>
+<!-- are_latlon_2d -->
+<g id="node18" class="node">
+<title>are_latlon_2d</title>
+<polygon fill="none" stroke="#000000" points="630.6718,-421.4011 555.4627,-384.8 630.6718,-348.1989 705.8809,-384.8 630.6718,-421.4011"></polygon>
+<text text-anchor="middle" x="630.6718" y="-388.4" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">Are lat/lon</text>
+<text text-anchor="middle" x="630.6718" y="-374" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">coords 2d?</text>
+</g>
+<!-- if_vert_coord_1&#45;&gt;are_latlon_2d -->
+<g id="edge12" class="edge">
+<title>if_vert_coord_1-&gt;are_latlon_2d</title>
+<path fill="none" stroke="#000000" d="M454.7736,-487.2008C491.6288,-465.7452 548.1234,-432.8564 587.0936,-410.1695"></path>
+<polygon fill="#000000" stroke="#000000" points="589.2279,-412.9769 596.1092,-404.921 585.7061,-406.9274 589.2279,-412.9769"></polygon>
+<text text-anchor="middle" x="541.0074" y="-443.2" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">true</text>
+</g>
+<!-- are_latlon_3d&#45;&gt;mband_image -->
+<g id="edge8" class="edge">
+<title>are_latlon_3d-&gt;mband_image</title>
+<path fill="none" stroke="#000000" d="M171.2103,-361.4765C145.7583,-339.8598 108.0094,-307.7991 81.9824,-285.6939"></path>
+<polygon fill="#000000" stroke="#000000" points="84.1956,-282.9817 74.3079,-279.1759 79.6642,-288.3171 84.1956,-282.9817"></polygon>
+<text text-anchor="middle" x="141.0074" y="-319.2" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">true</text>
+</g>
+<!-- are_latlon_2d_1 -->
+<g id="node21" class="node">
+<title>are_latlon_2d_1</title>
+<polygon fill="none" stroke="#000000" points="198.6718,-297.4011 123.4627,-260.8 198.6718,-224.1989 273.8809,-260.8 198.6718,-297.4011"></polygon>
+<text text-anchor="middle" x="198.6718" y="-264.4" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">Are lat/lon</text>
+<text text-anchor="middle" x="198.6718" y="-250" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">coords 2d?</text>
+</g>
+<!-- are_latlon_3d&#45;&gt;are_latlon_2d_1 -->
+<g id="edge7" class="edge">
+<title>are_latlon_3d-&gt;are_latlon_2d_1</title>
+<path fill="none" stroke="#000000" d="M198.6718,-347.9316C198.6718,-335.4261 198.6718,-321.2785 198.6718,-308.0762"></path>
+<polygon fill="#000000" stroke="#000000" points="202.1719,-307.7404 198.6718,-297.7404 195.1719,-307.7405 202.1719,-307.7404"></polygon>
+<text text-anchor="middle" x="211.3414" y="-319.2" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">false</text>
+</g>
+<!-- are_latlonvar_3d&#45;&gt;image_swath -->
+<g id="edge14" class="edge">
+<title>are_latlonvar_3d-&gt;image_swath</title>
+<path fill="none" stroke="#000000" d="M398.002,-355.4137C384.1382,-334.7015 365.7305,-307.2009 352.3354,-287.189"></path>
+<polygon fill="#000000" stroke="#000000" points="355.2201,-285.2064 346.749,-278.8431 349.403,-289.1002 355.2201,-285.2064"></polygon>
+<text text-anchor="middle" x="389.0074" y="-319.2" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">true</text>
+</g>
+<!-- are_latlonvar_2d -->
+<g id="node17" class="node">
+<title>are_latlonvar_2d</title>
+<polygon fill="none" stroke="#000000" points="490.6718,-297.4011 395.4404,-260.8 490.6718,-224.1989 585.9032,-260.8 490.6718,-297.4011"></polygon>
+<text text-anchor="middle" x="490.6718" y="-264.4" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">Are lat/lon</text>
+<text text-anchor="middle" x="490.6718" y="-250" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">and nc var 2d?</text>
+</g>
+<!-- are_latlonvar_3d&#45;&gt;are_latlonvar_2d -->
+<g id="edge13" class="edge">
+<title>are_latlonvar_3d-&gt;are_latlonvar_2d</title>
+<path fill="none" stroke="#000000" d="M435.3431,-354.7831C445.0449,-338.3032 457.1909,-317.6717 467.6293,-299.9407"></path>
+<polygon fill="#000000" stroke="#000000" points="470.8531,-301.3635 472.9103,-290.9703 464.8208,-297.8122 470.8531,-301.3635"></polygon>
+<text text-anchor="middle" x="469.3414" y="-319.2" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">false</text>
+</g>
+<!-- are_latlonvar_2d&#45;&gt;unknown -->
+<g id="edge16" class="edge">
+<title>are_latlonvar_2d-&gt;unknown</title>
+<path fill="none" stroke="#000000" d="M472.0503,-231.3158C462.666,-214.9511 452.0834,-193.8592 446.3326,-173.6 439.1948,-148.4549 437.3417,-118.6389 437.0893,-97.3215"></path>
+<polygon fill="#000000" stroke="#000000" points="440.5894,-97.305 437.0806,-87.3081 433.5894,-97.3111 440.5894,-97.305"></polygon>
+<text text-anchor="middle" x="459.3414" y="-152" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">false</text>
+</g>
+<!-- are_latlonvar_2d&#45;&gt;swath -->
+<g id="edge15" class="edge">
+<title>are_latlonvar_2d-&gt;swath</title>
+<path fill="none" stroke="#000000" d="M496.2853,-226.062C498.4916,-212.4091 500.9923,-196.9343 503.087,-183.9715"></path>
+<polygon fill="#000000" stroke="#000000" points="506.5956,-184.1991 504.7358,-173.7687 499.6853,-183.0823 506.5956,-184.1991"></polygon>
+<text text-anchor="middle" x="513.0074" y="-195.2" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">true</text>
+</g>
+<!-- are_latlon_2d&#45;&gt;profile -->
+<g id="edge17" class="edge">
+<title>are_latlon_2d-&gt;profile</title>
+<path fill="none" stroke="#000000" d="M630.6718,-347.9316C630.6718,-329.1315 630.6718,-306.6202 630.6718,-289.1889"></path>
+<polygon fill="#000000" stroke="#000000" points="634.1719,-289.0706 630.6718,-279.0706 627.1719,-289.0706 634.1719,-289.0706"></polygon>
+<text text-anchor="middle" x="641.0074" y="-319.2" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">true</text>
+</g>
+<!-- are_latlon_3d_1 -->
+<g id="node20" class="node">
+<title>are_latlon_3d_1</title>
+<polygon fill="none" stroke="#000000" points="750.6718,-297.4011 675.4627,-260.8 750.6718,-224.1989 825.8809,-260.8 750.6718,-297.4011"></polygon>
+<text text-anchor="middle" x="750.6718" y="-264.4" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">Are lat/lon</text>
+<text text-anchor="middle" x="750.6718" y="-250" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">coords 3d?</text>
+</g>
+<!-- are_latlon_2d&#45;&gt;are_latlon_3d_1 -->
+<g id="edge18" class="edge">
+<title>are_latlon_2d-&gt;are_latlon_3d_1</title>
+<path fill="none" stroke="#000000" d="M654.9556,-359.7067C673.4979,-340.5463 699.1955,-313.9922 719.2957,-293.222"></path>
+<polygon fill="#000000" stroke="#000000" points="721.985,-295.476 726.4241,-285.8559 716.9548,-290.608 721.985,-295.476"></polygon>
+<text text-anchor="middle" x="706.3414" y="-319.2" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">false</text>
+</g>
+<!-- is_ncvar_5d -->
+<g id="node19" class="node">
+<title>is_ncvar_5d</title>
+<polygon fill="none" stroke="#000000" points="750.6718,-173.6 674.1816,-155.6 750.6718,-137.6 827.162,-155.6 750.6718,-173.6"></polygon>
+<text text-anchor="middle" x="750.6718" y="-152" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">Is nc var 5d?</text>
+</g>
+<!-- is_ncvar_5d&#45;&gt;unknown -->
+<g id="edge22" class="edge">
+<title>is_ncvar_5d-&gt;unknown</title>
+<path fill="none" stroke="#000000" d="M715.3752,-145.8568C659.6037,-130.4617 550.9185,-100.4604 487.3117,-82.9025"></path>
+<polygon fill="#000000" stroke="#000000" points="488.076,-79.4827 477.5052,-80.1956 486.2134,-86.2303 488.076,-79.4827"></polygon>
+<text text-anchor="middle" x="625.3414" y="-108.8" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">false</text>
+</g>
+<!-- is_ncvar_5d&#45;&gt;FOR_profile -->
+<g id="edge21" class="edge">
+<title>is_ncvar_5d-&gt;FOR_profile</title>
+<path fill="none" stroke="#000000" d="M750.6718,-137.2768C750.6718,-125.7444 750.6718,-110.6241 750.6718,-97.5633"></path>
+<polygon fill="#000000" stroke="#000000" points="754.1719,-97.2005 750.6718,-87.2005 747.1719,-97.2006 754.1719,-97.2005"></polygon>
+<text text-anchor="middle" x="761.0074" y="-108.8" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">true</text>
+</g>
+<!-- are_latlon_3d_1&#45;&gt;image_profile -->
+<g id="edge19" class="edge">
+<title>are_latlon_3d_1-&gt;image_profile</title>
+<path fill="none" stroke="#000000" d="M721.0673,-238.232C698.6372,-221.1331 667.8544,-197.6667 644.8229,-180.1094"></path>
+<polygon fill="#000000" stroke="#000000" points="646.7928,-177.2101 636.7182,-173.931 642.549,-182.777 646.7928,-177.2101"></polygon>
+<text text-anchor="middle" x="687.0074" y="-195.2" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">true</text>
+</g>
+<!-- are_latlon_3d_1&#45;&gt;is_ncvar_5d -->
+<g id="edge20" class="edge">
+<title>are_latlon_3d_1-&gt;is_ncvar_5d</title>
+<path fill="none" stroke="#000000" d="M750.6718,-224.0061C750.6718,-210.8079 750.6718,-196.1461 750.6718,-183.7922"></path>
+<polygon fill="#000000" stroke="#000000" points="754.1719,-183.6247 750.6718,-173.6247 747.1719,-183.6248 754.1719,-183.6247"></polygon>
+<text text-anchor="middle" x="763.3414" y="-195.2" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">false</text>
+</g>
+<!-- are_latlon_2d_1&#45;&gt;unknown -->
+<g id="edge10" class="edge">
+<title>are_latlon_2d_1-&gt;unknown</title>
+<path fill="none" stroke="#000000" d="M191.506,-227.5558C187.6882,-200.4187 187.2723,-162.6025 207.3326,-137.6 229.9129,-109.4566 327.1578,-88.1149 387.8469,-77.2338"></path>
+<polygon fill="#000000" stroke="#000000" points="388.7479,-80.6292 397.9911,-75.4511 387.5362,-73.7349 388.7479,-80.6292"></polygon>
+<text text-anchor="middle" x="220.3414" y="-152" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">false</text>
+</g>
+<!-- are_latlon_2d_1&#45;&gt;mband -->
+<g id="edge9" class="edge">
+<title>are_latlon_2d_1-&gt;mband</title>
+<path fill="none" stroke="#000000" d="M218.5012,-233.7084C230.1564,-217.7847 244.8236,-197.7458 256.3836,-181.9521"></path>
+<polygon fill="#000000" stroke="#000000" points="259.3653,-183.8044 262.4473,-173.6677 253.7167,-179.6699 259.3653,-183.8044"></polygon>
+<text text-anchor="middle" x="259.0074" y="-195.2" font-family="Helvetica,sans-Serif" font-size="12.00" fill="#000000">true</text>
+</g>
+</g>
+</svg>

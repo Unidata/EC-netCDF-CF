@@ -5,9 +5,10 @@ Aleksandar Jelenak; David Santek; Kent Yang; Robert Carp
 :sectnums:
 :icons: font
 :linkattrs:
+:imagesdir: figures/
 
 ====
-Proposal status: *[red]#FINAL DRAFT/2018-04-27#*.
+Proposal status: *[red]#FINAL DRAFT/2018-??-??#*.
 ====
 
 // Example counter
@@ -327,7 +328,11 @@ variables:
 <2> Number of columns of the two-dimensional imaging sensor.
 ====
 
-The same encoding is applicable to swath data from hyperspectral sounding instruments which make observations arranged into a grid, typically 2-by-2 or 3-by-3. Such grouping of the observations comprises one field-of-regard (FOR). The following example is identical to the previous one except for two dimensions with changed names.
+The same encoding is applicable to swath data from hyperspectral sounding instruments which make observations arranged into a grid, typically 2-by-2 or 3-by-3 (see <<forfov>>). Such grouping of the observations comprises one field-of-regard (FOR). The following example is identical to the previous one except for two dimensions with changed names.
+
+[[forfov,{figure-caption} {counter:figure-num}]]
+.CrIS footprint for the FOR 1 to 30 typical of one scan. (From Han, Y. et al. (2013), doi:10.1002/2013JD020344.)
+image::hypersounder.png[]
 
 [caption="Example {counter:example-count}: "]
 .Multiband Image data for each field-of-regard/observation.
@@ -1096,21 +1101,21 @@ The adoption of this document relies on its quality and applicability which grea
 Sample swath files for testing data access software are available for both the document's examples (https://eosdap.hdfgroup.org:8080/opendap/data/earth-cube-cf2/swath/contents.html[Hyrax^], https://eosdap.hdfgroup.org:8888/thredds/catalog/testAll/cf2/swath/catalog.html[THREDDS^]) and community-submitted files (https://eosdap.hdfgroup.org:8080/opendap/data/earth-cube-cf2/swath-real/contents.html[Hyrax^], https://eosdap.hdfgroup.org:8888/thredds/catalog/testAll/cf2/swath-real/catalog.html[THREDDS^]).
 
 [appendix]
+== Decision Flowchart
+
+[[flowchart,{figure-caption} {counter:figure-num}]]
+.Decision flowchart for identifying swath data encoding types.
+image::flowchart.svg[Swath encoding type decision flowchart]
+
+[appendix]
 == Revision History
 
 [width="90%",cols="25%,75%",options="header"]
 |===
 |Release |Description
 
-|FINAL DRAFT/2018-04-27
-a|
-* Updated the link for the CF2 Group proposal document.
-
-|FINAL DRAFT/2018-03-01
-a|
-* Updated the status of the CF convention's version 1.7 and its link.
-* Replaced "field-of-view" with "observation".
-* Updated the Group Hierarchies section.
+|DRAFT/2017-05-16
+|Initial version.
 
 |DRAFT/2017-08-31
 a|
@@ -1120,8 +1125,20 @@ a|
 * Vertical coordinates included in the geospatial coordinates section.
 * An example for non-monotonic spectral coordinate.
 
-|DRAFT/2017-05-16
-|Initial version.
+|FINAL DRAFT/2018-03-01
+a|
+* Updated the status of the CF convention's version 1.7 and its link.
+* Replaced "field-of-view" with "observation" throughout the text and examples.
+* Updated the Group Hierarchies section.
+
+|FINAL DRAFT/2018-04-27
+a|
+* Updated the link for the CF2 Group proposal document.
+
+|FINAL DRAFT/2018-??-??
+a|
+* Added an annex with decision flowchart for identifying swath encoding types.
+* Added a diagram depicting a hyperspectral sounding instrument's observation goemetry.
 |===
 
 [appendix]
