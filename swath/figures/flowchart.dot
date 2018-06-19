@@ -1,6 +1,4 @@
 digraph {
-    label="Decision flowchart for swath data encodings\nAleksandar Jelenak <ajelenak@hdfgroup.org>\n2018-05-16";
-
     graph[fontname="Helvetica", fontsize=12];
     node[fontname="Helvetica", fontsize=12];
     edge[fontname="Helvetica", fontsize=12];

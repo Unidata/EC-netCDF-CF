@@ -8,7 +8,7 @@ Aleksandar Jelenak; David Santek; Kent Yang; Robert Carp
 :imagesdir: figures/
 
 ====
-Proposal status: *[red]#FINAL DRAFT/2018-??-??#*.
+Proposal status: *[red]#FINAL DRAFT/2018-06-19#*.
 ====
 
 // Example counter
@@ -328,11 +328,13 @@ variables:
 <2> Number of columns of the two-dimensional imaging sensor.
 ====
 
-The same encoding is applicable to swath data from hyperspectral sounding instruments which make observations arranged into a grid, typically 2-by-2 or 3-by-3 (see <<forfov>>). Such grouping of the observations comprises one field-of-regard (FOR). The following example is identical to the previous one except for two dimensions with changed names.
+The same encoding is applicable to swath data from hyperspectral sounding instruments which make observations arranged into a grid, typically 2-by-2 or 3-by-3 (see <<forfov>>). Such grouping of the observations comprises one field-of-regard (FOR).
 
 [[forfov,{figure-caption} {counter:figure-num}]]
-.CrIS footprint for the FOR 1 to 30 typical of one scan. (From Han, Y. et al. (2013), doi:10.1002/2013JD020344.)
+.Cross-track Infrared Sounder (CrIS) instrument's footprint for the field-of-regard (FOR) typical of one scan. (From Han, Y. et al. (2013), doi:10.1002/2013JD020344.) The field-of-regard contains nine fields-of-view arranged in a 3-by-3 grid, numbered `1` through `9`. Observations are made from all fields-of-view independently. Depending on the viewing geometry for each FOR the geospatial extent and relative position varies for every field-of-view.
 image::hypersounder.png[]
+
+The following example is identical to the previous one except for two dimensions with changed names.
 
 [caption="Example {counter:example-count}: "]
 .Multiband Image data for each field-of-regard/observation.
@@ -1103,6 +1105,8 @@ Sample swath files for testing data access software are available for both the d
 [appendix]
 == Decision Flowchart
 
+The flowchart below (<<flowchart>>) describes the process for identifying the proposed swath data encodings. It starts from a netCDF variable that is already assumed to represent a swath data parameter. The variable's rank and the type and rank of its coordinates are used to determine the actual encoding type.
+
 [[flowchart,{figure-caption} {counter:figure-num}]]
 .Decision flowchart for identifying swath data encoding types.
 image::flowchart.svg[Swath encoding type decision flowchart]
@@ -1135,10 +1139,10 @@ a|
 a|
 * Updated the link for the CF2 Group proposal document.
 
-|FINAL DRAFT/2018-??-??
+|FINAL DRAFT/2018-06-19
 a|
 * Added an annex with decision flowchart for identifying swath encoding types.
-* Added a diagram depicting a hyperspectral sounding instrument's observation goemetry.
+* Added a diagram depicting a hyperspectral sounding instrument's observation geometry.
 |===
 
 [appendix]
